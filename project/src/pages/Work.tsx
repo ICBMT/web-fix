@@ -1,9 +1,10 @@
 import { useEffect, useRef } from "react";
-import { ArrowDown, ArrowUpRight } from "lucide-react";
-import { gsap, ScrollTrigger, splitChars } from "../lib/core";
+import { ArrowUpRight } from "lucide-react";
+import { gsap, ScrollTrigger } from "../lib/core";
 import { ARCHIVE_IDS, PORTFOLIO_IDS, projectMeta, projects, STUDIO_LABEL, type Project } from "../lib/data";
 import Footer from "../components/Footer";
 import Marquee from "../components/Marquee";
+import WorkHero from "../components/WorkHero";
 
 const aspects = ["16/10", "4/5", "16/11", "1/1", "16/9", "4/5"];
 
@@ -12,6 +13,14 @@ const PORTFOLIO_ORDER = ["lairo", "jalebi", "on-card", "ad-grants-pilot", "xpati
   PORTFOLIO_IDS.includes(id)
 );
 const ARCHIVE_ORDER = ["sopra", "cob", "caisse", "jinns", "biotherm"].filter((id) => ARCHIVE_IDS.includes(id));
+
+/** Pixel Vault hero cycles every case — ordered so consecutive palettes contrast. */
+const HERO_ITEMS: Project[] = [
+  "jalebi", "hotcoin", "lairo", "on-card", "moosehead", "shepherd", "ad-grants-pilot", "xpatio",
+  "sopra", "kim-and-co", "find-a-doc", "cob", "deltabook", "caisse", "jinns", "biotherm",
+]
+  .map((id) => projects.find((p) => p.id === id))
+  .filter((p): p is Project => Boolean(p));
 
 function WorkCard({ p, i }: { p: Project; i: number }) {
   const vidRef = useRef<HTMLVideoElement>(null);
@@ -109,22 +118,6 @@ export default function Work({ ready, onNavigate }: { ready: boolean; onNavigate
   const rootRef = useRef<HTMLDivElement>(null);
   const heroVidRef = useRef<HTMLVideoElement>(null);
   const heroMediaRef = useRef<HTMLDivElement>(null);
-  const introDone = useRef(false);
-
-  /* ---------- hero intro, gated until loader finished ---------- */
-  useEffect(() => {
-    if (!ready || introDone.current) return;
-    introDone.current = true;
-    const c1 = splitChars(document.querySelector<HTMLElement>(".work-word-1")!);
-    const c2 = splitChars(document.querySelector<HTMLElement>(".work-word-2")!);
-    gsap.set([...c1, ...c2], { yPercent: 115 });
-    gsap.set(".work-meta", { opacity: 0, y: 16 });
-    gsap
-      .timeline({ delay: 0.25 })
-      .to(c1, { yPercent: 0, duration: 1.1, ease: "expo.out", stagger: 0.06 }, 0)
-      .to(c2, { yPercent: 0, duration: 1.1, ease: "expo.out", stagger: 0.045 }, 0.15)
-      .to(".work-meta", { opacity: 1, y: 0, duration: 0.8, stagger: 0.08, ease: "power3.out" }, 0.7);
-  }, [ready]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -199,44 +192,8 @@ export default function Work({ ready, onNavigate }: { ready: boolean; onNavigate
 
   return (
     <div ref={rootRef} className="relative" style={{ background: "#0a0a0b" }}>
-      {/* ---------- HERO ---------- */}
-      <section className="relative flex h-[92svh] flex-col justify-between overflow-hidden px-6 pb-10 pt-28 md:px-10">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute inset-0 opacity-[0.5]" style={{ background: "radial-gradient(60% 50% at 50% 38%, rgba(233,89,37,0.09), transparent 70%)" }} />
-          {/* pixel decorations */}
-          {[
-            ["12%", "30%"],
-            ["78%", "22%"],
-            ["86%", "64%"],
-            ["6%", "70%"],
-          ].map(([x, y], i) => (
-            <span key={i} className="absolute h-2 w-2" style={{ left: x, top: y, background: i % 2 ? "rgba(237,234,224,0.3)" : "#e95925" }} />
-          ))}
-        </div>
-
-        <div className="work-meta flex items-center justify-between">
-          <span className="label">GREEPIXEL® — WORK</span>
-          <span className="label hidden md:block">GREEPIXEL® PORTFOLIO × STUDIO ARCHIVE</span>
-          <span className="label label-gold">16 CASES — 2021 → 2026</span>
-        </div>
-
-        <div className="relative">
-          <h1 className="sr-only">GreePixel work archive</h1>
-          <div aria-hidden>
-            <div className="work-word-1 font-display text-[clamp(4.5rem,19vw,17rem)] leading-[0.8] text-bone">WORK</div>
-            <div className="work-word-2 font-display text-right text-[clamp(4.5rem,19vw,17rem)] leading-[0.8] text-stroke">ARCHIVE</div>
-          </div>
-        </div>
-
-        <div className="work-meta flex items-center justify-between">
-          <p className="max-w-sm text-sm leading-relaxed text-bone/60">
-            Sixteen case studies — AI products, SaaS platforms and mobile apps shipped by GreePixel, plus selected web, real-time 3D and live-event work from the studio archive.
-          </p>
-          <span className="label flex items-center gap-2">
-            SCROLL <ArrowDown className="h-3.5 w-3.5 animate-bounce" style={{ color: "#e95925" }} />
-          </span>
-        </div>
-      </section>
+      {/* ---------- HERO — Pixel Vault ---------- */}
+      <WorkHero ready={ready} items={HERO_ITEMS} />
 
       <Marquee items={["AI PRODUCTS", "SAAS PLATFORMS", "MOBILE APPS", "IMMERSIVE 3D", "LIVE EVENTS"]} className="border-y py-5" textClass="label !text-[11px]" duration={26} />
 
