@@ -1,28 +1,33 @@
 @import "tailwindcss";
 
 /* ---------- self-hosted fonts (inlined into the single-file build) ---------- */
+/* Display — Big Shoulders Display (variable). size-adjust lifts its cap height to
+   roughly match the old Anton metrics so every headline keeps its layout. */
 @font-face {
-  font-family: "Anton";
+  font-family: "Big Shoulders Display";
   font-style: normal;
-  font-weight: 400;
+  font-weight: 100 900;
   font-display: block;
-  src: url("./media/fonts/anton-400.woff2") format("woff2");
+  size-adjust: 104%;
+  src: url("./media/fonts/bigshoulders-var.woff2") format("woff2");
 }
 
+/* Body — Inter (variable, optical sizing) for maximum readability */
 @font-face {
-  font-family: "Space Grotesk";
+  font-family: "Inter";
   font-style: normal;
-  font-weight: 300 700;
+  font-weight: 100 900;
   font-display: swap;
-  src: url("./media/fonts/spacegrotesk-var.woff2") format("woff2");
+  src: url("./media/fonts/inter-var.woff2") format("woff2");
 }
 
+/* Labels / UI — Geist Mono (variable) */
 @font-face {
-  font-family: "JetBrains Mono";
+  font-family: "Geist Mono";
   font-style: normal;
-  font-weight: 100 800;
+  font-weight: 100 900;
   font-display: swap;
-  src: url("./media/fonts/jetbrainsmono-var.woff2") format("woff2");
+  src: url("./media/fonts/geistmono-var.woff2") format("woff2");
 }
 
 @font-face {
@@ -42,16 +47,17 @@
 }
 
 @theme {
-  --color-ink: #0a0a0b;
-  --color-coal: #121214;
-  --color-line: rgba(237, 234, 224, 0.09);
-  --color-bone: #edeae0;
-  --color-mute: rgba(237, 234, 224, 0.52);
-  --color-gold: #e95925;
-  --color-ember: #b03e16;
-  --font-display: "Anton", "Arial Black", sans-serif;
-  --font-sans: "Space Grotesk", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  /* warm black + ivory + luminous ember orange (same 16° hue as the logo) */
+  --color-ink: #0b0a09;
+  --color-coal: #151311;
+  --color-line: rgba(242, 238, 229, 0.1);
+  --color-bone: #f2eee5;
+  --color-mute: rgba(242, 238, 229, 0.64);
+  --color-gold: #f4602a;
+  --color-ember: #c2441a;
+  --font-display: "Big Shoulders Display", "Anton", "Arial Narrow", sans-serif;
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", monospace;
   --font-pixel: "Silkscreen", monospace;
 }
 
@@ -70,6 +76,9 @@ body {
   background: var(--color-ink);
   color: var(--color-bone);
   font-family: var(--font-sans);
+  font-optical-sizing: auto;
+  font-feature-settings: "cv05"; /* Inter: tailed l — tells l / I / 1 apart */
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: clip;
@@ -88,12 +97,13 @@ body {
 /* ---------- typography helpers ---------- */
 .font-display {
   font-family: var(--font-display);
-  letter-spacing: 0.01em;
+  font-weight: 900;
+  letter-spacing: 0.005em;
   text-transform: uppercase;
 }
 
 .text-stroke {
-  -webkit-text-stroke: 1.5px rgba(237, 234, 224, 0.55);
+  -webkit-text-stroke: 1.5px rgba(242, 238, 229, 0.55);
   color: transparent;
 }
 
@@ -116,8 +126,9 @@ body {
 
 .label {
   font-family: var(--font-mono);
-  font-size: 0.625rem;
-  letter-spacing: 0.28em;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--color-mute);
 }
@@ -247,7 +258,7 @@ body {
   position: absolute;
   width: 22px;
   height: 22px;
-  border-color: rgba(233, 89, 37, 0.65);
+  border-color: rgba(244, 96, 42, 0.65);
 }
 
 /* ---------- misc ---------- */
@@ -280,5 +291,5 @@ canvas {
   position: absolute;
   width: 22px;
   height: 22px;
-  border-color: rgba(233, 89, 37, 0.65);
+  border-color: rgba(244, 96, 42, 0.65);
 }

@@ -77,7 +77,7 @@ export default function Marquee({
       {items.map((item, i) => (
         <Fragment key={i}>
           <span className={`whitespace-nowrap px-6 md:px-10 ${textClass}`}>{item}</span>
-          <span className="inline-block h-2.5 w-2.5 shrink-0" style={{ background: i % 2 ? "#e95925" : "rgba(237,234,224,0.35)" }} />
+          <span className="inline-block h-2.5 w-2.5 shrink-0" style={{ background: i % 2 ? "#f4602a" : "rgba(242,238,229,0.35)" }} />
         </Fragment>
       ))}
     </div>

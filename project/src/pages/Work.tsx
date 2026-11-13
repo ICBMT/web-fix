@@ -51,21 +51,21 @@ function WorkCard({ p, i }: { p: Project; i: number }) {
         </div>
         <div
           className="absolute inset-0 flex items-end justify-between p-4 opacity-0 transition-opacity duration-400 group-hover:opacity-100 md:p-5"
-          style={{ background: "linear-gradient(to top, rgba(10,10,11,0.72), rgba(10,10,11,0.08) 55%, rgba(10,10,11,0.25))" }}
+          style={{ background: "linear-gradient(to top, rgba(11,10,9,0.72), rgba(11,10,9,0.08) 55%, rgba(11,10,9,0.25))" }}
         >
-          <span className="font-pixel text-[10px]" style={{ fontFamily: "var(--font-pixel)", color: "#e95925" }}>
+          <span className="font-pixel text-[10px]" style={{ fontFamily: "var(--font-pixel)", color: "#f4602a" }}>
             OPEN CASE ↗
           </span>
           <span className="label">{projectMeta(p)}</span>
         </div>
-        <span className="label absolute left-4 top-4 border border-bone/25 bg-ink/55 px-2 py-1 backdrop-blur-sm" style={{ background: "rgba(10,10,11,0.5)", fontSize: "9px" }}>
+        <span className="label absolute left-4 top-4 border border-bone/25 bg-ink/55 px-2 py-1 backdrop-blur-sm" style={{ background: "rgba(11,10,9,0.5)", fontSize: "9px" }}>
           {STUDIO_LABEL[p.studio]}
         </span>
       </div>
 
       <div className="mt-4 flex items-baseline justify-between gap-4">
         <div className="flex items-baseline gap-3">
-          <span className="font-mono text-[10px]" style={{ fontFamily: "var(--font-mono)", color: "#e95925" }}>
+          <span className="font-mono text-[10px]" style={{ fontFamily: "var(--font-mono)", color: "#f4602a" }}>
             [{String(i + 1).padStart(2, "0")}]
           </span>
           <h3 className="font-display text-xl uppercase leading-none text-bone transition-colors duration-300 group-hover:text-gold md:text-2xl">{p.name}</h3>
@@ -191,7 +191,7 @@ export default function Work({ ready, onNavigate }: { ready: boolean; onNavigate
   const moosehead = projects.find((p) => p.id === "moosehead")!;
 
   return (
-    <div ref={rootRef} className="relative" style={{ background: "#0a0a0b" }}>
+    <div ref={rootRef} className="relative" style={{ background: "#0b0a09" }}>
       {/* ---------- HERO — Pixel Vault ---------- */}
       <WorkHero ready={ready} items={HERO_ITEMS} />
 
@@ -212,9 +212,9 @@ export default function Work({ ready, onNavigate }: { ready: boolean; onNavigate
                 <img src={moosehead.img} alt={moosehead.name} className="h-full w-full object-cover" />
               )}
             </div>
-            <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(10,10,11,0.78), rgba(10,10,11,0.12) 45%, rgba(10,10,11,0.25))" }} />
+            <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(11,10,9,0.78), rgba(11,10,9,0.12) 45%, rgba(11,10,9,0.25))" }} />
             <div className="absolute left-0 top-0 flex w-full items-center justify-between p-5 md:p-7">
-              <span className="label border border-bone/25 px-2 py-1 backdrop-blur-sm" style={{ background: "rgba(10,10,11,0.5)", fontSize: "9px" }}>
+              <span className="label border border-bone/25 px-2 py-1 backdrop-blur-sm" style={{ background: "rgba(11,10,9,0.5)", fontSize: "9px" }}>
                 MILL3® — 2023
               </span>
               <span className="label label-gold">E-COMMERCE / SHOPIFY / MOTION</span>
@@ -240,7 +240,7 @@ export default function Work({ ready, onNavigate }: { ready: boolean; onNavigate
       <Vault title="VAULT 02 — MILL3® × STUDIO MIRAGE® ARCHIVE" ghost="ARCHIVE" ids={ARCHIVE_ORDER} startIndex={1 + PORTFOLIO_ORDER.length} />
 
       {/* ---------- NFO ---------- */}
-      <section className="border-t px-6 py-20 text-center md:py-28" style={{ borderColor: "rgba(237,234,224,0.09)" }}>
+      <section className="border-t px-6 py-20 text-center md:py-28" style={{ borderColor: "rgba(242,238,229,0.09)" }}>
         <span className="label label-gold">[END OF VAULT]</span>
         <p className="font-display mx-auto mt-6 max-w-4xl text-[clamp(1.6rem,3.6vw,3.2rem)] uppercase leading-[1.05]">
           Every pixel above shipped to production. <span className="text-stroke">Yours could be next.</span>
@@ -251,8 +251,8 @@ export default function Work({ ready, onNavigate }: { ready: boolean; onNavigate
           data-magnetic
           className="mt-10 inline-flex items-center gap-3 border px-8 py-4 font-mono text-xs tracking-[0.24em] transition-colors"
           style={{
-            borderColor: "#e95925",
-            color: "#e95925",
+            borderColor: "#f4602a",
+            color: "#f4602a",
             fontFamily: "var(--font-mono)",
           }}
         >

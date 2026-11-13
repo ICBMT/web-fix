@@ -9,7 +9,7 @@ export default function Footer({ onNavigate }: { onNavigate: (r: string) => void
   };
 
   return (
-    <footer className="relative border-t" style={{ borderColor: "rgba(237,234,224,0.09)", background: "#0a0a0b" }}>
+    <footer className="relative border-t" style={{ borderColor: "rgba(242,238,229,0.09)", background: "#0b0a09" }}>
       <Marquee
         items={["LET'S BUILD SOMETHING RARE", "GREEPIXEL®", "PIXEL BY PIXEL", "LET'S BUILD SOMETHING RARE", "GREEPIXEL®", "PIXEL BY PIXEL"]}
         duration={26}
@@ -26,10 +26,10 @@ export default function Footer({ onNavigate }: { onNavigate: (r: string) => void
             </span>
             <span className="font-display mt-1 flex items-center gap-3 text-[clamp(3rem,7vw,6rem)] uppercase leading-[0.9] text-bone transition-colors duration-500 group-hover:text-gold" style={{ ["--tw-text-opacity" as string]: 1 }}>
               Let's build
-              <ArrowUpRight className="h-[0.7em] w-[0.7em] transition-transform duration-500 group-hover:-translate-y-2 group-hover:translate-x-2" style={{ color: "#e95925" }} />
+              <ArrowUpRight className="h-[0.7em] w-[0.7em] transition-transform duration-500 group-hover:-translate-y-2 group-hover:translate-x-2" style={{ color: "#f4602a" }} />
             </span>
           </a>
-          <a href="mailto:hello@greepixel.com" className="label mt-6 inline-block border-b border-transparent pb-1 transition-colors hover:border-gold" style={{ color: "rgba(237,234,224,0.75)" }}>
+          <a href="mailto:hello@greepixel.com" className="label mt-6 inline-block border-b border-transparent pb-1 transition-colors hover:border-gold" style={{ color: "rgba(242,238,229,0.75)" }}>
             hello@greepixel.com
           </a>
         </div>
@@ -87,9 +87,9 @@ export default function Footer({ onNavigate }: { onNavigate: (r: string) => void
         <img src={LOGO_WHITE} alt="GreePixel" className="w-full opacity-[0.14]" />
       </div>
 
-      <div className="flex flex-col gap-2 border-t px-6 py-5 md:flex-row md:items-center md:justify-between md:px-10" style={{ borderColor: "rgba(237,234,224,0.09)" }}>
+      <div className="flex flex-col gap-2 border-t px-6 py-5 md:flex-row md:items-center md:justify-between md:px-10" style={{ borderColor: "rgba(242,238,229,0.09)" }}>
         <span className="label">© 2026 GREEPIXEL® — ALL RIGHTS RESERVED</span>
-        <span className="label" style={{ color: "rgba(233,89,37,0.75)" }}>
+        <span className="label" style={{ color: "rgba(244,96,42,0.75)" }}>
           FORGED FROM MILL3 × STUDIO MIRAGE
         </span>
         <span className="label">BUILT PIXEL BY PIXEL</span>

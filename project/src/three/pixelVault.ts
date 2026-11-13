@@ -112,7 +112,7 @@ void main() {
   vec2 c = gl_PointCoord - 0.5;
   float edge = max(abs(c.x), abs(c.y));
   vec3 col = vCol + (0.5 - edge) * 0.06;   // tiny bevel
-  col = mix(col, vec3(0.914, 0.349, 0.145), clamp(vGlow, 0.0, 1.0) * 0.6);
+  col = mix(col, vec3(0.957, 0.376, 0.165), clamp(vGlow, 0.0, 1.0) * 0.6);
   gl_FragColor = vec4(col, vAlpha);
 }
 `;
@@ -361,7 +361,7 @@ export class PixelVault {
     cv.height = rows;
     const ctx = cv.getContext("2d", { willReadFrequently: true });
     if (!ctx) return out;
-    ctx.fillStyle = "#121214";
+    ctx.fillStyle = "#151311";
     ctx.fillRect(0, 0, cols, rows);
     if (img && img.naturalWidth) {
       // two-step downscale keeps colours clean instead of aliased

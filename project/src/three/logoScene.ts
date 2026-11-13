@@ -91,10 +91,14 @@ export class LogoScene {
   };
   private onResize = () => this.resize();
 
-  constructor(canvas: HTMLCanvasElement, url: string, interactive = true) {
+  /** On-screen size multiplier for the logo + its cube ring (positions are unaffected). */
+  private sizeFactor: number;
+
+  constructor(canvas: HTMLCanvasElement, url: string, interactive = true, sizeFactor = 1) {
     this.canvas = canvas;
     this.url = url;
     this.interactive = interactive;
+    this.sizeFactor = sizeFactor;
   }
 
   async init() {
@@ -122,7 +126,7 @@ export class LogoScene {
         if (mat) {
           mat.envMapIntensity = 1.25;
           if (mat.name === "GreePixel_Yellow") {
-            mat.emissive = new THREE.Color(0xe95925);
+            mat.emissive = new THREE.Color(0xf4602a);
             mat.emissiveIntensity = 0.24;
             mat.roughness = 0.28;
           } else {
@@ -151,12 +155,12 @@ export class LogoScene {
     const key = new THREE.DirectionalLight(0xffffff, 2.1);
     key.position.set(4, 6, 7);
     this.scene.add(key);
-    const ember = new THREE.DirectionalLight(0xe95925, 1.6);
+    const ember = new THREE.DirectionalLight(0xf4602a, 1.6);
     ember.position.set(-6, -3.5, 2.5);
     this.scene.add(ember);
-    this.scene.add(new THREE.HemisphereLight(0xffe9d6, 0x0a0a0b, 0.55));
+    this.scene.add(new THREE.HemisphereLight(0xffe9d6, 0x0b0a09, 0.55));
     // pulsing ember core behind the logo — hot rim halo
-    this.backLight = new THREE.PointLight(0xe95925, 26, 14, 1.6);
+    this.backLight = new THREE.PointLight(0xf4602a, 26, 14, 1.6);
     this.backLight.position.set(0, 0.4, -2.4);
     this.scene.add(this.backLight);
 
@@ -214,8 +218,8 @@ export class LogoScene {
       this.particles.push(pts);
       this.scene.add(pts);
     };
-    make(640, 0xe95925, 0.045, 0.7);
-    make(360, 0xedeae0, 0.03, 0.35);
+    make(640, 0xf4602a, 0.045, 0.7);
+    make(360, 0xf2eee5, 0.03, 0.35);
   }
 
   /** A halo of tumbling pixel-cubes orbiting the logo — its "satellite ring". */
@@ -223,8 +227,8 @@ export class LogoScene {
     const shell = Math.max(size.x, size.y);
     const geo = new THREE.BoxGeometry(0.055, 0.055, 0.055);
     const mat = new THREE.MeshStandardMaterial({
-      color: 0xe95925,
-      emissive: 0xe95925,
+      color: 0xf4602a,
+      emissive: 0xf4602a,
       emissiveIntensity: 0.55,
       roughness: 0.35,
       metalness: 0.1,
@@ -300,7 +304,7 @@ export class LogoScene {
     this.root.rotation.x = s.rotX + py * 0.09 + Math.sin(t * 0.8) * 0.015;
     this.root.position.y = s.y + Math.sin(t * 1.1) * 0.045;
     this.root.position.x = s.x;
-    this.root.scale.setScalar(s.scale);
+    this.root.scale.setScalar(s.scale * this.sizeFactor);
 
     this.camera.position.set(0, 0, this.baseDist * s.dist);
     this.camera.lookAt(0, 0, 0);
@@ -314,6 +318,7 @@ export class LogoScene {
     // orbital cube ring
     if (this.ring) {
       this.ringPivot.rotation.z = 0.18 + Math.sin(t * 0.2) * 0.1;
+      this.ringPivot.scale.setScalar(this.sizeFactor);
       const R = this.ring.userData.radius;
       for (let i = 0; i < 30; i++) {
         const a = t * 0.32 * s.spin + (i / 30) * Math.PI * 2;

@@ -24,7 +24,7 @@ export default function Nav({ route, onNavigate }: { route: string; onNavigate: 
     >
       <span
         className="h-1.5 w-1.5 transition-all duration-300"
-        style={{ background: route === to ? "#e95925" : "transparent", boxShadow: route === to ? "0 0 10px rgba(233,89,37,0.9)" : "none" }}
+        style={{ background: route === to ? "#f4602a" : "transparent", boxShadow: route === to ? "0 0 10px rgba(244,96,42,0.9)" : "none" }}
       />
       {children}
     </a>
@@ -58,7 +58,7 @@ export default function Nav({ route, onNavigate }: { route: string; onNavigate: 
       {/* mobile menu */}
       <div
         className={`fixed inset-0 z-[95] flex flex-col justify-between bg-ink p-6 transition-all duration-500 md:hidden ${open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
-        style={{ background: "#0a0a0b" }}
+        style={{ background: "#0b0a09" }}
       >
         <div className="flex items-center justify-between">
           <img src={LOGO_WHITE} alt="GreePixel" className="h-6 w-auto" />
@@ -72,7 +72,7 @@ export default function Nav({ route, onNavigate }: { route: string; onNavigate: 
             ["#/work", "WORK ARCHIVE", "02"],
           ].map(([to, label, n]) => (
             <a key={to} href={to} onClick={go(to)} className="font-display flex items-baseline gap-4 text-6xl uppercase text-bone">
-              <span className="font-mono text-xs" style={{ color: "#e95925", fontFamily: "var(--font-mono)" }}>
+              <span className="font-mono text-xs" style={{ color: "#f4602a", fontFamily: "var(--font-mono)" }}>
                 {n}
               </span>
               {label}

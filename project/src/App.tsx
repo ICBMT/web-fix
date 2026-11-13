@@ -97,7 +97,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className="grain min-h-screen" style={{ background: "#0a0a0b" }}>
+    <div className="grain min-h-screen" style={{ background: "#0b0a09" }}>
       <Cursor />
       <Nav route={route} onNavigate={navigate} />
 
@@ -106,7 +106,7 @@ export default function App() {
       {/* pixel wipe transition */}
       <div ref={transitionRef} className="pointer-events-none fixed inset-0 z-[90] flex" style={{ visibility: "visible" }}>
         {[...Array(6)].map((_, i) => (
-          <div key={i} className="wipe-col h-full flex-1" style={{ background: i % 2 ? "#0a0a0b" : "#e95925", transform: "scaleY(0)" }} />
+          <div key={i} className="wipe-col h-full flex-1" style={{ background: i % 2 ? "#0b0a09" : "#f4602a", transform: "scaleY(0)" }} />
         ))}
       </div>
 

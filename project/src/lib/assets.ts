@@ -39,10 +39,10 @@ function pick(map: GlobMap, name: string): string | undefined {
 /** Dark, on-brand SVG placeholder used when an image file is missing. */
 function placeholder(label: string): string {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
-  <defs><radialGradient id="g" cx="50%" cy="45%" r="60%"><stop offset="0" stop-color="#e95925" stop-opacity="0.22"/><stop offset="1" stop-color="#0a0a0b" stop-opacity="0"/></radialGradient></defs>
-  <rect width="1600" height="1000" fill="#121214"/><rect width="1600" height="1000" fill="url(#g)"/>
-  <rect x="770" y="470" width="60" height="60" fill="#e95925"/>
-  <text x="800" y="600" fill="#edeae0" fill-opacity="0.55" font-family="monospace" font-size="28" letter-spacing="8" text-anchor="middle">${label.toUpperCase()}</text>
+  <defs><radialGradient id="g" cx="50%" cy="45%" r="60%"><stop offset="0" stop-color="#f4602a" stop-opacity="0.22"/><stop offset="1" stop-color="#0b0a09" stop-opacity="0"/></radialGradient></defs>
+  <rect width="1600" height="1000" fill="#151311"/><rect width="1600" height="1000" fill="url(#g)"/>
+  <rect x="770" y="470" width="60" height="60" fill="#f4602a"/>
+  <text x="800" y="600" fill="#f2eee5" fill-opacity="0.55" font-family="monospace" font-size="28" letter-spacing="8" text-anchor="middle">${label.toUpperCase()}</text>
 </svg>`;
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 }
