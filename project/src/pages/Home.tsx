@@ -5,7 +5,8 @@ import { LAB, SERVICE_PREVIEWS } from "../lib/assets";
 import { chapters, GLB_URL, projectMeta, projects, services, stats, STUDIO_LABEL, type Project } from "../lib/data";
 import { defaultPose, logoPose, LogoScene, resetPose } from "../three/logoScene";
 import Footer from "../components/Footer";
-import Marquee from "../components/Marquee";
+import ToolsStrip from "../components/ToolsStrip";
+import { getTheme, onThemeChange } from "../lib/theme";
 
 export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate: (r: string) => void }) {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -27,6 +28,8 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
     // scroll pose (x / y / dist) stays exactly where it was.
     const scene = new LogoScene(canvasRef.current!, GLB_URL, true, 0.8);
     scene.setMode("scrub");
+    scene.setLight(getTheme() === "light");
+    const offTheme = onThemeChange((t) => scene.setLight(t === "light"));
     sceneRef.current = scene;
     scene.init().catch((err) => console.warn("[Home] 3D logo failed to initialise:", err));
     const io = new IntersectionObserver(
@@ -36,6 +39,7 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
     io.observe(stageZoneRef.current!);
     return () => {
       io.disconnect();
+      offTheme();
       scene.dispose();
       sceneRef.current = null;
     };
@@ -151,8 +155,8 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
               onUpdate: (self) => {
                 const idx = Math.min(3, Math.floor(self.progress * 4));
                 ticks.forEach((t, i) => {
-                  t.style.background = i === idx ? "#f4602a" : "rgba(242,238,229,0.18)";
-                  t.style.boxShadow = i === idx ? "0 0 12px rgba(244,96,42,0.8)" : "none";
+                  t.style.background = i === idx ? "var(--color-gold)" : "rgba(var(--bone-rgb),0.18)";
+                  t.style.boxShadow = i === idx ? "0 0 12px rgba(var(--gold-rgb),0.8)" : "none";
                 });
                 if (counter) counter.textContent = `0${idx + 1} / 04`;
               },
@@ -314,13 +318,13 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
     <div ref={rootRef} className="relative">
       {/* fixed 3D stage */}
       <div className="pointer-events-none fixed inset-0 z-0">
-        <div className="absolute inset-0" style={{ background: "radial-gradient(58% 44% at 50% 46%, rgba(244,96,42,0.11), transparent 70%)" }} />
+        <div className="absolute inset-0" style={{ background: "radial-gradient(58% 44% at 50% 46%, rgba(var(--gold-rgb),0.11), transparent 70%)" }} />
         <canvas ref={canvasRef} className="relative h-full w-full" />
       </div>
 
       {/* floating service preview (follows cursor) */}
       <div ref={previewRef} className="invisible pointer-events-none fixed left-0 top-0 z-40 h-[236px] w-[340px] opacity-0" style={{ transform: "translate3d(-400px,-400px,0)" }}>
-        <img alt="" className="h-full w-full border object-cover" style={{ borderColor: "rgba(244,96,42,0.5)", boxShadow: "0 24px 70px rgba(0,0,0,0.6), 0 0 0 6px rgba(11,10,9,0.9)" }} />
+        <img alt="" className="h-full w-full border object-cover" style={{ borderColor: "rgba(var(--gold-rgb),0.5)", boxShadow: "0 24px 70px rgba(0,0,0,0.6), 0 0 0 6px rgba(var(--ink-rgb),0.9)" }} />
       </div>
 
       {/* ======== zone where the 3D shows through ======== */}
@@ -346,16 +350,16 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
               {/* HUD rings framing the 3D logo */}
               <div aria-hidden className="hud pointer-events-none absolute left-1/2 top-1/2 h-[min(80vmin,740px)] w-[min(80vmin,740px)] -translate-x-1/2 -translate-y-1/2">
                 <svg viewBox="0 0 100 100" className="animate-spin-slow absolute inset-0 h-full w-full">
-                  <circle cx="50" cy="50" r="49" fill="none" stroke="rgba(242,238,229,0.16)" strokeWidth="0.22" strokeDasharray="0.6 2.4" />
+                  <circle cx="50" cy="50" r="49" fill="none" style={{ stroke: "rgba(var(--bone-rgb),0.16)" }} strokeWidth="0.22" strokeDasharray="0.6 2.4" />
                 </svg>
                 <svg viewBox="0 0 100 100" className="animate-spin-rev absolute inset-[7%] h-[86%] w-[86%]">
-                  <circle cx="50" cy="50" r="48" fill="none" stroke="rgba(244,96,42,0.55)" strokeWidth="0.3" strokeDasharray="10 26" strokeLinecap="round" />
+                  <circle cx="50" cy="50" r="48" fill="none" style={{ stroke: "rgba(var(--gold-rgb),0.55)" }} strokeWidth="0.3" strokeDasharray="10 26" strokeLinecap="round" />
                 </svg>
                 <span className="absolute left-1/2 top-0 h-2.5 w-px -translate-x-1/2 bg-bone/30" />
                 <span className="absolute bottom-0 left-1/2 h-2.5 w-px -translate-x-1/2 bg-bone/30" />
                 <span className="absolute left-0 top-1/2 h-px w-2.5 -translate-y-1/2 bg-bone/30" />
                 <span className="absolute right-0 top-1/2 h-px w-2.5 -translate-y-1/2 bg-bone/30" />
-                <span className="animate-pulse-glow absolute left-1/2 top-[7%] h-1.5 w-1.5 -translate-x-1/2" style={{ background: "#f4602a" }} />
+                <span className="animate-pulse-glow absolute left-1/2 top-[7%] h-1.5 w-1.5 -translate-x-1/2" style={{ background: "var(--color-gold)" }} />
               </div>
 
               {/* floating spec chips */}
@@ -368,9 +372,9 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
                 <span
                   key={c.t}
                   className={`hero-chip label absolute hidden items-center gap-2 border border-bone/15 bg-ink/60 px-3 py-2 backdrop-blur-sm md:flex ${c.pos}`}
-                  style={{ background: "rgba(11,10,9,0.55)" }}
+                  style={{ background: "rgba(var(--ink-rgb),0.55)" }}
                 >
-                  <span className="animate-float-y inline-block h-1.5 w-1.5" style={{ background: "#f4602a", animationDelay: c.d }} />
+                  <span className="animate-float-y inline-block h-1.5 w-1.5" style={{ background: "var(--color-gold)", animationDelay: c.d }} />
                   {c.t}
                 </span>
               ))}
@@ -395,10 +399,10 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
 
           <div className="hero-cue flex items-center justify-center gap-6">
             <span className="label hidden items-center gap-2 sm:flex">
-              <Move className="h-3.5 w-3.5" style={{ color: "#f4602a" }} /> DRAG TO SPIN
+              <Move className="h-3.5 w-3.5" style={{ color: "var(--color-gold)" }} /> DRAG TO SPIN
             </span>
             <span className="flex items-center gap-3">
-              <ArrowDown className="h-4 w-4 animate-bounce" style={{ color: "#f4602a" }} />
+              <ArrowDown className="h-4 w-4 animate-bounce" style={{ color: "var(--color-gold)" }} />
               <span className="label">SCROLL</span>
             </span>
             <span className="label hidden items-center gap-2 sm:flex">© 2026</span>
@@ -410,11 +414,11 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
           <div className="sticky top-0 h-[100svh] overflow-hidden">
             {/* side progress */}
             <div className="absolute right-6 top-1/2 z-20 flex -translate-y-1/2 flex-col items-end gap-3 md:right-10">
-              <span className="chapter-counter font-pixel mb-2 text-xs" style={{ fontFamily: "var(--font-pixel)", color: "#f4602a" }}>
+              <span className="chapter-counter font-pixel mb-2 text-xs" style={{ fontFamily: "var(--font-pixel)", color: "var(--color-gold)" }}>
                 01 / 04
               </span>
               {chapters.map((c, i) => (
-                <span key={c.k} className="chapter-tick h-2.5 w-2.5" style={{ background: i === 0 ? "#f4602a" : "rgba(242,238,229,0.18)" }} />
+                <span key={c.k} className="chapter-tick h-2.5 w-2.5" style={{ background: i === 0 ? "var(--color-gold)" : "rgba(var(--bone-rgb),0.18)" }} />
               ))}
             </div>
 
@@ -438,7 +442,7 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
                   className="font-pixel pointer-events-none absolute bottom-10 text-[10px] tracking-widest md:bottom-1/2 md:translate-y-1/2"
                   style={{
                     fontFamily: "var(--font-pixel)",
-                    color: "rgba(244,96,42,0.55)",
+                    color: "rgba(var(--gold-rgb),0.55)",
                     ...(i === 1 ? { left: "1.5rem" } : {}),
                   }}
                 >
@@ -451,13 +455,9 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
       </div>
 
       {/* ======== solid content over the canvas ======== */}
-      <div className="relative z-20" style={{ background: "#0b0a09" }}>
-        <Marquee
-          items={["AI PRODUCTS", "IMMERSIVE 3D", "MVP SPRINTS", "DESIGN SYSTEMS", "SENIOR ONLY", "SHIPPED & SCALED"]}
-          className="border-y py-5"
-          textClass="label !text-[11px]"
-          duration={24}
-        />
+      <div className="relative z-20" style={{ background: "var(--color-ink)" }}>
+        {/* tools we build UIs with — logo strip */}
+        <ToolsStrip />
 
         {/* ---------- SERVICES ---------- */}
         <section className="px-6 py-24 md:px-10 md:py-36">
@@ -473,15 +473,15 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
             <span className="label pb-3">08 DISCIPLINES — ONE TEAM</span>
           </div>
 
-          <div className="border-t" style={{ borderColor: "rgba(242,238,229,0.09)" }}>
+          <div className="border-t" style={{ borderColor: "rgba(var(--bone-rgb),0.09)" }}>
             {services.map((s) => (
               <div
                 key={s.n}
                 data-preview={s.n}
                 className="service-row group relative grid cursor-default grid-cols-[auto_1fr] items-baseline gap-x-5 gap-y-2 border-b py-6 transition-colors duration-300 hover:bg-gold md:grid-cols-12 md:py-8"
-                style={{ borderColor: "rgba(242,238,229,0.09)" }}
+                style={{ borderColor: "rgba(var(--bone-rgb),0.09)" }}
               >
-                <span className="font-mono text-xs md:col-span-1 md:pl-2" style={{ fontFamily: "var(--font-mono)", color: "#f4602a" }}>
+                <span className="font-mono text-xs md:col-span-1 md:pl-2" style={{ fontFamily: "var(--font-mono)", color: "var(--color-gold)" }}>
                   /{s.n}
                 </span>
                 <h3 className="font-display text-2xl uppercase tracking-tight text-bone transition-all duration-300 group-hover:translate-x-3 group-hover:text-ink md:col-span-5 md:text-4xl" style={{ transitionProperty: "transform,color" }}>
@@ -501,9 +501,9 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
         </section>
 
         {/* ---------- LAB — horizontal R&D gallery ---------- */}
-        <section ref={labRef} className="relative overflow-hidden border-t" style={{ borderColor: "rgba(242,238,229,0.09)" }}>
+        <section ref={labRef} className="relative overflow-hidden border-t" style={{ borderColor: "rgba(var(--bone-rgb),0.09)" }}>
           <div className="relative flex h-[100svh] flex-col justify-center py-10">
-            <div className="absolute inset-0" style={{ background: "radial-gradient(70% 60% at 70% 40%, rgba(244,96,42,0.07), transparent 70%)" }} />
+            <div className="absolute inset-0" style={{ background: "radial-gradient(70% 60% at 70% 40%, rgba(var(--gold-rgb),0.07), transparent 70%)" }} />
             <div className="mb-8 flex flex-wrap items-end justify-between gap-4 px-6 md:mb-12 md:px-10">
               <div className="overflow-hidden">
                 <span className="label label-gold block">[GREEPIXEL LAB]</span>
@@ -517,25 +517,25 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
             <div ref={labTrackRef} className="flex w-max items-stretch gap-5 px-6 md:gap-8 md:px-10">
               {Object.entries(LAB).map(([k, item], i) => (
                 <figure key={k} className="lab-card group relative w-[74vw] shrink-0 md:w-[36vw] lg:w-[30vw]" data-cursor="R&D">
-                  <div className="relative overflow-hidden border border-bone/10" style={{ aspectRatio: "16/10", borderColor: "rgba(242,238,229,0.12)" }}>
+                  <div className="theme-dark relative overflow-hidden border border-bone/10" style={{ aspectRatio: "16/10", borderColor: "rgba(var(--bone-rgb),0.12)" }}>
                     <img src={item.img} alt={item.title} loading="lazy" className="h-[112%] w-[112%] max-w-none object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
-                    <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" style={{ background: "rgba(244,96,42,0.12)" }} />
-                    <span className="label absolute left-3 top-3 border border-bone/20 px-2 py-1 backdrop-blur-sm" style={{ background: "rgba(11,10,9,0.5)", fontSize: "9px" }}>
+                    <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" style={{ background: "rgba(var(--gold-rgb),0.12)" }} />
+                    <span className="label absolute left-3 top-3 border border-bone/20 px-2 py-1 backdrop-blur-sm" style={{ background: "rgba(var(--ink-rgb),0.5)", fontSize: "9px" }}>
                       EXP/{String(i + 1).padStart(2, "0")}
                     </span>
                   </div>
                   <figcaption className="mt-4 flex items-baseline justify-between">
                     <span className="font-display text-xl uppercase text-bone md:text-2xl">{item.title}</span>
-                    <span className="label" style={{ color: "rgba(244,96,42,0.9)" }}>
+                    <span className="label" style={{ color: "rgba(var(--gold-rgb),0.9)" }}>
                       {item.tag}
                     </span>
                   </figcaption>
                 </figure>
               ))}
 
-              <a href="mailto:hello@greepixel.com" className="group flex w-[60vw] shrink-0 items-center justify-center border border-dashed md:w-[26vw]" style={{ borderColor: "rgba(244,96,42,0.4)" }} data-cursor="SAY HI">
+              <a href="mailto:hello@greepixel.com" className="group flex w-[60vw] shrink-0 items-center justify-center border border-dashed md:w-[26vw]" style={{ borderColor: "rgba(var(--gold-rgb),0.4)" }} data-cursor="SAY HI">
                 <span className="font-display flex items-center gap-4 text-3xl uppercase text-stroke-gold transition-colors duration-300 group-hover:text-gold md:text-4xl" style={{ ["--tw-text-opacity" as string]: 1 }}>
-                  Your experiment <ArrowUpRight className="h-8 w-8 transition-transform duration-500 group-hover:-translate-y-2 group-hover:translate-x-2" style={{ color: "#f4602a" }} />
+                  Your experiment <ArrowUpRight className="h-8 w-8 transition-transform duration-500 group-hover:-translate-y-2 group-hover:translate-x-2" style={{ color: "var(--color-gold)" }} />
                 </span>
               </a>
             </div>
@@ -543,10 +543,10 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
         </section>
 
         {/* ---------- STATS ---------- */}
-        <section className="grid grid-cols-2 border-y md:grid-cols-4" style={{ borderColor: "rgba(242,238,229,0.09)" }}>
+        <section className="grid grid-cols-2 border-y md:grid-cols-4" style={{ borderColor: "rgba(var(--bone-rgb),0.09)" }}>
           {stats.map((s, i) => (
-            <div key={i} className="border-b border-r p-8 last:border-r-0 md:border-b-0 md:p-12" style={{ borderColor: "rgba(242,238,229,0.09)" }}>
-              <div className="font-display flex items-baseline text-6xl md:text-7xl" style={{ color: i === 0 ? "#f4602a" : "#f2eee5" }}>
+            <div key={i} className="border-b border-r p-8 last:border-r-0 md:border-b-0 md:p-12" style={{ borderColor: "rgba(var(--bone-rgb),0.09)" }}>
+              <div className="font-display flex items-baseline text-6xl md:text-7xl" style={{ color: i === 0 ? "var(--color-gold)" : "var(--color-bone)" }}>
                 <span className="stat-num" data-value={s.v}>
                   0
                 </span>
@@ -572,7 +572,7 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
           </div>
 
           <div className="grid gap-6 md:grid-cols-12">
-            <a href="#/work" onClick={goWork} data-cursor={featured[0].video ? "PLAY" : "VIEW"} className="group relative block overflow-hidden md:col-span-7" style={{ aspectRatio: "16/10" }}>
+            <a href="#/work" onClick={goWork} data-cursor={featured[0].video ? "PLAY" : "VIEW"} className="theme-dark group relative block overflow-hidden md:col-span-7" style={{ aspectRatio: "16/10" }}>
               <div className="work-parallax absolute inset-0" data-speed="6">
                 {featured[0].video ? (
                   <video ref={featVidRef} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" src={featured[0].video} poster={featured[0].img} muted loop playsInline preload="none" />
@@ -580,12 +580,12 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
                   <img src={featured[0].img} alt={featured[0].name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 )}
               </div>
-              <div className="absolute inset-0 bg-ink/20 transition-colors duration-500 group-hover:bg-transparent" style={{ background: "rgba(11,10,9,0.25)" }} />
+              <div className="absolute inset-0 bg-ink/20 transition-colors duration-500 group-hover:bg-transparent" style={{ background: "rgba(var(--ink-rgb),0.25)" }} />
               <div className="absolute left-0 top-0 flex w-full items-center justify-between p-5">
                 <span className="label label-gold">[01] FEATURED</span>
-                {featured[0].video ? <Play className="h-4 w-4" style={{ color: "#f4602a" }} /> : <ArrowUpRight className="h-4 w-4" style={{ color: "#f4602a" }} />}
+                {featured[0].video ? <Play className="h-4 w-4" style={{ color: "var(--color-gold)" }} /> : <ArrowUpRight className="h-4 w-4" style={{ color: "var(--color-gold)" }} />}
               </div>
-              <div className="absolute bottom-0 left-0 w-full p-5" style={{ background: "linear-gradient(to top, rgba(11,10,9,0.85), transparent)" }}>
+              <div className="absolute bottom-0 left-0 w-full p-5" style={{ background: "linear-gradient(to top, rgba(var(--ink-rgb),0.85), transparent)" }}>
                 <h3 className="font-display text-3xl uppercase md:text-5xl">{featured[0].name}</h3>
                 <span className="label mt-1 block">{caption(featured[0])}</span>
               </div>
@@ -593,12 +593,12 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
 
             <div className="grid gap-6 md:col-span-5">
               {featured.slice(1).map((p, i) => (
-                <a key={p.id} href="#/work" onClick={goWork} data-cursor="VIEW" className="group relative block overflow-hidden" style={{ aspectRatio: "16/8.5" }}>
+                <a key={p.id} href="#/work" onClick={goWork} data-cursor="VIEW" className="theme-dark group relative block overflow-hidden" style={{ aspectRatio: "16/8.5" }}>
                   <div className="work-parallax absolute inset-0" data-speed={i === 0 ? 10 : 8}>
                     <img src={p.img} alt={p.name} className="h-full w-full scale-110 object-cover transition-transform duration-700 group-hover:scale-125" />
                   </div>
-                  <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" style={{ background: "rgba(244,96,42,0.16)" }} />
-                  <div className="absolute bottom-0 left-0 w-full p-5" style={{ background: "linear-gradient(to top, rgba(11,10,9,0.8), transparent)" }}>
+                  <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" style={{ background: "rgba(var(--gold-rgb),0.16)" }} />
+                  <div className="absolute bottom-0 left-0 w-full p-5" style={{ background: "linear-gradient(to top, rgba(var(--ink-rgb),0.8), transparent)" }}>
                     <h3 className="font-display text-2xl uppercase md:text-3xl">{p.name}</h3>
                     <span className="label mt-1 block">{caption(p)}</span>
                   </div>
@@ -609,7 +609,7 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
         </section>
 
         {/* ---------- QUOTE ---------- */}
-        <section className="quote-block border-t px-6 py-28 md:px-10 md:py-40" style={{ borderColor: "rgba(242,238,229,0.09)" }}>
+        <section className="quote-block border-t px-6 py-28 md:px-10 md:py-40" style={{ borderColor: "rgba(var(--bone-rgb),0.09)" }}>
           <span className="label label-gold block text-center">[FIELD REPORT]</span>
           <blockquote className="mx-auto mt-8 max-w-5xl text-center">
             <p className="font-display text-[clamp(1.9rem,4.6vw,4.2rem)] uppercase leading-[1.02]">

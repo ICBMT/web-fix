@@ -116,7 +116,8 @@ export default function WorkHero({ ready, items }: { ready: boolean; items: Proj
 
     const c1 = splitChars(sectionRef.current!.querySelector<HTMLElement>(".work-word-1")!);
     const c2 = splitChars(sectionRef.current!.querySelector<HTMLElement>(".work-word-2")!);
-    gsap.set([...c1, ...c2], { yPercent: 115 });
+    // y: 0 matters — GSAP would otherwise adopt the CSS translateY(115%) as a fixed px offset
+    gsap.set([...c1, ...c2], { y: 0, yPercent: 115 });
     gsap.set(".work-meta", { opacity: 0, y: 16 });
     gsap.set(".vault-tick", { scaleY: 0 });
     gsap
@@ -160,7 +161,7 @@ export default function WorkHero({ ready, items }: { ready: boolean; items: Proj
   const current = items[active];
 
   return (
-    <section ref={sectionRef} className="relative h-[100svh] min-h-[560px] overflow-hidden select-none" style={{ isolation: "isolate", background: "#0b0a09" }}>
+    <section ref={sectionRef} className="theme-dark relative h-[100svh] min-h-[560px] overflow-hidden select-none" style={{ isolation: "isolate", background: "var(--color-ink)" }}>
       {/* ---- the mosaic ---- */}
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" aria-hidden />
       {fallback && current && (
@@ -170,7 +171,7 @@ export default function WorkHero({ ready, items }: { ready: boolean; items: Proj
       {/* readability: fade into the page at the top & bottom */}
       <div
         className="pointer-events-none absolute inset-0"
-        style={{ background: "linear-gradient(to bottom, rgba(11,10,9,0.85) 0%, rgba(11,10,9,0) 22%, rgba(11,10,9,0) 62%, rgba(11,10,9,0.92) 100%)" }}
+        style={{ background: "linear-gradient(to bottom, rgba(var(--ink-rgb),0.85) 0%, rgba(var(--ink-rgb),0) 22%, rgba(var(--ink-rgb),0) 62%, rgba(var(--ink-rgb),0.92) 100%)" }}
       />
 
       {/* HUD corners */}
@@ -203,9 +204,9 @@ export default function WorkHero({ ready, items }: { ready: boolean; items: Proj
           <div className="work-meta mb-5 grid items-end gap-6 md:grid-cols-12">
             <div className="md:col-span-7">
               <span className="label flex items-center gap-2">
-                <span className="animate-pulse-glow inline-block h-1.5 w-1.5" style={{ background: "#f4602a" }} />
+                <span className="animate-pulse-glow inline-block h-1.5 w-1.5" style={{ background: "var(--color-gold)" }} />
                 NOW SHOWING
-                <span className="text-[11px]" style={{ fontFamily: "var(--font-pixel)", color: "#f4602a" }}>
+                <span className="text-[11px]" style={{ fontFamily: "var(--font-pixel)", color: "var(--color-gold)" }}>
                   <span ref={idxRef}>01</span> / {pad(items.length)}
                 </span>
               </span>
@@ -217,12 +218,12 @@ export default function WorkHero({ ready, items }: { ready: boolean; items: Proj
               </span>
             </div>
             <div className="hidden flex-col items-end gap-2 text-right md:col-span-5 md:flex">
-              <span ref={coordRef} className="label" style={{ color: "rgba(242,238,229,0.75)" }}>
+              <span ref={coordRef} className="label" style={{ color: "rgba(var(--bone-rgb),0.75)" }}>
                 X 0000 · Y 0000
               </span>
               <span className="label">MOVE TO REVEAL — CLICK TO SHUFFLE</span>
               <span className="label flex items-center gap-2">
-                SCROLL <ArrowDown className="h-3.5 w-3.5 animate-bounce" style={{ color: "#f4602a" }} />
+                SCROLL <ArrowDown className="h-3.5 w-3.5 animate-bounce" style={{ color: "var(--color-gold)" }} />
               </span>
             </div>
           </div>
@@ -240,7 +241,7 @@ export default function WorkHero({ ready, items }: { ready: boolean; items: Proj
               >
                 <span
                   className="absolute bottom-0 left-0 h-[3px] w-full transition-all duration-300 group-hover:h-[6px]"
-                  style={{ background: i === active ? "rgba(244,96,42,0.28)" : "rgba(242,238,229,0.16)" }}
+                  style={{ background: i === active ? "rgba(var(--gold-rgb),0.28)" : "rgba(var(--bone-rgb),0.16)" }}
                 />
                 {i === active && (
                   <span
@@ -248,7 +249,7 @@ export default function WorkHero({ ready, items }: { ready: boolean; items: Proj
                       barRef.current = el;
                     }}
                     className="absolute bottom-0 left-0 h-[3px] w-full origin-left"
-                    style={{ background: "#f4602a", boxShadow: "0 0 10px rgba(244,96,42,0.8)", transform: "scaleX(0)" }}
+                    style={{ background: "var(--color-gold)", boxShadow: "0 0 10px rgba(var(--gold-rgb),0.8)", transform: "scaleX(0)" }}
                   />
                 )}
               </button>

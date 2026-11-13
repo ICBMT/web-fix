@@ -1,7 +1,7 @@
 Fonts in this folder are licensed under the SIL Open Font License 1.1
 (https://openfontlicense.org), obtained via Fontsource (npm):
 
-- inter-var.woff2         Inter (variable, opsz + wght)   © The Inter Project Authors
-- bigshoulders-var.woff2  Big Shoulders Display (variable) © The Big Shoulders Project Authors
-- geistmono-var.woff2     Geist Mono (variable)            © Vercel, in collaboration with basement.studio
-- silkscreen-*.woff2      Silkscreen                       © Jason Kottke
+- schibsted-var.woff2  Schibsted Grotesk (variable, wght 400–900)  © The Schibsted Grotesk Project Authors
+                       (used as an open-source stand-in for PP Mori, the commercial font on gsap.com)
+- geistmono-var.woff2  Geist Mono (variable)                      © Vercel, in collaboration with basement.studio
+- silkscreen-*.woff2   Silkscreen                                 © Jason Kottke

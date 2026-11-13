@@ -93,6 +93,7 @@ export class LogoScene {
 
   /** On-screen size multiplier for the logo + its cube ring (positions are unaffected). */
   private sizeFactor: number;
+  private light = false;
 
   constructor(canvas: HTMLCanvasElement, url: string, interactive = true, sizeFactor = 1) {
     this.canvas = canvas;
@@ -220,6 +221,33 @@ export class LogoScene {
     };
     make(640, 0xf4602a, 0.045, 0.7);
     make(360, 0xf2eee5, 0.03, 0.35);
+    this.applyLight();
+  }
+
+  /** Light mode: additive sparkles vanish on paper, so switch to normal blending + ink dust. */
+  setLight(light: boolean) {
+    this.light = light;
+    this.applyLight();
+  }
+
+  private applyLight() {
+    const [ember, dust] = this.particles;
+    const l = this.light;
+    if (ember) {
+      const m = ember.material as THREE.PointsMaterial;
+      m.blending = l ? THREE.NormalBlending : THREE.AdditiveBlending;
+      m.opacity = l ? 0.6 : 0.7;
+      m.color.setHex(l ? 0xd1440f : 0xf4602a);
+      m.needsUpdate = true;
+    }
+    if (dust) {
+      const m = dust.material as THREE.PointsMaterial;
+      m.blending = l ? THREE.NormalBlending : THREE.AdditiveBlending;
+      m.opacity = l ? 0.4 : 0.35;
+      m.color.setHex(l ? 0x2a2420 : 0xf2eee5);
+      m.needsUpdate = true;
+    }
+    if (this.renderer) this.renderer.toneMappingExposure = l ? 1.05 : 1.15;
   }
 
   /** A halo of tumbling pixel-cubes orbiting the logo — its "satellite ring". */

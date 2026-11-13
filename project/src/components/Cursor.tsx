@@ -46,8 +46,8 @@ export default function Cursor() {
         if (labelRef.current.textContent !== label) labelRef.current.textContent = label;
         labelRef.current.style.opacity = label ? "1" : "0";
       }
-      r.style.backgroundColor = label ? "#f4602a" : "transparent";
-      r.style.borderColor = label ? "transparent" : "rgba(242,238,229,0.75)";
+      r.style.backgroundColor = label ? "var(--color-gold)" : "transparent";
+      r.style.borderColor = label ? "transparent" : "rgba(var(--bone-rgb),0.75)";
     };
     raf = requestAnimationFrame(tick);
 
@@ -63,13 +63,13 @@ export default function Cursor() {
 
   return (
     <>
-      <div ref={dotRef} className="pointer-events-none fixed left-0 top-0 z-[120] hidden h-1.5 w-1.5 rounded-full bg-gold md:block" style={{ background: "#f4602a" }} />
+      <div ref={dotRef} className="pointer-events-none fixed left-0 top-0 z-[120] hidden h-1.5 w-1.5 rounded-full bg-gold md:block" style={{ background: "var(--color-gold)" }} />
       <div
         ref={ringRef}
-        className="pointer-events-none fixed left-0 top-0 z-[119] hidden h-10 w-10 items-center justify-center rounded-full border mix-blend-difference md:flex"
-        style={{ borderColor: "rgba(242,238,229,0.75)" }}
+        className="theme-dark pointer-events-none fixed left-0 top-0 z-[119] hidden h-10 w-10 items-center justify-center rounded-full border mix-blend-difference md:flex"
+        style={{ borderColor: "rgba(var(--bone-rgb),0.75)" }}
       >
-        <span ref={labelRef} className="font-mono text-[7px] font-bold tracking-[0.18em] text-ink opacity-0 transition-opacity" style={{ fontFamily: "var(--font-mono)", color: "#0b0a09" }}>
+        <span ref={labelRef} className="font-mono text-[7px] font-bold tracking-[0.18em] text-ink opacity-0 transition-opacity" style={{ fontFamily: "var(--font-mono)", color: "var(--color-ink)" }}>
           VIEW
         </span>
       </div>

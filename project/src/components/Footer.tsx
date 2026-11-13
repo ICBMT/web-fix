@@ -1,6 +1,6 @@
 import { ArrowUp, ArrowUpRight } from "lucide-react";
 import { getLenis } from "../lib/core";
-import { LOGO_WHITE } from "../lib/data";
+import { LOGO_BLACK, LOGO_WHITE } from "../lib/data";
 import Marquee from "./Marquee";
 
 export default function Footer({ onNavigate }: { onNavigate: (r: string) => void }) {
@@ -9,7 +9,7 @@ export default function Footer({ onNavigate }: { onNavigate: (r: string) => void
   };
 
   return (
-    <footer className="relative border-t" style={{ borderColor: "rgba(242,238,229,0.09)", background: "#0b0a09" }}>
+    <footer className="relative border-t" style={{ borderColor: "rgba(var(--bone-rgb),0.09)", background: "var(--color-ink)" }}>
       <Marquee
         items={["LET'S BUILD SOMETHING RARE", "GREEPIXEL®", "PIXEL BY PIXEL", "LET'S BUILD SOMETHING RARE", "GREEPIXEL®", "PIXEL BY PIXEL"]}
         duration={26}
@@ -26,10 +26,10 @@ export default function Footer({ onNavigate }: { onNavigate: (r: string) => void
             </span>
             <span className="font-display mt-1 flex items-center gap-3 text-[clamp(3rem,7vw,6rem)] uppercase leading-[0.9] text-bone transition-colors duration-500 group-hover:text-gold" style={{ ["--tw-text-opacity" as string]: 1 }}>
               Let's build
-              <ArrowUpRight className="h-[0.7em] w-[0.7em] transition-transform duration-500 group-hover:-translate-y-2 group-hover:translate-x-2" style={{ color: "#f4602a" }} />
+              <ArrowUpRight className="h-[0.7em] w-[0.7em] transition-transform duration-500 group-hover:-translate-y-2 group-hover:translate-x-2" style={{ color: "var(--color-gold)" }} />
             </span>
           </a>
-          <a href="mailto:hello@greepixel.com" className="label mt-6 inline-block border-b border-transparent pb-1 transition-colors hover:border-gold" style={{ color: "rgba(242,238,229,0.75)" }}>
+          <a href="mailto:hello@greepixel.com" className="label mt-6 inline-block border-b border-transparent pb-1 transition-colors hover:border-gold" style={{ color: "rgba(var(--bone-rgb),0.75)" }}>
             hello@greepixel.com
           </a>
         </div>
@@ -84,12 +84,13 @@ export default function Footer({ onNavigate }: { onNavigate: (r: string) => void
       </div>
 
       <div className="px-6 md:px-10">
-        <img src={LOGO_WHITE} alt="GreePixel" className="w-full opacity-[0.14]" />
+        <img src={LOGO_WHITE} alt="GreePixel" className="logo-on-dark w-full opacity-[0.14]" />
+        <img src={LOGO_BLACK} alt="" aria-hidden className="logo-on-light w-full opacity-[0.12]" />
       </div>
 
-      <div className="flex flex-col gap-2 border-t px-6 py-5 md:flex-row md:items-center md:justify-between md:px-10" style={{ borderColor: "rgba(242,238,229,0.09)" }}>
+      <div className="flex flex-col gap-2 border-t px-6 py-5 md:flex-row md:items-center md:justify-between md:px-10" style={{ borderColor: "rgba(var(--bone-rgb),0.09)" }}>
         <span className="label">© 2026 GREEPIXEL® — ALL RIGHTS RESERVED</span>
-        <span className="label" style={{ color: "rgba(244,96,42,0.75)" }}>
+        <span className="label" style={{ color: "rgba(var(--gold-rgb),0.75)" }}>
           FORGED FROM MILL3 × STUDIO MIRAGE
         </span>
         <span className="label">BUILT PIXEL BY PIXEL</span>

@@ -95,11 +95,11 @@ export default function Loader({ onDone }: { onDone: () => void }) {
   }, [onDone]);
 
   return (
-    <div ref={rootRef} className="fixed inset-0 z-[100]">
+    <div ref={rootRef} className="theme-dark fixed inset-0 z-[100]">
       {/* wipe columns */}
       <div className="absolute inset-0 flex">
         {[...Array(6)].map((_, i) => (
-          <div key={i} className="loader-col h-full flex-1 bg-ink" style={{ borderRight: "1px solid rgba(242,238,229,0.04)" }} />
+          <div key={i} className="loader-col h-full flex-1 bg-ink" style={{ borderRight: "1px solid rgba(var(--bone-rgb),0.04)" }} />
         ))}
       </div>
 
@@ -111,21 +111,21 @@ export default function Loader({ onDone }: { onDone: () => void }) {
 
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <div className="relative">
-            <div className="absolute inset-[-30%]" style={{ background: "radial-gradient(50% 50% at 50% 50%, rgba(244,96,42,0.13), transparent 70%)" }} />
+            <div className="absolute inset-[-30%]" style={{ background: "radial-gradient(50% 50% at 50% 50%, rgba(var(--gold-rgb),0.13), transparent 70%)" }} />
             <canvas ref={canvasRef} className="relative h-[min(64vw,340px)] w-[min(64vw,340px)]" />
           </div>
         </div>
 
         <div className="flex items-end justify-between gap-8">
           <div>
-            <span ref={statusRef} className="label mb-4 block text-gold" style={{ color: "#f4602a" }}>
+            <span ref={statusRef} className="label mb-4 block text-gold" style={{ color: "var(--color-gold)" }}>
               INITIALIZING
             </span>
             <div className="flex items-start leading-none">
               <div ref={pctRef} className="font-pixel text-[clamp(4rem,14vw,9rem)] leading-none text-bone" style={{ fontFamily: "var(--font-pixel)" }}>
                 000
               </div>
-              <span className="mt-2 ml-2 font-pixel text-xl text-gold" style={{ fontFamily: "var(--font-pixel)", color: "#f4602a" }}>
+              <span className="mt-2 ml-2 font-pixel text-xl text-gold" style={{ fontFamily: "var(--font-pixel)", color: "var(--color-gold)" }}>
                 %
               </span>
             </div>
@@ -133,14 +133,14 @@ export default function Loader({ onDone }: { onDone: () => void }) {
           <div className="hidden text-right md:block">
             <span className="label block">31.5204° N — 74.3587° E</span>
             <span className="label mt-2 block">LAHORE / WORLDWIDE</span>
-            <span className="label mt-2 block" style={{ color: "rgba(244,96,42,0.7)" }}>
+            <span className="label mt-2 block" style={{ color: "rgba(var(--gold-rgb),0.7)" }}>
               GLB · 23 ACTIONS · 4.56S
             </span>
           </div>
         </div>
 
         <div className="absolute bottom-0 left-0 h-px w-full bg-bone/10">
-          <div ref={barRef} className="h-full w-full origin-left bg-gold" style={{ transform: "scaleX(0)", background: "#f4602a" }} />
+          <div ref={barRef} className="h-full w-full origin-left bg-gold" style={{ transform: "scaleX(0)", background: "var(--color-gold)" }} />
         </div>
       </div>
     </div>

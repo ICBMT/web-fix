@@ -20,7 +20,7 @@ npm run dev
 | --- | --- |
 | `src/media/work/` | Case-study images (`<id>.jpg`) and optional videos (`<id>.mp4`) |
 | `src/media/lab/` | Lab / R&D gallery images |
-| `src/media/fonts/` | Self-hosted fonts (Big Shoulders Display, Inter, Geist Mono, Silkscreen — OFL) |
+| `src/media/fonts/` | Self-hosted fonts (Schibsted Grotesk — PP Mori look-alike, Geist Mono, Silkscreen — OFL) |
 
 Media is collected with `import.meta.glob` in `src/lib/assets.ts`, so:
 

@@ -1,6 +1,6 @@
-import { GLB_URL, LOGO_WHITE, MEDIA } from "./assets";
+import { GLB_URL, LOGO_BLACK, LOGO_WHITE, MEDIA } from "./assets";
 
-export { GLB_URL, LOGO_WHITE };
+export { GLB_URL, LOGO_BLACK, LOGO_WHITE };
 
 export type Studio = "GREEPIXEL" | "MILL3" | "MIRAGE";
 

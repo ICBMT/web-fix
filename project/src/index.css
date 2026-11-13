@@ -1,24 +1,26 @@
 @import "tailwindcss";
 
 /* ---------- self-hosted fonts (inlined into the single-file build) ---------- */
-/* Display — Big Shoulders Display (variable). size-adjust lifts its cap height to
-   roughly match the old Anton metrics so every headline keeps its layout. */
+/* GSAP-style type. gsap.com uses PP Mori (commercial, Pangram Pangram); Schibsted
+   Grotesk is the closest open-source (OFL) match. One variable file, two faces:
+   - "Schibsted Display": headlines, scaled to 94% so the giant uppercase words
+     keep fitting their lines (Mori-style wide caps are ~30% wider than before).
+   - "Schibsted Grotesk": body copy at its natural size. */
 @font-face {
-  font-family: "Big Shoulders Display";
+  font-family: "Schibsted Display";
   font-style: normal;
-  font-weight: 100 900;
+  font-weight: 400 900;
   font-display: block;
-  size-adjust: 104%;
-  src: url("./media/fonts/bigshoulders-var.woff2") format("woff2");
+  size-adjust: 94%;
+  src: url("./media/fonts/schibsted-var.woff2") format("woff2");
 }
 
-/* Body — Inter (variable, optical sizing) for maximum readability */
 @font-face {
-  font-family: "Inter";
+  font-family: "Schibsted Grotesk";
   font-style: normal;
-  font-weight: 100 900;
+  font-weight: 400 900;
   font-display: swap;
-  src: url("./media/fonts/inter-var.woff2") format("woff2");
+  src: url("./media/fonts/schibsted-var.woff2") format("woff2");
 }
 
 /* Labels / UI — Geist Mono (variable) */
@@ -55,10 +57,82 @@
   --color-mute: rgba(242, 238, 229, 0.64);
   --color-gold: #f4602a;
   --color-ember: #c2441a;
-  --font-display: "Big Shoulders Display", "Anton", "Arial Narrow", sans-serif;
-  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Schibsted Display", "Helvetica Neue", Arial, sans-serif;
+  --font-sans: "Schibsted Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", monospace;
   --font-pixel: "Silkscreen", monospace;
+}
+
+/* ---------- themes ----------
+   Dark is the default. `html.light` flips the palette; `.theme-dark` re-pins the
+   dark palette for areas that must stay dark (blend-mode nav, cinematic hero…).
+   *-rgb triplets let inline styles use rgba(var(--bone-rgb), .5). */
+:root,
+.theme-dark {
+  --color-ink: #0b0a09;
+  --color-coal: #151311;
+  --color-line: rgba(242, 238, 229, 0.1);
+  --color-bone: #f2eee5;
+  --color-mute: rgba(242, 238, 229, 0.64);
+  --color-gold: #f4602a;
+  --color-ember: #c2441a;
+  --ink-rgb: 11, 10, 9;
+  --bone-rgb: 242, 238, 229;
+  --gold-rgb: 244, 96, 42;
+  color-scheme: dark;
+}
+
+html.light {
+  --color-ink: #f3efe6; /* warm paper */
+  --color-coal: #e9e3d6;
+  --color-line: rgba(21, 19, 17, 0.12);
+  --color-bone: #151311; /* warm near-black text */
+  --color-mute: rgba(21, 19, 17, 0.66);
+  --color-gold: #d1440f; /* deeper ember for contrast on paper */
+  --color-ember: #a8370c;
+  --ink-rgb: 243, 239, 230;
+  --bone-rgb: 21, 19, 17;
+  --gold-rgb: 209, 68, 15;
+  color-scheme: light;
+}
+
+/* re-pin dark inside light mode (must follow html.light) */
+html.light .theme-dark {
+  --color-ink: #0b0a09;
+  --color-coal: #151311;
+  --color-line: rgba(242, 238, 229, 0.1);
+  --color-bone: #f2eee5;
+  --color-mute: rgba(242, 238, 229, 0.64);
+  --color-gold: #f4602a;
+  --color-ember: #c2441a;
+  --ink-rgb: 11, 10, 9;
+  --bone-rgb: 242, 238, 229;
+  --gold-rgb: 244, 96, 42;
+  color-scheme: dark;
+}
+
+/* pinned-dark areas also reset inherited text colour (it's computed on the
+   light-mode ancestors otherwise) */
+html.light .theme-dark {
+  color: var(--color-bone);
+}
+
+/* logo swap: white mark on dark, black mark on light */
+.logo-on-light {
+  display: none;
+}
+html.light .logo-on-dark:not(.theme-dark *) {
+  display: none;
+}
+html.light .logo-on-light:not(.theme-dark *) {
+  display: block;
+}
+
+/* freeze colour transitions for the single frame the palette flips */
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  transition: none !important;
 }
 
 html {
@@ -76,9 +150,7 @@ body {
   background: var(--color-ink);
   color: var(--color-bone);
   font-family: var(--font-sans);
-  font-optical-sizing: auto;
-  font-feature-settings: "cv05"; /* Inter: tailed l — tells l / I / 1 apart */
-  line-height: 1.55;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: clip;
@@ -97,13 +169,13 @@ body {
 /* ---------- typography helpers ---------- */
 .font-display {
   font-family: var(--font-display);
-  font-weight: 900;
-  letter-spacing: 0.005em;
+  font-weight: 600;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
 }
 
 .text-stroke {
-  -webkit-text-stroke: 1.5px rgba(242, 238, 229, 0.55);
+  -webkit-text-stroke: 1.5px rgba(var(--bone-rgb), 0.55);
   color: transparent;
 }
 
@@ -258,7 +330,7 @@ body {
   position: absolute;
   width: 22px;
   height: 22px;
-  border-color: rgba(244, 96, 42, 0.65);
+  border-color: rgba(var(--gold-rgb), 0.65);
 }
 
 /* ---------- misc ---------- */
@@ -286,10 +358,103 @@ canvas {
   scroll-behavior: auto !important;
 }
 
-/* Work hero — Pixel Vault HUD corner brackets */
-.hud-corner {
+
+/* ---------- theme toggle (nav) ---------- */
+.theme-toggle {
+  color: var(--color-bone);
+  border-color: rgba(var(--bone-rgb), 0.4);
+  transition: border-color 0.3s;
+}
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  border-color: var(--color-bone);
+  outline: none;
+}
+.tt-knob {
+  transform: translateX(0) rotate(0deg);
+  transition: transform 0.75s cubic-bezier(0.7, 0, 0.2, 1);
+}
+.theme-toggle[data-light] .tt-knob {
+  transform: translateX(28px) rotate(360deg);
+}
+.tt-bite {
+  transition: transform 0.6s cubic-bezier(0.7, 0, 0.2, 1);
+}
+.theme-toggle[data-light] .tt-bite {
+  transform: translate(14px, -14px);
+}
+.tt-rays,
+.tt-core {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.tt-rays {
+  opacity: 0;
+  transform: scale(0.3) rotate(-90deg);
+  transition: transform 0.6s 0.12s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s 0.12s;
+}
+.theme-toggle[data-light] .tt-rays {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+.tt-core {
+  transition: transform 0.6s cubic-bezier(0.7, 0, 0.2, 1);
+}
+.theme-toggle[data-light] .tt-core {
+  transform: scale(0.66);
+}
+.tt-stars i {
   position: absolute;
-  width: 22px;
-  height: 22px;
-  border-color: rgba(244, 96, 42, 0.65);
+  width: 2px;
+  height: 2px;
+  background: currentColor;
+  opacity: 0.85;
+  transition: opacity 0.35s, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.tt-stars i:nth-child(2) {
+  animation: pulse-glow 1.8s ease-in-out infinite;
+}
+.theme-toggle[data-light] .tt-stars i {
+  opacity: 0;
+  transform: translateY(5px) scale(0);
+}
+.tt-pulse {
+  opacity: 0;
+}
+.tt-pulse-run {
+  animation: tt-pulse 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes tt-pulse {
+  from {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.9, 2.6);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tt-knob,
+  .tt-bite,
+  .tt-rays,
+  .tt-core {
+    transition-duration: 0.01s;
+  }
+}
+
+/* ---------- tools strip ---------- */
+.tool-chip {
+  color: rgba(var(--bone-rgb), 0.62);
+  transition: color 0.3s;
+}
+.tool-chip:hover {
+  color: var(--color-bone);
+}
+.tool-chip .tool-logo {
+  transition: color 0.3s, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.tool-chip:hover .tool-logo {
+  color: var(--brand, var(--color-bone));
+  transform: scale(1.18);
 }
