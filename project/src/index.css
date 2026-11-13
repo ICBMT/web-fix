@@ -1,0 +1,276 @@
+@import "tailwindcss";
+
+/* ---------- self-hosted fonts (inlined into the single-file build) ---------- */
+@font-face {
+  font-family: "Anton";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("./media/fonts/anton-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url("./media/fonts/spacegrotesk-var.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url("./media/fonts/jetbrainsmono-var.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Silkscreen";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("./media/fonts/silkscreen-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Silkscreen";
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+  src: url("./media/fonts/silkscreen-700.woff2") format("woff2");
+}
+
+@theme {
+  --color-ink: #0a0a0b;
+  --color-coal: #121214;
+  --color-line: rgba(237, 234, 224, 0.09);
+  --color-bone: #edeae0;
+  --color-mute: rgba(237, 234, 224, 0.52);
+  --color-gold: #e95925;
+  --color-ember: #b03e16;
+  --font-display: "Anton", "Arial Black", sans-serif;
+  --font-sans: "Space Grotesk", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-pixel: "Silkscreen", monospace;
+}
+
+html {
+  background: var(--color-ink);
+  scrollbar-width: none;
+}
+
+html,
+body {
+  overscroll-behavior: none;
+}
+
+body {
+  margin: 0;
+  background: var(--color-ink);
+  color: var(--color-bone);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-ink);
+}
+
+/* ---------- typography helpers ---------- */
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+
+.text-stroke {
+  -webkit-text-stroke: 1.5px rgba(237, 234, 224, 0.55);
+  color: transparent;
+}
+
+.text-stroke-gold {
+  -webkit-text-stroke: 1.5px var(--color-gold);
+  color: transparent;
+}
+
+/* outline text that paints gold when its .group parent is hovered */
+.group:hover .gtg {
+  -webkit-text-stroke-color: var(--color-gold);
+}
+
+@media (max-width: 768px) {
+  .text-stroke,
+  .text-stroke-gold {
+    -webkit-text-stroke-width: 1px;
+  }
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-mute);
+}
+
+.label-gold {
+  color: var(--color-gold);
+}
+
+/* ---------- char-split reveals ---------- */
+.split-line {
+  display: block;
+  overflow: hidden;
+}
+
+.split-line > span {
+  display: block;
+  transform: translateY(115%);
+  will-change: transform;
+}
+
+.char-wrap {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+}
+
+.char-wrap > span {
+  display: inline-block;
+  transform: translateY(115%);
+  will-change: transform;
+}
+
+/* ---------- marquee ---------- */
+@keyframes marquee-x {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-x var(--marquee-duration, 28s) linear infinite;
+}
+
+.marquee-reverse {
+  animation-direction: reverse;
+}
+
+/* ---------- grain ---------- */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: -100%;
+  z-index: 90;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity: 0.05;
+  animation: grain-shift 0.9s steps(4) infinite;
+}
+
+@keyframes grain-shift {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-2%, 3%);
+  }
+  50% {
+    transform: translate(3%, -2%);
+  }
+  75% {
+    transform: translate(-3%, -3%);
+  }
+  100% {
+    transform: translate(2%, 2%);
+  }
+}
+
+/* ---------- HUD / float animations ---------- */
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 46s linear infinite;
+}
+
+.animate-spin-rev {
+  animation: spin-slow 30s linear infinite reverse;
+}
+
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(-5px);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+.animate-float-y {
+  animation: float-y 5s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2.6s ease-in-out infinite;
+}
+
+.hud-corner {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-color: rgba(233, 89, 37, 0.65);
+}
+
+/* ---------- misc ---------- */
+.pixel-block {
+  image-rendering: pixelated;
+}
+
+.no-cursor,
+.no-cursor * {
+  cursor: none !important;
+}
+
+@media (hover: none) {
+  .no-cursor,
+  .no-cursor * {
+    cursor: auto !important;
+  }
+}
+
+canvas {
+  display: block;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
