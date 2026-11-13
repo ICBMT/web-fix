@@ -285,7 +285,8 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
     const chars2 = splitChars(document.querySelector<HTMLElement>(".hero-word-2")!);
 
     gsap.set(logoPose, { assemble: 0, rotY: -1.4, dist: 1.5, spin: 3.4 });
-    gsap.set([...chars1, ...chars2], { yPercent: 115 });
+    // y: 0 matters — GSAP would otherwise adopt the CSS translateY(115%) as a fixed px offset
+    gsap.set([...chars1, ...chars2], { y: 0, yPercent: 115 });
     gsap.set(".hero-meta", { opacity: 0, y: 18 });
     gsap.set(".hero-cue", { opacity: 0 });
     gsap.set(".hud", { opacity: 0, scale: 0.82 });
