@@ -63,19 +63,21 @@ export const LOGO_WHITE = whiteLogo;
 export const LOGO_BLACK = blackLogo;
 
 const WORK_IDS = [
+  // GreePixel portfolio
+  "jalebi",
+  "ad-grants-pilot",
+  "on-card",
+  "kim-and-co",
+  "lairo",
+  "find-a-doc",
+  "shepherd",
+  "deltabook",
+  "xpatio",
+  "hotcoin",
+  // studio archive (MILL3 × Studio Mirage)
   "moosehead",
   "cob",
-  "difc",
-  "margiela",
-  "renault",
-  "omnicell",
-  "gsoft",
-  "ubisoft",
-  "ventriloc",
-  "tasmim",
-  "amourliquide",
   "sopra",
-  "basehabitation",
   "caisse",
   "jinns",
   "biotherm",

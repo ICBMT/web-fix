@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { ArrowDown, ArrowUpRight, Move, Play } from "lucide-react";
 import { gsap, ScrollTrigger, splitChars } from "../lib/core";
 import { LAB, SERVICE_PREVIEWS } from "../lib/assets";
-import { chapters, GLB_URL, projects, services, stats } from "../lib/data";
+import { chapters, GLB_URL, projectMeta, projects, services, stats, STUDIO_LABEL, type Project } from "../lib/data";
 import { defaultPose, logoPose, LogoScene, resetPose } from "../three/logoScene";
 import Footer from "../components/Footer";
 import Marquee from "../components/Marquee";
@@ -304,7 +304,9 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
     onNavigate("#/work");
   };
 
-  const featured = projects.filter((p) => ["moosehead", "difc", "ubisoft"].includes(p.id));
+  // big video tile + two portfolio highlights
+  const featured = ["moosehead", "jalebi", "shepherd"].map((id) => projects.find((p) => p.id === id)).filter(Boolean) as Project[];
+  const caption = (p: Project) => `${p.cat} — ${STUDIO_LABEL[p.studio].replace("®", "")}, ${projectMeta(p)}`;
 
   return (
     <div ref={rootRef} className="relative">
@@ -557,7 +559,7 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
         <section className="px-6 py-24 md:px-10 md:py-36">
           <div className="mb-12 flex flex-wrap items-end justify-between gap-6 md:mb-16">
             <div>
-              <span className="label label-gold block">[ARCHIVE — FROM MILL3 × STUDIO MIRAGE]</span>
+              <span className="label label-gold block">[PORTFOLIO — GREEPIXEL® × STUDIO ARCHIVE]</span>
               <div className="mt-3 overflow-hidden">
                 <h2 className="reveal-line font-display block text-[clamp(2.8rem,7vw,6.5rem)] uppercase leading-[0.9]">SELECTED WORK</h2>
               </div>
@@ -583,7 +585,7 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
               </div>
               <div className="absolute bottom-0 left-0 w-full p-5" style={{ background: "linear-gradient(to top, rgba(10,10,11,0.85), transparent)" }}>
                 <h3 className="font-display text-3xl uppercase md:text-5xl">{featured[0].name}</h3>
-                <span className="label mt-1 block">{featured[0].cat} — MILL3, {featured[0].year}</span>
+                <span className="label mt-1 block">{caption(featured[0])}</span>
               </div>
             </a>
 
@@ -596,7 +598,7 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
                   <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" style={{ background: "rgba(233,89,37,0.16)" }} />
                   <div className="absolute bottom-0 left-0 w-full p-5" style={{ background: "linear-gradient(to top, rgba(10,10,11,0.8), transparent)" }}>
                     <h3 className="font-display text-2xl uppercase md:text-3xl">{p.name}</h3>
-                    <span className="label mt-1 block">{p.cat} — MIRAGE, {p.year}</span>
+                    <span className="label mt-1 block">{caption(p)}</span>
                   </div>
                 </a>
               ))}

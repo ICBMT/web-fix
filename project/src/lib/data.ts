@@ -2,19 +2,153 @@ import { GLB_URL, LOGO_WHITE, MEDIA } from "./assets";
 
 export { GLB_URL, LOGO_WHITE };
 
+export type Studio = "GREEPIXEL" | "MILL3" | "MIRAGE";
+
 export type Project = {
   id: string;
   name: string;
   cat: string;
-  studio: "MILL3" | "MIRAGE";
-  year: string;
+  studio: Studio;
+  /** Shown on the card; portfolio projects without a known year show `kind` instead. */
+  year?: string;
+  /** e.g. "Web platform" / "Mobile app" */
+  kind?: string;
+  industry?: string;
+  desc?: string;
   img: string;
   video?: string;
   tags: string[];
+  url?: string;
   hue?: string;
 };
 
-export const projects: Project[] = [
+/** Where GreePixel portfolio cards link to (source: greelogix.com/portfolio). */
+export const PORTFOLIO_URL = "https://greelogix.com/portfolio";
+
+export const STUDIO_LABEL: Record<Studio, string> = {
+  GREEPIXEL: "GREEPIXEL®",
+  MILL3: "MILL3®",
+  MIRAGE: "MIRAGE®",
+};
+
+/** "2023" for archive work, "MOBILE APP" etc. for portfolio work. */
+export function projectMeta(p: Project) {
+  return p.year ?? (p.kind ?? "").toUpperCase();
+}
+
+/* ---- GreePixel portfolio (sourced from the GreeLogix portfolio page) ---- */
+const portfolio: Project[] = [
+  {
+    id: "jalebi",
+    name: "Jalebi",
+    cat: "Restaurant SaaS Platform",
+    studio: "GREEPIXEL",
+    kind: "Web platform",
+    industry: "Food & Hospitality",
+    desc: "A full-featured SaaS platform for restaurants to manage inventory, orders, customers and operations — all in one place.",
+    img: MEDIA.jalebi.img,
+    tags: ["Laravel", "React", "PostgreSQL", "Redis"],
+  },
+  {
+    id: "ad-grants-pilot",
+    name: "Ad Grants Pilot",
+    cat: "AI Chatbot Admin Panel",
+    studio: "GREEPIXEL",
+    kind: "Web platform",
+    industry: "Non-Profit · AI",
+    desc: "A centralised admin panel for managing chatbot flows for non-profit ad campaigns — monitor conversations, configure automated responses, and understand performance at a glance.",
+    img: MEDIA["ad-grants-pilot"].img,
+    tags: ["Node.js", "OpenAI", "React", "MongoDB"],
+  },
+  {
+    id: "on-card",
+    name: "ON Card",
+    cat: "Digital Business Card Platform",
+    studio: "GREEPIXEL",
+    kind: "Mobile app",
+    industry: "Networking · FinTech",
+    desc: "Create and share digital business cards with NFC support. Track transactions, capture leads and export straight to CRM — all from a tap.",
+    img: MEDIA["on-card"].img,
+    tags: ["Flutter", "Node.js", "NFC", "Salesforce API"],
+  },
+  {
+    id: "kim-and-co",
+    name: "Kim & Co",
+    cat: "Internal Product & Sales Tool",
+    studio: "GREEPIXEL",
+    kind: "Web platform",
+    industry: "Internal Tools · Retail",
+    desc: "An internal management tool to manage, analyse and optimise products and the sales pipeline — giving leadership real-time visibility into performance.",
+    img: MEDIA["kim-and-co"].img,
+    tags: ["React", "Laravel", "PostgreSQL", "Chart.js"],
+  },
+  {
+    id: "lairo",
+    name: "Lairo",
+    cat: "AI Interest Analyzer",
+    studio: "GREEPIXEL",
+    kind: "Mobile app",
+    industry: "AI · Consumer",
+    desc: "Upload a screenshot of a conversation and Lairo's AI analyses it to reveal the other person's level of interest — plus smart suggestions on what to reply next.",
+    img: MEDIA.lairo.img,
+    tags: ["Flutter", "OpenAI Vision", "Python", "FastAPI"],
+  },
+  {
+    id: "find-a-doc",
+    name: "Find a Doc",
+    cat: "Doctor Appointment Platform",
+    studio: "GREEPIXEL",
+    kind: "Mobile app",
+    industry: "Healthcare",
+    desc: "Patients book appointments with specialised doctors. Doctors set their schedule, manage staff and run their practice — one streamlined platform.",
+    img: MEDIA["find-a-doc"].img,
+    tags: ["Flutter", "Laravel", "MySQL", "Firebase"],
+  },
+  {
+    id: "shepherd",
+    name: "Shepherd",
+    cat: "AI Tutor & Study App",
+    studio: "GREEPIXEL",
+    kind: "Mobile app",
+    industry: "EdTech · AI",
+    desc: "An AI study co-pilot: topic chat, generated study modules, notes, flashcards, summaries and a study calendar.",
+    img: MEDIA.shepherd.img,
+    tags: ["Flutter", "OpenAI", "Firebase", "Node.js"],
+  },
+  {
+    id: "deltabook",
+    name: "DeltaBook",
+    cat: "Interactive Learning Platform",
+    studio: "GREEPIXEL",
+    kind: "Mobile app",
+    industry: "EdTech",
+    img: MEDIA.deltabook.img,
+    tags: ["Flutter", "Firebase", "Node.js", "MongoDB"],
+  },
+  {
+    id: "xpatio",
+    name: "Xpatio",
+    cat: "Expat Community App",
+    studio: "GREEPIXEL",
+    kind: "Mobile app",
+    industry: "Social · Community",
+    img: MEDIA.xpatio.img,
+    tags: ["Flutter", "Node.js", "PostgreSQL", "Firebase"],
+  },
+  {
+    id: "hotcoin",
+    name: "Hotcoin",
+    cat: "Video Rewards App",
+    studio: "GREEPIXEL",
+    kind: "Mobile app",
+    industry: "Entertainment · Rewards",
+    img: MEDIA.hotcoin.img,
+    tags: ["Flutter", "Node.js", "Firebase", "Stripe"],
+  },
+];
+
+/* ---- Studio archive (MILL3 × Studio Mirage) — kept: video work + remaining slots ---- */
+const archive: Project[] = [
   {
     id: "moosehead",
     name: "Moosehead",
@@ -24,24 +158,7 @@ export const projects: Project[] = [
     img: MEDIA.moosehead.img,
     video: MEDIA.moosehead.video,
     tags: ["Web Experience", "Shopify", "Motion"],
-  },
-  {
-    id: "difc",
-    name: "DIFC — 4th Edition",
-    cat: "Projection Mapping Film",
-    studio: "MIRAGE",
-    year: "2025",
-    img: MEDIA.difc.img,
-    tags: ["3D Motion", "Live Event", "Dubai"],
-  },
-  {
-    id: "margiela",
-    name: "Maison Margiela",
-    cat: "Immersive 3D Garden",
-    studio: "MIRAGE",
-    year: "2024",
-    img: MEDIA.margiela.img,
-    tags: ["Immersive", "Luxury", "WebGL"],
+    url: "https://mill3.studio/en/projects/moosehead/",
   },
   {
     id: "cob",
@@ -52,69 +169,7 @@ export const projects: Project[] = [
     img: MEDIA.cob.img,
     video: MEDIA.cob.video,
     tags: ["Art Direction", "WebGL", "CPG"],
-  },
-  {
-    id: "renault",
-    name: "Renault Trucks",
-    cat: "3D Virtual City",
-    studio: "MIRAGE",
-    year: "2024",
-    img: MEDIA.renault.img,
-    tags: ["Real-time 3D", "Configurator", "B2B"],
-  },
-  {
-    id: "omnicell",
-    name: "Omnicell Explorer",
-    cat: "Interactive Product 3D",
-    studio: "MIRAGE",
-    year: "2025",
-    img: MEDIA.omnicell.img,
-    tags: ["Interactive", "Healthcare", "3D"],
-  },
-  {
-    id: "gsoft",
-    name: "GSoft",
-    cat: "Corporate Platform",
-    studio: "MILL3",
-    year: "2021",
-    img: MEDIA.gsoft.img,
-    tags: ["Platform", "SaaS", "Branding"],
-  },
-  {
-    id: "ubisoft",
-    name: "Ubisoft — Assassin's Creed",
-    cat: "Campaign Experience",
-    studio: "MIRAGE",
-    year: "2023",
-    img: MEDIA.ubisoft.img,
-    tags: ["Gaming", "Campaign", "3D"],
-  },
-  {
-    id: "ventriloc",
-    name: "Ventriloc",
-    cat: "Product Site",
-    studio: "MILL3",
-    year: "2023",
-    img: MEDIA.ventriloc.img,
-    tags: ["Web Design", "Motion", "Startup"],
-  },
-  {
-    id: "tasmim",
-    name: "Tasmim",
-    cat: "Design Platform",
-    studio: "MIRAGE",
-    year: "2024",
-    img: MEDIA.tasmim.img,
-    tags: ["Product", "MENA", "UI/UX"],
-  },
-  {
-    id: "amourliquide",
-    name: "Amour Liquide",
-    cat: "E-Commerce / Brand",
-    studio: "MILL3",
-    year: "2023",
-    img: MEDIA.amourliquide.img,
-    tags: ["E-Commerce", "Fragrance", "Culture"],
+    url: "https://cobfoods.com/",
   },
   {
     id: "sopra",
@@ -124,15 +179,7 @@ export const projects: Project[] = [
     year: "2023",
     img: MEDIA.sopra.img,
     tags: ["Live Event", "Fintech", "3D"],
-  },
-  {
-    id: "basehabitation",
-    name: "Base Habitation",
-    cat: "Digital Platform",
-    studio: "MILL3",
-    year: "2024",
-    img: MEDIA.basehabitation.img,
-    tags: ["Editorial", "Housing", "Platform"],
+    url: "https://studiomirage.io/works/sopra-banking",
   },
   {
     id: "caisse",
@@ -142,6 +189,7 @@ export const projects: Project[] = [
     year: "2024",
     img: MEDIA.caisse.img,
     tags: ["Real-time 3D", "Public", "Paris"],
+    url: "https://studiomirage.io/works/caisse-des-depots",
   },
   {
     id: "jinns",
@@ -151,6 +199,7 @@ export const projects: Project[] = [
     year: "2023",
     img: MEDIA.jinns.img,
     tags: ["Campaign", "Beverage", "OOH"],
+    url: "https://studiomirage.io/works/jinns",
   },
   {
     id: "biotherm",
@@ -160,8 +209,16 @@ export const projects: Project[] = [
     year: "2024",
     img: MEDIA.biotherm.img,
     tags: ["Beauty", "Campaign", "CGI"],
+    url: "https://studiomirage.io/works/biotherm",
   },
 ];
+
+for (const p of portfolio) p.url ??= PORTFOLIO_URL;
+
+export const projects: Project[] = [...portfolio, ...archive];
+
+export const PORTFOLIO_IDS = portfolio.map((p) => p.id);
+export const ARCHIVE_IDS = archive.filter((p) => p.id !== "moosehead").map((p) => p.id);
 
 export const chapters = [
   {
@@ -207,7 +264,7 @@ export const services = [
 
 export const stats = [
   { v: 150, suffix: "+", label: "Products shipped worldwide" },
-  { v: 16, suffix: "", label: "Archived case studies below" },
+  { v: 16, suffix: "", label: "Case studies below" },
   { v: 8, suffix: "", label: "Countries served remotely" },
   { v: 4, suffix: "h", label: "Response time, guaranteed" },
 ];

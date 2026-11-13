@@ -1,30 +1,17 @@
 import { useEffect, useRef } from "react";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { gsap, ScrollTrigger, splitChars } from "../lib/core";
-import { projects, type Project } from "../lib/data";
+import { ARCHIVE_IDS, PORTFOLIO_IDS, projectMeta, projects, STUDIO_LABEL, type Project } from "../lib/data";
 import Footer from "../components/Footer";
 import Marquee from "../components/Marquee";
 
-const externalLinks: Record<string, string> = {
-  moosehead: "https://mill3.studio/en/projects/moosehead/",
-  cob: "https://cobfoods.com/",
-  gsoft: "https://mill3.studio/en/projects/gsoft/",
-  ventriloc: "https://mill3.studio/en/projects/ventriloc/",
-  amourliquide: "https://mill3.studio/en/projects/amour-liquide/",
-  basehabitation: "https://mill3.studio/en/projects/",
-  difc: "https://studiomirage.io/works/difc",
-  margiela: "https://studiomirage.io/works/margiela",
-  renault: "https://studiomirage.io/works/renault-trucks",
-  omnicell: "https://studiomirage.io/works/omnicell-explorer",
-  ubisoft: "https://studiomirage.io/works/ubisoft",
-  tasmim: "https://studiomirage.io/works/tasmim",
-  sopra: "https://studiomirage.io/works/sopra-banking",
-  caisse: "https://studiomirage.io/works/caisse-des-depots",
-  jinns: "https://studiomirage.io/works/jinns",
-  biotherm: "https://studiomirage.io/works/biotherm",
-};
-
 const aspects = ["16/10", "4/5", "16/11", "1/1", "16/9", "4/5"];
+
+/** Card order tuned so portrait shots (Lairo, Xpatio, Sopra) land on tall 4/5 slots. */
+const PORTFOLIO_ORDER = ["lairo", "jalebi", "on-card", "ad-grants-pilot", "xpatio", "kim-and-co", "find-a-doc", "shepherd", "hotcoin", "deltabook"].filter((id) =>
+  PORTFOLIO_IDS.includes(id)
+);
+const ARCHIVE_ORDER = ["sopra", "cob", "caisse", "jinns", "biotherm"].filter((id) => ARCHIVE_IDS.includes(id));
 
 function WorkCard({ p, i }: { p: Project; i: number }) {
   const vidRef = useRef<HTMLVideoElement>(null);
@@ -32,7 +19,7 @@ function WorkCard({ p, i }: { p: Project; i: number }) {
 
   return (
     <a
-      href={externalLinks[p.id] || "#"}
+      href={p.url || "#"}
       target="_blank"
       rel="noreferrer"
       data-cursor={p.video ? "PLAY" : "VIEW"}
@@ -60,10 +47,10 @@ function WorkCard({ p, i }: { p: Project; i: number }) {
           <span className="font-pixel text-[10px]" style={{ fontFamily: "var(--font-pixel)", color: "#e95925" }}>
             OPEN CASE ↗
           </span>
-          <span className="label">{p.year}</span>
+          <span className="label">{projectMeta(p)}</span>
         </div>
         <span className="label absolute left-4 top-4 border border-bone/25 bg-ink/55 px-2 py-1 backdrop-blur-sm" style={{ background: "rgba(10,10,11,0.5)", fontSize: "9px" }}>
-          {p.studio === "MILL3" ? "MILL3®" : "MIRAGE®"}
+          {STUDIO_LABEL[p.studio]}
         </span>
       </div>
 
@@ -228,8 +215,8 @@ export default function Work({ ready, onNavigate }: { ready: boolean; onNavigate
         </div>
 
         <div className="work-meta flex items-center justify-between">
-          <span className="label">GREEPIXEL® — VAULT</span>
-          <span className="label hidden md:block">MILL3 (MTL) × STUDIO MIRAGE (PAR / DXB)</span>
+          <span className="label">GREEPIXEL® — WORK</span>
+          <span className="label hidden md:block">GREEPIXEL® PORTFOLIO × STUDIO ARCHIVE</span>
           <span className="label label-gold">16 CASES — 2021 → 2026</span>
         </div>
 
@@ -243,7 +230,7 @@ export default function Work({ ready, onNavigate }: { ready: boolean; onNavigate
 
         <div className="work-meta flex items-center justify-between">
           <p className="max-w-sm text-sm leading-relaxed text-bone/60">
-            Sixteen case studies recovered from the vaults of the two studios that forged GreePixel — web experiences, real-time 3D and live-event worlds.
+            Sixteen case studies — AI products, SaaS platforms and mobile apps shipped by GreePixel, plus selected web, real-time 3D and live-event work from the studio archive.
           </p>
           <span className="label flex items-center gap-2">
             SCROLL <ArrowDown className="h-3.5 w-3.5 animate-bounce" style={{ color: "#e95925" }} />
@@ -251,7 +238,7 @@ export default function Work({ ready, onNavigate }: { ready: boolean; onNavigate
         </div>
       </section>
 
-      <Marquee items={["IMMERSIVE 3D", "REAL-TIME WORLDS", "LIVE EVENTS", "E-COMMERCE", "MOTION & CRAFT"]} className="border-y py-5" textClass="label !text-[11px]" duration={26} />
+      <Marquee items={["AI PRODUCTS", "SAAS PLATFORMS", "MOBILE APPS", "IMMERSIVE 3D", "LIVE EVENTS"]} className="border-y py-5" textClass="label !text-[11px]" duration={26} />
 
       {/* ---------- FEATURED ---------- */}
       <section className="featured-wrap px-6 py-20 md:px-10 md:py-28">
@@ -259,7 +246,7 @@ export default function Work({ ready, onNavigate }: { ready: boolean; onNavigate
           <span className="label label-gold">[00] — FEATURED CASE</span>
           <span className="label hidden md:block">{projects.some((p) => p.video) ? "HOVER-TO-PLAY BELOW" : "HOVER TO EXPLORE BELOW"}</span>
         </div>
-        <a href={externalLinks.moosehead} target="_blank" rel="noreferrer" data-cursor={moosehead.video ? "PLAY" : "VIEW"} className="group relative block overflow-hidden">
+        <a href={moosehead.url} target="_blank" rel="noreferrer" data-cursor={moosehead.video ? "PLAY" : "VIEW"} className="group relative block overflow-hidden">
           <div className="relative" style={{ aspectRatio: "16/9" }}>
             <div ref={heroMediaRef} className="h-full w-full">
               {moosehead.video ? (
@@ -289,11 +276,11 @@ export default function Work({ ready, onNavigate }: { ready: boolean; onNavigate
       </section>
 
       {/* ---------- VAULTS ---------- */}
-      <Vault title="VAULT 01 — MILL3® MONTREAL" ghost="MILL3" ids={["gsoft", "cob", "ventriloc", "amourliquide", "basehabitation"]} startIndex={1} />
+      <Vault title="VAULT 01 — GREEPIXEL® PORTFOLIO" ghost="PIXEL" ids={PORTFOLIO_ORDER} startIndex={1} />
 
       <Marquee items={["PARIS", "DUBAI", "MONTREAL", "LAHORE", "WORLDWIDE"]} className="border-y py-5" textClass="font-display text-3xl md:text-5xl uppercase" duration={30} reverse />
 
-      <Vault title="VAULT 02 — STUDIO MIRAGE® PARIS/DUBAI" ghost="MIRAGE" ids={["difc", "margiela", "renault", "omnicell", "ubisoft", "tasmim", "sopra", "caisse", "jinns", "biotherm"]} startIndex={6} />
+      <Vault title="VAULT 02 — MILL3® × STUDIO MIRAGE® ARCHIVE" ghost="ARCHIVE" ids={ARCHIVE_ORDER} startIndex={1 + PORTFOLIO_ORDER.length} />
 
       {/* ---------- NFO ---------- */}
       <section className="border-t px-6 py-20 text-center md:py-28" style={{ borderColor: "rgba(237,234,224,0.09)" }}>
