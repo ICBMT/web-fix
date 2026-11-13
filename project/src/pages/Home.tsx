@@ -26,7 +26,7 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
     const scene = new LogoScene(canvasRef.current!, GLB_URL, true);
     scene.setMode("scrub");
     sceneRef.current = scene;
-    scene.init();
+    scene.init().catch((err) => console.warn("[Home] 3D logo failed to initialise:", err));
     const io = new IntersectionObserver(
       ([entry]) => scene.setRunning(entry.isIntersecting),
       { rootMargin: "80px", threshold: 0 }

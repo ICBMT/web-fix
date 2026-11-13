@@ -27,9 +27,15 @@ let progressCb: ((p: number) => void) | null = null;
 export function preloadLogo(url: string, onProgress?: (p: number) => void) {
   if (onProgress) progressCb = onProgress;
   if (!gltfCache) {
-    gltfCache = new GLTFLoader().loadAsync(url, (ev) => {
-      if (ev.total > 0) progressCb?.(ev.loaded / ev.total);
-    });
+    gltfCache = new GLTFLoader()
+      .loadAsync(url, (ev) => {
+        if (ev.total > 0) progressCb?.(ev.loaded / ev.total);
+      })
+      .then((gltf) => {
+        // data: URLs report no total size, so always signal completion.
+        progressCb?.(1);
+        return gltf;
+      });
   }
   return gltfCache;
 }

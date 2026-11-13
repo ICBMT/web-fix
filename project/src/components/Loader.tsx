@@ -16,10 +16,13 @@ export default function Loader({ onDone }: { onDone: () => void }) {
     const scene = new LogoScene(canvasRef.current!, GLB_URL, false);
     scene.setMode("autoplay");
     let alive = true;
-    scene.init();
+    scene.init().catch((err) => console.warn("[Loader] 3D logo failed to initialise:", err));
 
     const start = performance.now();
     const MIN = 4300;
+    // Never trap the visitor behind the loader: if the model or the fonts hang,
+    // force completion after this long.
+    const MAX = 12000;
     let glbP = 0;
     let glbDone = false;
     let fontsDone = false;
@@ -29,15 +32,19 @@ export default function Loader({ onDone }: { onDone: () => void }) {
     preloadLogo(GLB_URL, (p) => {
       glbP = p;
     })
-      .then(() => {
-        glbDone = true;
-      })
-      .catch(() => {
+      .catch((err) => console.warn("[Loader] GLB failed to load:", err))
+      .finally(() => {
+        // The GLB is an inlined data: URL, which has no Content-Length, so the
+        // loader never emits progress events. Mark it complete once resolved,
+        // otherwise the bar plateaus at ~62% and never finishes.
+        glbP = 1;
         glbDone = true;
       });
-    document.fonts.ready.then(() => {
-      fontsDone = true;
-    });
+    document.fonts.ready
+      .catch(() => {})
+      .finally(() => {
+        fontsDone = true;
+      });
 
     const finish = () => {
       if (doneRef.current) return;
@@ -56,7 +63,14 @@ export default function Loader({ onDone }: { onDone: () => void }) {
 
     const tick = () => {
       if (!alive) return;
-      const timeP = Math.min(1, (performance.now() - start) / MIN);
+      const elapsed = performance.now() - start;
+      if (elapsed > MAX && (!glbDone || !fontsDone)) {
+        console.warn("[Loader] timed out waiting for assets — continuing anyway");
+        glbP = 1;
+        glbDone = true;
+        fontsDone = true;
+      }
+      const timeP = Math.min(1, elapsed / MIN);
       let target = timeP * 0.62 + glbP * 0.38;
       if (!glbDone || !fontsDone) target = Math.min(target, 0.93);
       shown += (target - shown) * 0.075;
