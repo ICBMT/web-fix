@@ -74,60 +74,128 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
     return () => io.disconnect();
   }, []);
 
-  /* ---------- floating preview image on service rows ---------- */
+  /* ---------- floating preview image on service rows ----------
+     Which row is "hovered" is decided by hit-testing the pointer position, not by
+     mouseenter/mouseleave: those don't fire when the page scrolls under a still
+     cursor (fast wheel / Lenis), which used to leave the preview stuck to the cursor
+     outside the section. The rAF loop only runs while the preview is moving. */
   useEffect(() => {
     if (window.matchMedia("(hover: none)").matches) return;
     const preview = previewRef.current!;
     const img = preview.querySelector("img")!;
-    const rows = gsap.utils.toArray<HTMLElement>(".service-row");
+    const list = document.querySelector<HTMLElement>(".service-list");
+    if (!list) return;
     const pos = { x: -400, y: -400 };
     const cur = { x: -400, y: -400 };
-    let visible = false;
+    let hasPointer = false;
+    let near = false; // section close to the viewport
+    let active: HTMLElement | null = null;
+    let shown = false; // preview fully faded out?
+    let dirty = false; // pointer moved / page scrolled since last hit-test
     let raf = 0;
+    let lastTx = "";
 
-    const onMove = (e: PointerEvent) => {
-      pos.x = e.clientX;
-      pos.y = e.clientY;
-    };
-
-    const enter = (row: HTMLElement) => () => {
+    const show = (row: HTMLElement) => {
       const key = row.dataset.preview || "01";
-      img.src = SERVICE_PREVIEWS[key];
-      if (!visible) {
-        visible = true;
-        gsap.to(preview, { autoAlpha: 1, scale: 1, rotate: 0, duration: 0.45, ease: "power3.out" });
+      if (img.dataset.key !== key) {
+        img.dataset.key = key;
+        img.src = SERVICE_PREVIEWS[key];
       }
+      if (!shown) {
+        // appear where the cursor is instead of flying in from the last spot
+        cur.x = pos.x;
+        cur.y = pos.y;
+        shown = true;
+      }
+      gsap.to(preview, { autoAlpha: 1, scale: 1, rotate: 0, duration: 0.45, ease: "power3.out", overwrite: "auto" });
     };
-    const leave = () => {
-      visible = false;
-      gsap.to(preview, { autoAlpha: 0, scale: 0.92, rotate: -3, duration: 0.35, ease: "power3.in" });
+    const hide = () => {
+      gsap.to(preview, {
+        autoAlpha: 0, scale: 0.92, rotate: -3, duration: 0.3, ease: "power3.in", overwrite: "auto",
+        onComplete: () => { if (!active) shown = false; },
+      });
     };
 
-    const removers: (() => void)[] = [];
-    rows.forEach((row) => {
-      const fn = enter(row);
-      row.addEventListener("mouseenter", fn);
-      row.addEventListener("mouseleave", leave);
-      removers.push(() => {
-        row.removeEventListener("mouseenter", fn);
-        row.removeEventListener("mouseleave", leave);
-      });
-    });
+    const hitTest = () => {
+      let row: HTMLElement | null = null;
+      if (hasPointer && near) {
+        const r = list.getBoundingClientRect();
+        if (pos.x >= r.left && pos.x <= r.right && pos.y >= r.top && pos.y <= r.bottom) {
+          row = (document.elementFromPoint(pos.x, pos.y) as HTMLElement | null)?.closest<HTMLElement>(".service-row") ?? null;
+          if (row && !list.contains(row)) row = null;
+        }
+      }
+      if (row === active) return;
+      active = row;
+      if (row) show(row);
+      else hide();
+    };
 
     const loop = () => {
-      raf = requestAnimationFrame(loop);
+      raf = 0;
+      if (dirty) {
+        dirty = false;
+        hitTest();
+      }
+      if (!shown) return; // idle: nothing to move
       cur.x += (pos.x - cur.x) * 0.12;
       cur.y += (pos.y - cur.y) * 0.12;
       const tilt = Math.max(-6, Math.min(6, (pos.x - cur.x) * 0.04));
-      preview.style.transform = `translate3d(${cur.x + 26}px, ${cur.y - 118}px, 0) rotate(${tilt}deg)`;
+      const tx = `translate3d(${cur.x + 26}px, ${cur.y - 118}px, 0) rotate(${tilt}deg)`;
+      if (tx !== lastTx) {
+        preview.style.transform = tx;
+        lastTx = tx;
+      }
+      const settled = Math.abs(pos.x - cur.x) < 0.3 && Math.abs(pos.y - cur.y) < 0.3;
+      if (!settled || active || dirty) raf = requestAnimationFrame(loop);
     };
-    raf = requestAnimationFrame(loop);
-    window.addEventListener("pointermove", onMove);
+    const kick = () => {
+      dirty = true;
+      if (!raf) raf = requestAnimationFrame(loop);
+    };
+
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType === "touch") return;
+      pos.x = e.clientX;
+      pos.y = e.clientY;
+      hasPointer = true;
+      if (near || active) kick();
+    };
+    const onScroll = () => {
+      if (near || active) kick();
+    };
+    const onGone = () => {
+      hasPointer = false;
+      kick();
+    };
+    const onOut = (e: PointerEvent) => {
+      if (!e.relatedTarget) onGone(); // left the window
+    };
+
+    const io = new IntersectionObserver(
+      ([e]) => {
+        near = e.isIntersecting;
+        kick();
+      },
+      { rootMargin: "120px 0px" }
+    );
+    io.observe(list);
+
+    window.addEventListener("pointermove", onMove, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("wheel", onScroll, { passive: true });
+    document.addEventListener("pointerout", onOut);
+    window.addEventListener("blur", onGone);
 
     return () => {
       cancelAnimationFrame(raf);
+      io.disconnect();
+      gsap.killTweensOf(preview);
       window.removeEventListener("pointermove", onMove);
-      removers.forEach((r) => r());
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("wheel", onScroll);
+      document.removeEventListener("pointerout", onOut);
+      window.removeEventListener("blur", onGone);
     };
   }, []);
 
@@ -480,7 +548,7 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
             <span className="label pb-3" data-reveal>08 DISCIPLINES — ONE TEAM</span>
           </div>
 
-          <div className="border-t" style={{ borderColor: "rgba(var(--bone-rgb),0.09)" }}>
+          <div className="service-list border-t" style={{ borderColor: "rgba(var(--bone-rgb),0.09)" }}>
             {services.map((s) => (
               <div
                 key={s.n}

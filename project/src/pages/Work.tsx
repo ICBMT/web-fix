@@ -442,6 +442,10 @@ export default function Work({ ready, onNavigate }: { ready: boolean; onNavigate
       lastY = y;
       current += (target - current) * 0.08;
       target *= 0.92;
+      if (Math.abs(current) < 0.001 && Math.abs(target) < 0.001) {
+        if (current !== 0) skewSet((current = 0)); // settle once, then stop touching styles
+        return;
+      }
       skewSet(current);
     };
     gsap.ticker.add(skewLoop);

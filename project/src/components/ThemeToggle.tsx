@@ -1,6 +1,6 @@
 import { useEffect, useId, useState } from "react";
 import { getTheme, onThemeChange, type Theme } from "../lib/theme";
-import { isTimeTraveling, prepareTimeTravel, timeTravel } from "../lib/timeTunnel";
+import { isTimeTraveling, prepareTimeTravel, timeTravel, warmTimeTravel } from "../lib/timeTunnel";
 
 /**
  * Dark ⇄ light switch for the nav (it sits on the frosted-glass header).
@@ -13,6 +13,8 @@ export default function ThemeToggle({ className = "" }: { className?: string }) 
   const maskId = `tt-moon-${useId().replace(/:/g, "")}`;
 
   useEffect(() => onThemeChange(setTheme), []);
+  // build the tunnel stage (worker + canvas) while the browser is idle after load
+  useEffect(() => warmTimeTravel(() => (getTheme() === "light" ? "dark" : "light")), []);
 
   const light = theme === "light";
 
