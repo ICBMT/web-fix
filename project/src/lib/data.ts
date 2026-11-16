@@ -2,7 +2,7 @@ import { GLB_URL, LOGO_BLACK, LOGO_WHITE, MEDIA } from "./assets";
 
 export { GLB_URL, LOGO_BLACK, LOGO_WHITE };
 
-export type Studio = "GREEPIXEL" | "MILL3" | "MIRAGE";
+export type Studio = "GREEPIXEL";
 
 export const CREDIT = "Created by GreePixel";
 
@@ -32,16 +32,22 @@ export type Project = {
   credit?: boolean;
 };
 
-/** Every "start a project" CTA books a call here (the link guard allows this one external link). */
+/** Every "start a project" CTA books a call here. */
 export const CALENDLY_URL = "https://calendly.com/abuzer/30min?back=1";
 
-/** Where GreePixel portfolio cards link to (source: greelogix.com/portfolio). */
-export const PORTFOLIO_URL = "https://greelogix.com/portfolio";
+/** Contact details (source: greelogix.com, "Get In Touch"). These, plus Calendly, are the
+ *  ONLY links allowed to leave the site — see ALLOWED_LINKS in linkGuard.ts. */
+export const CONTACT = {
+  email: "contact@greelogix.com",
+  emailHref: "mailto:contact@greelogix.com",
+  phone: "+92 333 65 27 366",
+  phoneHref: "tel:+923336527366",
+  whatsapp: "Chat on WhatsApp",
+  whatsappHref: "https://wa.me/923336527366",
+} as const;
 
 export const STUDIO_LABEL: Record<Studio, string> = {
   GREEPIXEL: "GREEPIXEL®",
-  MILL3: "MILL3®",
-  MIRAGE: "MIRAGE®",
 };
 
 /** "2023" for archive work, "MOBILE APP" etc. for portfolio work. */
@@ -242,7 +248,6 @@ const archive: Project[] = [
     img: MEDIA.moosehead.img,
     video: MEDIA.moosehead.video,
     tags: ["Web Experience", "Shopify", "Motion"],
-    url: "https://mill3.studio/en/projects/moosehead/",
   },
   {
     id: "cob",
@@ -254,14 +259,10 @@ const archive: Project[] = [
     img: MEDIA.cob.img,
     video: MEDIA.cob.video,
     tags: ["Art Direction", "WebGL", "CPG"],
-    url: "https://cobfoods.com/",
   },
 ];
 
-for (const p of portfolio) {
-  p.url ??= PORTFOLIO_URL;
-  Object.assign(p, { ...STORY[p.id], ...p });
-}
+for (const p of portfolio) Object.assign(p, { ...STORY[p.id], ...p });
 
 export const projects: Project[] = [...portfolio, ...archive];
 

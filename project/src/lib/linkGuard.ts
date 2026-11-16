@@ -1,5 +1,6 @@
 /**
- * Link guard — only the site's own links work (plus the Calendly booking link).
+ * Link guard — only the site's own links work, plus an exact allow-list
+ * (Calendly booking + the GreeLogix contact links: email, phone, WhatsApp).
  *
  * Any link that would leave the site (another domain, mailto:, tel:, …) is
  * silently neutralised. Nothing is removed or restyled, so the site looks and
@@ -9,11 +10,14 @@
  * link to the tab bar, the right-click "open in new tab" menu, and window.open().
  */
 
-/** Set to true to let mailto:/tel: links open the visitor's mail/phone app again. */
-const ALLOW_MAIL_AND_PHONE = false;
+import { CALENDLY_URL, CONTACT } from "./data";
 
-/** The only external destinations that may open: booking a call from the "start a project" CTAs. */
-const ALLOWED_EXTERNAL = [{ host: "calendly.com", path: "/abuzer/" }];
+/** The ONLY links allowed to leave the site: booking a call + the contact links.
+ *  Everything else (other domains, other mailto:/tel:, …) is blocked. */
+const ALLOWED_LINKS = [CALENDLY_URL, CONTACT.emailHref, CONTACT.phoneHref, CONTACT.whatsappHref];
+
+const normalise = (u: URL) => (u.protocol === "mailto:" || u.protocol === "tel:" ? u.protocol + decodeURIComponent(u.pathname).toLowerCase() : u.origin + u.pathname.replace(/\/+$/, ""));
+const ALLOWED = new Set(ALLOWED_LINKS.map((h) => normalise(new URL(h))));
 
 function isInternal(href: string | null | undefined): boolean {
   if (!href) return true; // <a> without href does nothing anyway
@@ -25,8 +29,7 @@ function isInternal(href: string | null | undefined): boolean {
   } catch {
     return false;
   }
-  if (ALLOW_MAIL_AND_PHONE && (url.protocol === "mailto:" || url.protocol === "tel:")) return true;
-  if (url.protocol === "https:" && ALLOWED_EXTERNAL.some((x) => url.hostname === x.host && url.pathname.startsWith(x.path))) return true;
+  if ((url.protocol === "https:" || url.protocol === "mailto:" || url.protocol === "tel:") && ALLOWED.has(normalise(url))) return true;
   // same protocol + host = the site itself (also works when opened from file://)
   return url.protocol === window.location.protocol && url.host === window.location.host;
 }

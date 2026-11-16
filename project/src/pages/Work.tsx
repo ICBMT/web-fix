@@ -284,9 +284,7 @@ function WorkCard({ p, i }: { p: Project; i: number }) {
 
   return (
     <a
-      href={p.url || "#"}
-      target="_blank"
-      rel="noreferrer"
+      {...(p.url ? { href: p.url, target: "_blank", rel: "noreferrer" } : {})}
       data-cursor={p.video ? "PLAY" : "VIEW"}
       className="work-card group block"
       onMouseEnter={() => vidRef.current?.play().catch(() => {})}
@@ -484,7 +482,7 @@ export default function Work({ ready, onNavigate }: { ready: boolean; onNavigate
           <span className="label label-gold" data-scramble>[00] — FEATURED CASE</span>
           <span className="label hidden md:block">{projects.some((p) => p.video) ? "HOVER-TO-PLAY BELOW" : "HOVER TO EXPLORE BELOW"}</span>
         </div>
-        <a href={moosehead.url} target="_blank" rel="noreferrer" data-cursor={moosehead.video ? "PLAY" : "VIEW"} className="group relative block overflow-hidden">
+        <a {...(moosehead.url ? { href: moosehead.url, target: "_blank", rel: "noreferrer" } : {})} data-cursor={moosehead.video ? "PLAY" : "VIEW"} className="group relative block overflow-hidden">
           <div className="theme-dark card-sheen relative" style={{ aspectRatio: "16/9" }}>
             <div ref={heroMediaRef} className="h-full w-full">
               {moosehead.video ? (

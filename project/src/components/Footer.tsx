@@ -1,6 +1,6 @@
 import { ArrowUp, ArrowUpRight } from "lucide-react";
 import { getLenis } from "../lib/core";
-import { CALENDLY_URL, LOGO_BLACK, LOGO_WHITE } from "../lib/data";
+import { CALENDLY_URL, CONTACT, LOGO_BLACK, LOGO_WHITE } from "../lib/data";
 import Marquee from "./Marquee";
 import RollText from "./RollText";
 
@@ -30,8 +30,8 @@ export default function Footer({ onNavigate }: { onNavigate: (r: string) => void
               <ArrowUpRight className="h-[0.7em] w-[0.7em] transition-transform duration-500 group-hover:-translate-y-2 group-hover:translate-x-2" style={{ color: "var(--color-gold)" }} />
             </span>
           </a>
-          <a href="mailto:hello@greepixel.com" className="label link-line mt-6 inline-block pb-1" style={{ color: "rgba(var(--bone-rgb),0.75)" }}>
-            hello@greepixel.com
+          <a href={CONTACT.emailHref} className="label link-line mt-6 inline-block pb-1" style={{ color: "rgba(var(--bone-rgb),0.75)" }}>
+            {CONTACT.email}
           </a>
         </div>
 
@@ -52,16 +52,21 @@ export default function Footer({ onNavigate }: { onNavigate: (r: string) => void
         </div>
 
         <div className="md:col-span-2">
-          <span className="label">STUDIOS</span>
+          <span className="label">CONTACT</span>
           <ul className="mt-5 space-y-3">
             <li>
-              <a href="https://mill3.studio/en/" target="_blank" rel="noreferrer" className="inline-block text-sm text-bone/75">
-                <RollText text="MILL3 (MTL)" />
+              <a href={CONTACT.emailHref} className="inline-block text-sm text-bone/75">
+                <RollText text="Email us" />
               </a>
             </li>
             <li>
-              <a href="https://studiomirage.io/" target="_blank" rel="noreferrer" className="inline-block text-sm text-bone/75">
-                <RollText text="Studio Mirage (PAR/DXB)" />
+              <a href={CONTACT.phoneHref} className="inline-block whitespace-nowrap text-sm text-bone/75">
+                <RollText text={CONTACT.phone} />
+              </a>
+            </li>
+            <li>
+              <a href={CONTACT.whatsappHref} target="_blank" rel="noopener noreferrer" className="inline-block text-sm text-bone/75">
+                <RollText text="WhatsApp" />
               </a>
             </li>
           </ul>
@@ -92,7 +97,7 @@ export default function Footer({ onNavigate }: { onNavigate: (r: string) => void
       <div className="flex flex-col gap-2 border-t px-6 py-5 md:flex-row md:items-center md:justify-between md:px-10" style={{ borderColor: "rgba(var(--bone-rgb),0.09)" }}>
         <span className="label">© 2026 GREEPIXEL® — ALL RIGHTS RESERVED</span>
         <span className="label" style={{ color: "rgba(var(--gold-rgb),0.75)" }}>
-          FORGED FROM MILL3 × STUDIO MIRAGE
+          REPLY WITHIN 4 BUSINESS HOURS
         </span>
         <span className="label">BUILT PIXEL BY PIXEL</span>
       </div>
