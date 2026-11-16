@@ -9,14 +9,30 @@ export function getTheme(): Theme {
   return document.documentElement.classList.contains("light") ? "light" : "dark";
 }
 
-/** Flip the palette in one go. Colour transitions are frozen while it happens so
- *  hundreds of hover-transitions don't all animate at once.
- *  Returns a `release` that un-freezes them. By default that runs automatically two
- *  frames later; pass `{ deferRelease: true }` to call it yourself at a quiet moment
- *  (un-freezing is a whole-page restyle too, so the time tunnel runs it once it's done). */
+const canFinishTransitions = () => typeof CSSTransition !== "undefined" && typeof document.getAnimations === "function";
+
+/** Snap every colour transition the flip just started straight to its end state,
+ *  so hundreds of hover-transitions don't all animate at once. Only the elements that
+ *  actually started a transition are touched (no second whole-page restyle). The
+ *  theme toggle keeps its own knob animation. */
+function finishFlipTransitions() {
+  for (const a of document.getAnimations()) {
+    if (!(a instanceof CSSTransition)) continue;
+    const target = (a.effect as KeyframeEffect | null)?.target;
+    if (target && target.closest(".theme-toggle")) continue;
+    a.finish();
+  }
+}
+
+/** Flip the palette in one go.
+ *  Returns a `release` callback for API compatibility: on modern browsers there is
+ *  nothing to release (transitions are finished in place). Older browsers fall back
+ *  to freezing transitions with a class; then `release` un-freezes them, by default
+ *  two frames later, or whenever you call it with `{ deferRelease: true }`. */
 export function applyTheme(theme: Theme, opts: { deferRelease?: boolean } = {}): () => void {
   const root = document.documentElement;
-  root.classList.add("theme-switching");
+  const finish = canFinishTransitions();
+  if (!finish) root.classList.add("theme-switching");
   root.classList.toggle("light", theme === "light");
   root.dataset.theme = theme;
   document.querySelector('meta[name="theme-color"]')?.setAttribute("content", META[theme]);
@@ -26,6 +42,10 @@ export function applyTheme(theme: Theme, opts: { deferRelease?: boolean } = {}):
     /* private mode */
   }
   window.dispatchEvent(new CustomEvent<Theme>(EVENT, { detail: theme }));
+  if (finish) {
+    finishFlipTransitions();
+    return () => {};
+  }
   const release = () => root.classList.remove("theme-switching");
   if (!opts.deferRelease) requestAnimationFrame(() => requestAnimationFrame(release));
   return release;

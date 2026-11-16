@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { tunnelPaused } from "../lib/tunnelPause";
 
 /**
  * PIXEL VAULT — the Work Archive hero.
@@ -398,7 +399,7 @@ export class PixelVault {
   private loop = () => {
     if (this.disposed) return;
     this.raf = requestAnimationFrame(this.loop);
-    if (!this.running || !this.geo) return;
+    if (!this.running || !this.geo || tunnelPaused()) return; // time tunnel owns the GPU right now
     const dt = Math.min(this.clock.getDelta(), 0.05);
     const t = this.clock.elapsedTime;
     const u = this.mat.uniforms;

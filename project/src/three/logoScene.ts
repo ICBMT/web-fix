@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { GLTFLoader, type GLTF } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
+import { tunnelPaused } from "../lib/tunnelPause";
 
 /** Shared mutable pose — pages tween this, the scene damps toward it. */
 export const logoPose = {
@@ -67,11 +68,6 @@ export class LogoScene {
   private lastX = 0;
   private mode: "autoplay" | "scrub" = "scrub";
   private running = true;
-  /** Paused while the time-tunnel portal covers the screen (frees the main thread for the palette flip). */
-  private tunnelCovered = false;
-  private onTunnel = (e: Event) => {
-    this.tunnelCovered = (e as CustomEvent<string>).detail === "covered";
-  };
   private interactive: boolean;
   private disposed = false;
   private url: string;
@@ -105,7 +101,6 @@ export class LogoScene {
     this.url = url;
     this.interactive = interactive;
     this.sizeFactor = sizeFactor;
-    window.addEventListener("gp-tunnel", this.onTunnel);
   }
 
   async init() {
@@ -301,7 +296,7 @@ export class LogoScene {
   private loop = () => {
     if (this.disposed) return;
     this.raf = requestAnimationFrame(this.loop);
-    if (!this.running || this.tunnelCovered) return;
+    if (!this.running || tunnelPaused()) return; // time tunnel owns the GPU right now
     const dt = Math.min(this.clock.getDelta(), 0.05);
     const t = this.clock.elapsedTime;
     const s = this.smooth;
@@ -383,7 +378,6 @@ export class LogoScene {
     this.disposed = true;
     cancelAnimationFrame(this.raf);
     window.removeEventListener("resize", this.onResize);
-    window.removeEventListener("gp-tunnel", this.onTunnel);
     window.removeEventListener("pointermove", this.onPointer);
     window.removeEventListener("pointerdown", this.onDown);
     window.removeEventListener("pointerup", this.onUp);

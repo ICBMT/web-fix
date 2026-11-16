@@ -14,9 +14,7 @@
  * 3D zone is on screen (setRunning).
  */
 
-/** True while the time-tunnel portal covers the screen. */
-let tunnelCovered = false;
-window.addEventListener("gp-tunnel", (e) => (tunnelCovered = (e as CustomEvent<string>).detail === "covered"));
+import { tunnelPaused } from "./tunnelPause";
 
 type Target = {
   el: HTMLElement;
@@ -66,7 +64,7 @@ export class Halos {
   private tick = () => {
     if (!this.running) return;
     this.raf = requestAnimationFrame(this.tick);
-    if (tunnelCovered) return; // screen is covered by the time tunnel: skip layout reads
+    if (tunnelPaused()) return; // time tunnel running: skip layout reads + halo updates
     const vw = window.innerWidth;
     const vh = window.innerHeight;
 
