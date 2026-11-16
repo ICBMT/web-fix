@@ -5,6 +5,7 @@ import Nav from "./components/Nav";
 import Home from "./pages/Home";
 import Work from "./pages/Work";
 import { gsap, initScroll, lockScroll, scrollTop, ScrollTrigger } from "./lib/core";
+import { initPressFx, initTextFx } from "./lib/textFx";
 
 function getRoute(): string {
   return window.location.hash === "#/work" ? "#/work" : "#/";
@@ -45,6 +46,10 @@ export default function App() {
     window.addEventListener("pointermove", onMove);
     return () => window.removeEventListener("pointermove", onMove);
   }, []);
+
+  /* ---------- GreeLogix text & hover vocabulary ---------- */
+  useEffect(() => initPressFx(), []);
+  useEffect(() => initTextFx(document), [route]);
 
   useEffect(() => {
     document.title = route === "#/work" ? "Work Archive — GreePixel®" : "GreePixel® — We Build Beyond";

@@ -2,6 +2,7 @@ import { ArrowUp, ArrowUpRight } from "lucide-react";
 import { getLenis } from "../lib/core";
 import { LOGO_BLACK, LOGO_WHITE } from "../lib/data";
 import Marquee from "./Marquee";
+import RollText from "./RollText";
 
 export default function Footer({ onNavigate }: { onNavigate: (r: string) => void }) {
   const toTop = () => {
@@ -19,7 +20,7 @@ export default function Footer({ onNavigate }: { onNavigate: (r: string) => void
 
       <div className="grid gap-10 px-6 py-14 md:grid-cols-12 md:px-10 md:py-20">
         <div className="md:col-span-5">
-          <span className="label label-gold">NEXT STEP</span>
+          <span className="label label-gold" data-scramble>NEXT STEP</span>
           <a href="mailto:hello@greepixel.com" className="group mt-5 block" data-cursor="SAY HI" data-magnetic>
             <span className="font-display gtg block text-[clamp(3rem,7vw,6rem)] uppercase leading-[0.9] text-stroke transition-all duration-500">
               Have a brief?
@@ -29,7 +30,7 @@ export default function Footer({ onNavigate }: { onNavigate: (r: string) => void
               <ArrowUpRight className="h-[0.7em] w-[0.7em] transition-transform duration-500 group-hover:-translate-y-2 group-hover:translate-x-2" style={{ color: "var(--color-gold)" }} />
             </span>
           </a>
-          <a href="mailto:hello@greepixel.com" className="label mt-6 inline-block border-b border-transparent pb-1 transition-colors hover:border-gold" style={{ color: "rgba(var(--bone-rgb),0.75)" }}>
+          <a href="mailto:hello@greepixel.com" className="label link-line mt-6 inline-block pb-1" style={{ color: "rgba(var(--bone-rgb),0.75)" }}>
             hello@greepixel.com
           </a>
         </div>
@@ -38,13 +39,13 @@ export default function Footer({ onNavigate }: { onNavigate: (r: string) => void
           <span className="label">SITEMAP</span>
           <ul className="mt-5 space-y-3">
             <li>
-              <a href="#/" onClick={(e) => { e.preventDefault(); onNavigate("#/"); }} className="text-sm text-bone/75 transition-colors hover:text-gold">
-                Index
+              <a href="#/" onClick={(e) => { e.preventDefault(); onNavigate("#/"); }} className="inline-block text-sm text-bone/75">
+                <RollText text="Index" />
               </a>
             </li>
             <li>
-              <a href="#/work" onClick={(e) => { e.preventDefault(); onNavigate("#/work"); }} className="text-sm text-bone/75 transition-colors hover:text-gold">
-                Work Archive
+              <a href="#/work" onClick={(e) => { e.preventDefault(); onNavigate("#/work"); }} className="inline-block text-sm text-bone/75">
+                <RollText text="Work Archive" />
               </a>
             </li>
           </ul>
@@ -54,13 +55,13 @@ export default function Footer({ onNavigate }: { onNavigate: (r: string) => void
           <span className="label">STUDIOS</span>
           <ul className="mt-5 space-y-3">
             <li>
-              <a href="https://mill3.studio/en/" target="_blank" rel="noreferrer" className="text-sm text-bone/75 transition-colors hover:text-gold">
-                MILL3 (MTL)
+              <a href="https://mill3.studio/en/" target="_blank" rel="noreferrer" className="inline-block text-sm text-bone/75">
+                <RollText text="MILL3 (MTL)" />
               </a>
             </li>
             <li>
-              <a href="https://studiomirage.io/" target="_blank" rel="noreferrer" className="text-sm text-bone/75 transition-colors hover:text-gold">
-                Studio Mirage (PAR/DXB)
+              <a href="https://studiomirage.io/" target="_blank" rel="noreferrer" className="inline-block text-sm text-bone/75">
+                <RollText text="Studio Mirage (PAR/DXB)" />
               </a>
             </li>
           </ul>
@@ -69,9 +70,9 @@ export default function Footer({ onNavigate }: { onNavigate: (r: string) => void
         <div className="flex flex-col items-start justify-between gap-8 md:col-span-3 md:items-end">
           <button
             onClick={toTop}
-            data-cursor="TOP"
+            data-cursor-snap
             data-magnetic
-            className="group flex h-16 w-16 items-center justify-center border border-bone/20 transition-colors hover:border-gold"
+            className="group flex h-16 w-16 items-center justify-center rounded-full border border-bone/20 transition-colors hover:border-gold"
             aria-label="Back to top"
           >
             <ArrowUp className="h-5 w-5 text-bone transition-all duration-500 group-hover:-translate-y-1 group-hover:text-gold" />

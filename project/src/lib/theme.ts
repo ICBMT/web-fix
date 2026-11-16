@@ -9,9 +9,12 @@ export function getTheme(): Theme {
   return document.documentElement.classList.contains("light") ? "light" : "dark";
 }
 
-/** Flip the palette in one go. Colour transitions are frozen for two frames so
- *  hundreds of hover-transitions don't all animate at once. */
-export function applyTheme(theme: Theme) {
+/** Flip the palette in one go. Colour transitions are frozen while it happens so
+ *  hundreds of hover-transitions don't all animate at once.
+ *  Returns a `release` that un-freezes them. By default that runs automatically two
+ *  frames later; pass `{ deferRelease: true }` to call it yourself at a quiet moment
+ *  (un-freezing is a whole-page restyle too, so the time tunnel runs it once it's done). */
+export function applyTheme(theme: Theme, opts: { deferRelease?: boolean } = {}): () => void {
   const root = document.documentElement;
   root.classList.add("theme-switching");
   root.classList.toggle("light", theme === "light");
@@ -23,7 +26,9 @@ export function applyTheme(theme: Theme) {
     /* private mode */
   }
   window.dispatchEvent(new CustomEvent<Theme>(EVENT, { detail: theme }));
-  requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove("theme-switching")));
+  const release = () => root.classList.remove("theme-switching");
+  if (!opts.deferRelease) requestAnimationFrame(() => requestAnimationFrame(release));
+  return release;
 }
 
 export function onThemeChange(cb: (theme: Theme) => void): () => void {

@@ -1,10 +1,9 @@
 import { useEffect, useId, useState } from "react";
 import { getTheme, onThemeChange, type Theme } from "../lib/theme";
-import { isTimeTraveling, timeTravel } from "../lib/timeTunnel";
+import { isTimeTraveling, prepareTimeTravel, timeTravel } from "../lib/timeTunnel";
 
 /**
- * Dark ⇄ light switch for the nav. Monochrome on purpose: it lives inside the
- * mix-blend-difference header, so "white" always reads against any background.
+ * Dark ⇄ light switch for the nav (it sits on the frosted-glass header).
  * Knob slides + spins a full turn while the moon morphs into a sun (and back);
  * every animated property is transform/opacity → compositor-only.
  */
@@ -25,15 +24,20 @@ export default function ThemeToggle({ className = "" }: { className?: string }) 
     void timeTravel(next);
   };
 
+  // pre-build the tunnel while the pointer approaches, so the click starts instantly
+  const prime = () => prepareTimeTravel(light ? "dark" : "light");
+
   return (
     <button
+      onPointerEnter={prime}
+      onFocus={prime}
       type="button"
       onClick={toggle}
       role="switch"
       aria-checked={light}
       aria-label={light ? "Switch to dark mode" : "Switch to light mode"}
       title={light ? "Dark mode" : "Light mode"}
-      data-cursor={light ? "NIGHT" : "DAY"}
+      data-cursor-snap
       className={`theme-toggle group relative h-[30px] w-[58px] shrink-0 rounded-full border ${className}`}
       data-light={light ? "" : undefined}
     >

@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getTheme, onThemeChange, type Theme } from "../lib/theme";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import { LOGO_BLACK, LOGO_WHITE } from "../lib/data";
 import ThemeToggle from "./ThemeToggle";
+import RollText from "./RollText";
 
 export default function Nav({ route, onNavigate }: { route: string; onNavigate: (r: string) => void }) {
   const [open, setOpen] = useState(false);
@@ -11,15 +12,15 @@ export default function Nav({ route, onNavigate }: { route: string; onNavigate: 
 
   useEffect(() => onThemeChange(setTheme), []);
 
-  /* In light mode the header drops its difference-blend (which would turn the
-     orange brand bits blue on paper) and uses the light palette — except while a
-     dark section (e.g. the Work hero) sits under it, where the blend returns. */
+  /* The header is frosted glass tinted with the current palette. In light mode it
+     switches to dark glass while a dark section (Work hero, footer…) sits under it,
+     so the text never loses contrast. */
   useEffect(() => {
     if (theme !== "light") {
       setOverDark(false);
       return;
     }
-    const targets = Array.from(document.querySelectorAll<HTMLElement>("section.theme-dark, [data-nav-dark]"));
+    const targets = Array.from(document.querySelectorAll<HTMLElement>("section.theme-dark, footer.theme-dark, [data-nav-dark]"));
     if (!targets.length) {
       setOverDark(false);
       return;
@@ -36,7 +37,16 @@ export default function Nav({ route, onNavigate }: { route: string; onNavigate: 
     return () => io.disconnect();
   }, [theme, route]);
 
-  const blend = theme === "dark" || overDark;
+  const dark = theme === "dark" || overDark;
+  const glassRef = useRef<HTMLDivElement>(null);
+
+  // the specular highlight slides along the glass with the pointer
+  const onGlassMove = (e: React.PointerEvent) => {
+    const g = glassRef.current;
+    if (!g) return;
+    const b = g.getBoundingClientRect();
+    g.style.setProperty("--gx", `${(((e.clientX - b.left) / b.width) * 100).toFixed(1)}%`);
+  };
 
   useEffect(() => {
     setOpen(false);
@@ -52,40 +62,43 @@ export default function Nav({ route, onNavigate }: { route: string; onNavigate: 
     <a
       href={to}
       onClick={go(to)}
-      className="group relative flex items-center gap-2 font-mono text-[11px] tracking-[0.22em] text-bone/80 transition-colors hover:text-bone"
+      data-cursor-snap
+      className="group relative flex items-center gap-2 rounded-full px-2.5 py-1.5 font-mono text-[11px] tracking-[0.22em] text-bone transition-colors"
       style={{ fontFamily: "var(--font-mono)" }}
     >
       <span
         className="h-1.5 w-1.5 transition-all duration-300"
         style={{ background: route === to ? "var(--color-gold)" : "transparent", boxShadow: route === to ? "0 0 10px rgba(var(--gold-rgb),0.9)" : "none" }}
       />
-      {children}
+      <RollText text={String(children)} />
     </a>
   );
 
   return (
     <>
-      <header className={`fixed left-0 top-0 z-[80] w-full ${blend ? "theme-dark mix-blend-difference" : ""}`}>
-        <div className="flex items-center justify-between px-6 py-5 md:px-10">
+      <header className={`fixed left-0 top-0 z-[80] w-full px-3 pt-3 md:px-5 md:pt-4 ${dark ? "theme-dark" : ""}`}>
+        <div ref={glassRef} onPointerMove={onGlassMove} className="nav-glass flex items-center justify-between rounded-[20px] py-3 pl-4 pr-3 md:py-3 md:pl-5 md:pr-3.5">
           <a href="#/" onClick={go("#/")} className="block">
-            <img src={blend ? LOGO_WHITE : LOGO_BLACK} alt="GreePixel" className="h-7 w-auto md:h-8" />
+            <img src={dark ? LOGO_WHITE : LOGO_BLACK} alt="GreePixel" className="h-7 w-auto md:h-8" />
           </a>
-          <nav className="hidden items-center gap-8 md:flex">
+          <nav className="hidden items-center gap-5 md:flex">
             <Link to="#/">INDEX</Link>
             <Link to="#/work">WORK ARCHIVE</Link>
             <ThemeToggle />
             <a
               href="mailto:hello@greepixel.com"
               data-magnetic
-              className="flex items-center gap-1.5 border border-bone/30 px-4 py-2 font-mono text-[11px] tracking-[0.22em] text-bone transition-colors hover:bg-bone hover:text-ink"
+              data-cursor-snap
+              className="nav-cta group flex items-center gap-2 rounded-full px-5 py-2.5 font-mono text-[11px] tracking-[0.22em] transition-colors"
               style={{ fontFamily: "var(--font-mono)" }}
             >
-              START A PROJECT <ArrowUpRight className="h-3.5 w-3.5" />
+              <RollText text="START A PROJECT" />
+              <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:rotate-45" />
             </a>
           </nav>
           <div className="flex items-center gap-4 md:hidden">
             <ThemeToggle />
-            <button onClick={() => setOpen(true)} className="text-bone" aria-label="Open menu">
+            <button onClick={() => setOpen(true)} className="grid h-9 w-9 place-items-center rounded-full text-bone" aria-label="Open menu" data-cursor-snap>
               <Menu className="h-6 w-6" />
             </button>
           </div>

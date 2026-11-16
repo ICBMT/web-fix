@@ -129,15 +129,18 @@ html.light .logo-on-light:not(.theme-dark *) {
 }
 
 /* freeze colour transitions for the single frame the palette flips */
-.theme-switching *,
-.theme-switching *::before,
-.theme-switching *::after {
+.theme-switching *:not(.theme-toggle, .theme-toggle *),
+.theme-switching *:not(.theme-toggle *)::before,
+.theme-switching *:not(.theme-toggle *)::after {
   transition: none !important;
 }
 
 html {
   background: var(--color-ink);
   scrollbar-width: none;
+  /* spinning HUD rings briefly poke past the edge during the intro; without this
+     mobile browsers widen the layout viewport and the fixed header stretches */
+  overflow-x: clip;
 }
 
 html,
@@ -151,6 +154,7 @@ body {
   color: var(--color-bone);
   font-family: var(--font-sans);
   line-height: 1.5;
+  letter-spacing: -0.011em;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: clip;
@@ -170,7 +174,7 @@ body {
 .font-display {
   font-family: var(--font-display);
   font-weight: 600;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.022em;
   text-transform: uppercase;
 }
 
@@ -370,9 +374,25 @@ canvas {
   border-color: var(--color-bone);
   outline: none;
 }
+/* hover: the knob leans toward where it's about to go, stars twinkle */
+.theme-toggle:hover .tt-knob {
+  translate: 3px 0;
+}
+.theme-toggle[data-light]:hover .tt-knob {
+  translate: -3px 0;
+}
+.theme-toggle:hover .tt-stars i {
+  animation: pulse-glow 1.1s ease-in-out infinite;
+}
+.theme-toggle:hover .tt-stars i:nth-child(2) {
+  animation-delay: 0.35s;
+}
+.theme-toggle:hover .tt-stars i:nth-child(3) {
+  animation-delay: 0.7s;
+}
 .tt-knob {
   transform: translateX(0) rotate(0deg);
-  transition: transform 0.75s cubic-bezier(0.7, 0, 0.2, 1);
+  transition: transform 0.75s cubic-bezier(0.7, 0, 0.2, 1), translate 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .theme-toggle[data-light] .tt-knob {
   transform: translateX(28px) rotate(360deg);
@@ -457,4 +477,350 @@ canvas {
 .tool-chip:hover .tool-logo {
   color: var(--brand, var(--color-bone));
   transform: scale(1.18);
+}
+
+/* =====================================================================
+   LIQUID GLASS NAV
+   Frosted, saturated backdrop + a light-catching rim + a specular highlight
+   that glides along the glass with the pointer. Tinted with the current
+   palette (--ink-rgb), so it's dark glass in dark mode / over dark sections and
+   paper glass in light mode: the text on it always has contrast.
+   ===================================================================== */
+@property --gx {
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 24%;
+}
+
+.nav-glass {
+  position: relative;
+  isolation: isolate;
+  background: linear-gradient(180deg, rgba(var(--ink-rgb), 0.66), rgba(var(--ink-rgb), 0.5));
+  -webkit-backdrop-filter: blur(20px) saturate(1.8);
+  backdrop-filter: blur(20px) saturate(1.8);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.03),
+    0 14px 44px -18px rgba(0, 0, 0, 0.65);
+  transition:
+    background-color 0.5s,
+    box-shadow 0.5s,
+    --gx 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+/* liquid rim: a 1px gradient border that catches light on two corners */
+.nav-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  padding: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.36),
+    rgba(255, 255, 255, 0.07) 28%,
+    rgba(255, 255, 255, 0.02) 62%,
+    rgba(255, 255, 255, 0.2)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+}
+/* specular highlight, follows the pointer (--gx) */
+.nav-glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(280px 90px at var(--gx) 0%, rgba(255, 255, 255, 0.13), transparent 70%),
+    radial-gradient(180px 60px at calc(100% - var(--gx)) 100%, rgba(var(--gold-rgb), 0.08), transparent 70%);
+}
+html.light .nav-glass:not(.theme-dark *) {
+  background: linear-gradient(180deg, rgba(var(--ink-rgb), 0.74), rgba(var(--ink-rgb), 0.58));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -1px 0 rgba(21, 19, 17, 0.04),
+    0 14px 40px -20px rgba(21, 19, 17, 0.28);
+}
+html.light .nav-glass:not(.theme-dark *)::before {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.95),
+    rgba(21, 19, 17, 0.08) 30%,
+    rgba(21, 19, 17, 0.05) 62%,
+    rgba(255, 255, 255, 0.8)
+  );
+}
+html.light .nav-glass:not(.theme-dark *)::after {
+  background:
+    radial-gradient(280px 90px at var(--gx) 0%, rgba(255, 255, 255, 0.75), transparent 70%),
+    radial-gradient(180px 60px at calc(100% - var(--gx)) 100%, rgba(var(--gold-rgb), 0.07), transparent 70%);
+}
+/* no backdrop-filter support → solid enough to stay readable */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .nav-glass {
+    background: rgba(var(--ink-rgb), 0.94);
+  }
+}
+
+.nav-cta {
+  color: var(--color-ink);
+  background: var(--color-bone);
+  --roll-accent: var(--color-gold);
+}
+.nav-cta:hover {
+  background: var(--color-gold);
+  color: #fff;
+  --roll-accent: #fff;
+}
+
+/* =====================================================================
+   TEXT FX (GreeLogix vocabulary)
+   ===================================================================== */
+
+/* rolling letters: each char flips up into its accent twin */
+.roll {
+  display: inline-flex;
+  white-space: pre;
+}
+.roll-char {
+  display: inline-block;
+  overflow: hidden;
+  height: 1.2em;
+  line-height: 1.2;
+  vertical-align: top;
+}
+.roll-char-inner {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.55s cubic-bezier(0.76, 0, 0.24, 1);
+  will-change: transform;
+}
+.roll-char-inner > span {
+  display: block;
+  height: 1.2em;
+  line-height: 1.2;
+}
+.roll-char-inner > span:last-child {
+  color: var(--roll-accent, var(--color-gold));
+}
+a:hover .roll-char-inner,
+button:hover .roll-char-inner,
+.group:hover .roll-char-inner,
+a:focus-visible .roll-char-inner {
+  transform: translateY(-1.2em);
+}
+
+/* underline that sweeps in from the left, out to the right */
+.link-line {
+  position: relative;
+}
+.link-line::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  height: 1px;
+  width: 100%;
+  background: var(--color-gold);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.45s cubic-bezier(0.76, 0, 0.24, 1);
+}
+.link-line:hover::after,
+.link-line:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* headline letters: split into chars (see textFx.ts); hovered letters ignite gold
+   and swell toward the cursor */
+.hx-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+.hx-char {
+  display: inline-block;
+  transition: color 0.3s ease, -webkit-text-stroke-color 0.3s ease;
+  will-change: transform;
+}
+.hx-char:hover {
+  color: var(--color-gold);
+  -webkit-text-stroke-color: var(--color-gold);
+}
+
+/* light sweep across media cards on hover */
+.card-sheen {
+  position: relative;
+  overflow: hidden;
+}
+.card-sheen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.12) 50%, transparent 60%);
+  transform: translateX(-120%);
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.card-sheen:hover::before,
+.group:hover > .card-sheen::before {
+  transform: translateX(120%);
+}
+
+/* soft spotlight that follows the pointer across a panel (--mx/--my set in textFx.ts) */
+.spot-card {
+  position: relative;
+}
+.spot-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(380px circle at var(--mx, 50%) var(--my, 50%), rgba(var(--gold-rgb), 0.12), transparent 65%);
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+.spot-card:hover::after {
+  opacity: 1;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+/* =====================================================================
+   TEXT HALOS (Home, over the 3D logo)
+   A soft frosted patch that hugs each text block and slowly morphs. They live
+   in their own layer between the canvas and the text (see halos.ts) so the
+   blur always works, even while the text itself fades or blurs in.
+   ===================================================================== */
+.halo-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  overflow: hidden;
+  contain: strict;
+}
+.halo {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: none;
+  will-change: transform, opacity;
+}
+.halo > i {
+  position: absolute;
+  inset: 0;
+  display: block;
+  border-radius: 46% 54% 52% 48% / 58% 44% 56% 42%;
+  -webkit-mask:
+    linear-gradient(to right, transparent, #000 var(--hp), #000 calc(100% - var(--hp)), transparent),
+    linear-gradient(to bottom, transparent, #000 var(--hp), #000 calc(100% - var(--hp)), transparent);
+  -webkit-mask-composite: source-in;
+  mask:
+    linear-gradient(to right, transparent, #000 var(--hp), #000 calc(100% - var(--hp)), transparent),
+    linear-gradient(to bottom, transparent, #000 var(--hp), #000 calc(100% - var(--hp)), transparent);
+  mask-composite: intersect;
+}
+/* frosted core */
+.halo > i:first-child {
+  background: rgba(var(--ink-rgb), 0.4);
+  -webkit-backdrop-filter: blur(12px) saturate(1.15);
+  backdrop-filter: blur(12px) saturate(1.15);
+  animation: halo-morph-a 11s ease-in-out infinite alternate;
+}
+/* drifting tint lobe, slightly larger → the outline breathes around the text */
+.halo > i:last-child {
+  inset: -8%;
+  background: rgba(var(--ink-rgb), 0.22);
+  border-radius: 58% 42% 40% 60% / 46% 60% 40% 54%;
+  animation: halo-morph-b 14s ease-in-out infinite alternate;
+}
+html.light .halo > i:first-child {
+  background: rgba(var(--ink-rgb), 0.56);
+}
+html.light .halo > i:last-child {
+  background: rgba(var(--ink-rgb), 0.32);
+}
+@keyframes halo-morph-a {
+  0% {
+    transform: rotate(-1.5deg) scale(1.03, 0.96);
+  }
+  50% {
+    transform: rotate(1deg) scale(0.97, 1.05);
+  }
+  100% {
+    transform: rotate(2deg) scale(1.04, 0.99);
+  }
+}
+@keyframes halo-morph-b {
+  0% {
+    transform: translate(-2%, 1%) rotate(2deg) scale(0.98, 1.04);
+  }
+  50% {
+    transform: translate(2%, -2%) rotate(-2deg) scale(1.05, 0.95);
+  }
+  100% {
+    transform: translate(-1%, 2%) rotate(1deg) scale(1, 1.02);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .halo > i {
+    animation: none !important;
+  }
+}
+
+/* =====================================================================
+   LIGHT MODE READABILITY
+   Dark-on-paper text renders thinner, so: standard (not grayscale) smoothing,
+   stronger outline strokes, and faint text tints are lifted to readable
+   levels (GreeLogix rule: paper text never below ~65% ink).
+   ===================================================================== */
+html.light body {
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+}
+html.light .theme-dark {
+  -webkit-font-smoothing: antialiased;
+}
+
+:where(html.light) .text-stroke:not(:where(.theme-dark *)) {
+  -webkit-text-stroke-color: rgba(var(--bone-rgb), 0.82);
+}
+:where(html.light) .label:not(:where(.theme-dark *)) {
+  color: rgba(var(--bone-rgb), 0.74);
+}
+:where(html.light) .label-gold:not(:where(.theme-dark *)) {
+  color: var(--color-gold);
+}
+/* in the utilities layer with low specificity: beats the plain text-bone/NN
+   utility, but hover:/group-hover: colours still win */
+@layer utilities {
+  :where(html.light) .text-bone\/40:not(:where(.theme-dark *)) {
+    color: rgba(var(--bone-rgb), 0.62);
+  }
+  :where(html.light) .text-bone\/50:not(:where(.theme-dark *)) {
+    color: rgba(var(--bone-rgb), 0.7);
+  }
+  :where(html.light) .text-bone\/60:not(:where(.theme-dark *)),
+  :where(html.light) .text-bone\/65:not(:where(.theme-dark *)) {
+    color: rgba(var(--bone-rgb), 0.78);
+  }
+  :where(html.light) .text-bone\/75:not(:where(.theme-dark *)),
+  :where(html.light) .text-bone\/80:not(:where(.theme-dark *)) {
+    color: rgba(var(--bone-rgb), 0.86);
+  }
 }

@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { gsap, ScrollTrigger } from "../lib/core";
 import { ARCHIVE_IDS, PORTFOLIO_IDS, projectMeta, projects, STUDIO_LABEL, type Project } from "../lib/data";
+import RollText from "../components/RollText";
 import Footer from "../components/Footer";
 import Marquee from "../components/Marquee";
 import WorkHero from "../components/WorkHero";
@@ -41,7 +42,7 @@ function WorkCard({ p, i }: { p: Project; i: number }) {
         }
       }}
     >
-      <div className="theme-dark relative overflow-hidden" style={{ aspectRatio: aspect }}>
+      <div className="theme-dark card-sheen relative overflow-hidden" style={{ aspectRatio: aspect }}>
         <div className="work-media absolute -inset-y-[8%] inset-x-0">
           {p.video ? (
             <video ref={vidRef} src={p.video} poster={p.img} muted loop playsInline preload="none" className="h-full w-full object-cover" />
@@ -94,9 +95,11 @@ function Vault({ title, ids, startIndex, ghost }: { title: string; ids: string[]
       <div className="pointer-events-none absolute -right-6 top-6 select-none font-display text-[24vw] leading-none text-stroke opacity-[0.07] md:text-[18vw]">{ghost}</div>
       <div className="mb-12 flex flex-wrap items-end justify-between gap-4 md:mb-16">
         <div className="overflow-hidden">
-          <h2 className="reveal-line font-display block text-[clamp(2rem,5.4vw,4.6rem)] uppercase leading-[0.9]">{title}</h2>
+          <h2 className="reveal-line font-display block text-[clamp(2rem,5.4vw,4.6rem)] uppercase leading-[0.9]" data-hx>
+            {title}
+          </h2>
         </div>
-        <span className="label">[{String(items.length).padStart(2, "0")} CASES]</span>
+        <span className="label" data-reveal>[{String(items.length).padStart(2, "0")} CASES]</span>
       </div>
       <div className="grid gap-x-6 gap-y-16 md:grid-cols-2 md:gap-y-24">
         <div className="flex flex-col gap-16 md:gap-24">
@@ -200,11 +203,11 @@ export default function Work({ ready, onNavigate }: { ready: boolean; onNavigate
       {/* ---------- FEATURED ---------- */}
       <section className="featured-wrap px-6 py-20 md:px-10 md:py-28">
         <div className="mb-8 flex items-end justify-between">
-          <span className="label label-gold">[00] — FEATURED CASE</span>
+          <span className="label label-gold" data-scramble>[00] — FEATURED CASE</span>
           <span className="label hidden md:block">{projects.some((p) => p.video) ? "HOVER-TO-PLAY BELOW" : "HOVER TO EXPLORE BELOW"}</span>
         </div>
         <a href={moosehead.url} target="_blank" rel="noreferrer" data-cursor={moosehead.video ? "PLAY" : "VIEW"} className="group relative block overflow-hidden">
-          <div className="theme-dark relative" style={{ aspectRatio: "16/9" }}>
+          <div className="theme-dark card-sheen relative" style={{ aspectRatio: "16/9" }}>
             <div ref={heroMediaRef} className="h-full w-full">
               {moosehead.video ? (
                 <video ref={heroVidRef} src={moosehead.video} poster={moosehead.img} muted loop playsInline preload="metadata" className="h-full w-full object-cover" />
@@ -221,7 +224,9 @@ export default function Work({ ready, onNavigate }: { ready: boolean; onNavigate
             </div>
             <div className="absolute bottom-0 left-0 flex w-full items-end justify-between p-5 md:p-7">
               <div>
-                <h2 className="font-display text-[clamp(2.6rem,8vw,7rem)] uppercase leading-[0.85]">{moosehead.name}</h2>
+                <h2 className="font-display text-[clamp(2.6rem,8vw,7rem)] uppercase leading-[0.85]" data-hx>
+                  {moosehead.name}
+                </h2>
                 <p className="label mt-3 max-w-md" style={{ letterSpacing: "0.16em" }}>
                   AHEAD OF THE ALES — A FULL-FUNNEL BREW E-COMMERCE UNIVERSE
                 </p>
@@ -241,22 +246,22 @@ export default function Work({ ready, onNavigate }: { ready: boolean; onNavigate
 
       {/* ---------- NFO ---------- */}
       <section className="border-t px-6 py-20 text-center md:py-28" style={{ borderColor: "rgba(var(--bone-rgb),0.09)" }}>
-        <span className="label label-gold">[END OF VAULT]</span>
-        <p className="font-display mx-auto mt-6 max-w-4xl text-[clamp(1.6rem,3.6vw,3.2rem)] uppercase leading-[1.05]">
+        <span className="label label-gold" data-scramble>[END OF VAULT]</span>
+        <p className="font-display mx-auto mt-6 max-w-4xl text-[clamp(1.6rem,3.6vw,3.2rem)] uppercase leading-[1.05]" data-hx>
           Every pixel above shipped to production. <span className="text-stroke">Yours could be next.</span>
         </p>
         <a
           href="mailto:hello@greepixel.com"
           data-cursor="SAY HI"
           data-magnetic
-          className="mt-10 inline-flex items-center gap-3 border px-8 py-4 font-mono text-xs tracking-[0.24em] transition-colors"
+          className="group mt-10 inline-flex items-center gap-3 rounded-full border px-8 py-4 font-mono text-xs tracking-[0.24em] transition-colors"
           style={{
             borderColor: "var(--color-gold)",
             color: "var(--color-gold)",
             fontFamily: "var(--font-mono)",
           }}
         >
-          START A PROJECT <ArrowUpRight className="h-4 w-4" />
+          <RollText text="START A PROJECT" /> <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" />
         </a>
       </section>
 

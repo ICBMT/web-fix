@@ -1,12 +1,14 @@
 import { useEffect, useRef } from "react";
 import { ArrowDown, ArrowUpRight, Move, Play } from "lucide-react";
-import { gsap, ScrollTrigger, splitChars } from "../lib/core";
+import { gsap, ScrollTrigger } from "../lib/core";
 import { LAB, SERVICE_PREVIEWS } from "../lib/assets";
 import { chapters, GLB_URL, projectMeta, projects, services, stats, STUDIO_LABEL, type Project } from "../lib/data";
 import { defaultPose, logoPose, LogoScene, resetPose } from "../three/logoScene";
 import Footer from "../components/Footer";
 import ToolsStrip from "../components/ToolsStrip";
 import { getTheme, onThemeChange } from "../lib/theme";
+import { Halos } from "../lib/halos";
+import RollText from "../components/RollText";
 
 export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate: (r: string) => void }) {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -42,6 +44,18 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
       offTheme();
       scene.dispose();
       sceneRef.current = null;
+    };
+  }, []);
+
+  /* ---------- frosted halos behind text that floats over the 3D logo ---------- */
+  useEffect(() => {
+    const root = rootRef.current!;
+    const halos = new Halos(root, Array.from(root.querySelectorAll<HTMLElement>("[data-halo]")), root);
+    const io = new IntersectionObserver(([entry]) => halos.setRunning(entry.isIntersecting), { threshold: 0 });
+    io.observe(stageZoneRef.current!);
+    return () => {
+      io.disconnect();
+      halos.dispose();
     };
   }, []);
 
@@ -281,12 +295,7 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
     if (!ready || introDone.current) return;
     introDone.current = true;
 
-    const chars1 = splitChars(document.querySelector<HTMLElement>(".hero-word-1")!);
-    const chars2 = splitChars(document.querySelector<HTMLElement>(".hero-word-2")!);
-
     gsap.set(logoPose, { assemble: 0, rotY: -1.4, dist: 1.5, spin: 3.4 });
-    // y: 0 matters — GSAP would otherwise adopt the CSS translateY(115%) as a fixed px offset
-    gsap.set([...chars1, ...chars2], { y: 0, yPercent: 115 });
     gsap.set(".hero-meta", { opacity: 0, y: 18 });
     gsap.set(".hero-cue", { opacity: 0 });
     gsap.set(".hud", { opacity: 0, scale: 0.82 });
@@ -297,8 +306,6 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
       onComplete: () => ScrollTrigger.refresh(),
     });
     tl.to(logoPose, { assemble: 1, rotY: defaultPose.rotY, dist: defaultPose.dist, spin: 1, duration: 2.4, ease: "power3.inOut" }, 0)
-      .to(chars1, { yPercent: 0, duration: 1.1, ease: "expo.out", stagger: 0.05 }, 0.35)
-      .to(chars2, { yPercent: 0, duration: 1.1, ease: "expo.out", stagger: 0.05 }, 0.55)
       .to(".hud", { opacity: 1, scale: 1, duration: 1.7, ease: "expo.out" }, 1.15)
       .to(".hud-corner", { opacity: 1, duration: 0.5, stagger: 0.07 }, 1.3)
       .to(".hero-chip", { autoAlpha: 1, y: 0, duration: 0.7, ease: "power3.out", stagger: 0.09 }, 1.35)
@@ -340,9 +347,9 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
             <span className="hud-corner bottom-0 right-0 border-b-2 border-r-2" />
 
             <div className="hero-meta flex items-center justify-between">
-              <span className="label">DIGITAL PRODUCT STUDIO</span>
-              <span className="label hidden md:block">EST. 2019 — MTL / PAR / LHE</span>
-              <span className="label label-gold">SCROLL TO ASSEMBLE</span>
+              <span className="label" data-halo>DIGITAL PRODUCT STUDIO</span>
+              <span className="label hidden md:block" data-halo>EST. 2019 — MTL / PAR / LHE</span>
+              <span className="label label-gold" data-halo>SCROLL TO ASSEMBLE</span>
             </div>
 
             <div className="relative mt-6 flex-1">
@@ -379,18 +386,13 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
                   {c.t}
                 </span>
               ))}
-
-              <div aria-hidden className="pointer-events-none absolute inset-0 flex flex-col justify-between py-[6vh]">
-                <div className="hero-word-1 font-display text-[clamp(4.5rem,17vw,15rem)] leading-[0.8] text-bone md:ml-[4vw]">GREE</div>
-                <div className="hero-word-2 font-display self-end text-right text-[clamp(4.5rem,17vw,15rem)] leading-[0.8] text-stroke md:mr-[4vw]">PIXEL®</div>
-              </div>
             </div>
 
             <div className="hero-meta flex items-end justify-between">
-              <p className="max-w-xs text-sm leading-relaxed text-bone/60">
+              <p className="max-w-xs text-sm leading-relaxed text-bone/60" data-halo>
                 Senior engineers & 3D artists crafting AI products, immersive web and software that actually ships.
               </p>
-              <span className="label hidden text-right md:block">
+              <span className="label hidden text-right md:block" data-halo>
                 WE BUILD
                 <br />
                 BEYOND
@@ -399,14 +401,14 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
           </div>
 
           <div className="hero-cue flex items-center justify-center gap-6">
-            <span className="label hidden items-center gap-2 sm:flex">
+            <span className="label hidden items-center gap-2 sm:flex" data-halo>
               <Move className="h-3.5 w-3.5" style={{ color: "var(--color-gold)" }} /> DRAG TO SPIN
             </span>
-            <span className="flex items-center gap-3">
+            <span className="flex items-center gap-3" data-halo>
               <ArrowDown className="h-4 w-4 animate-bounce" style={{ color: "var(--color-gold)" }} />
               <span className="label">SCROLL</span>
             </span>
-            <span className="label hidden items-center gap-2 sm:flex">© 2026</span>
+            <span className="label hidden items-center gap-2 sm:flex" data-halo>© 2026</span>
           </div>
         </section>
 
@@ -414,7 +416,7 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
         <div ref={storyRef} className="relative z-10 h-[560vh]">
           <div className="sticky top-0 h-[100svh] overflow-hidden">
             {/* side progress */}
-            <div className="absolute right-6 top-1/2 z-20 flex -translate-y-1/2 flex-col items-end gap-3 md:right-10">
+            <div className="absolute right-6 top-1/2 z-20 flex -translate-y-1/2 flex-col items-end gap-3 md:right-10" data-halo data-halo-pad="16">
               <span className="chapter-counter font-pixel mb-2 text-xs" style={{ fontFamily: "var(--font-pixel)", color: "var(--color-gold)" }}>
                 01 / 04
               </span>
@@ -431,14 +433,16 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
                 }`}
                 style={{ opacity: 0 }}
               >
-                <span className="label label-gold mb-5 block">
+                <span className="label label-gold mb-5 block w-fit max-w-full" data-halo>
                   [{ch.k}] — {ch.meta}
                 </span>
-                <h2 className="font-display text-[clamp(3rem,9vw,8.5rem)] leading-[0.85]">
+                <h2 className="font-display w-fit max-w-full text-[clamp(3rem,9vw,8.5rem)] leading-[0.85]" data-halo data-hx>
                   <span className="block text-bone">{ch.title[0]}</span>
                   <span className="text-stroke block">{ch.title[1]}</span>
                 </h2>
-                <p className={`mt-7 max-w-md text-sm leading-relaxed text-bone/65 md:text-base ${i === 1 ? "md:ml-auto" : ""}`}>{ch.body}</p>
+                <p className={`mt-7 max-w-md text-sm leading-relaxed text-bone/65 md:text-base ${i === 1 ? "md:ml-auto" : ""}`} data-halo>
+                  {ch.body}
+                </p>
                 <span
                   className="font-pixel pointer-events-none absolute bottom-10 text-[10px] tracking-widest md:bottom-1/2 md:translate-y-1/2"
                   style={{
@@ -447,7 +451,9 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
                     ...(i === 1 ? { left: "1.5rem" } : {}),
                   }}
                 >
-                  {"//"} {ch.accent}
+                  <span data-halo data-halo-pad="14">
+                    {"//"} {ch.accent}
+                  </span>
                 </span>
               </div>
             ))}
@@ -464,14 +470,14 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
         <section className="px-6 py-24 md:px-10 md:py-36">
           <div className="mb-14 flex flex-wrap items-end justify-between gap-6 md:mb-20">
             <div>
-              <span className="label label-gold block overflow-hidden">[CAPABILITIES]</span>
+              <span className="label label-gold block overflow-hidden" data-scramble>[CAPABILITIES]</span>
               <div className="mt-3 overflow-hidden">
-                <h2 className="reveal-line font-display block text-[clamp(2.8rem,7vw,6.5rem)] uppercase leading-[0.9]">
+                <h2 className="reveal-line font-display block text-[clamp(2.8rem,7vw,6.5rem)] uppercase leading-[0.9]" data-hx>
                   WHAT WE <span className="text-stroke">SHIP</span>
                 </h2>
               </div>
             </div>
-            <span className="label pb-3">08 DISCIPLINES — ONE TEAM</span>
+            <span className="label pb-3" data-reveal>08 DISCIPLINES — ONE TEAM</span>
           </div>
 
           <div className="border-t" style={{ borderColor: "rgba(var(--bone-rgb),0.09)" }}>
@@ -507,8 +513,8 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
             <div className="absolute inset-0" style={{ background: "radial-gradient(70% 60% at 70% 40%, rgba(var(--gold-rgb),0.07), transparent 70%)" }} />
             <div className="mb-8 flex flex-wrap items-end justify-between gap-4 px-6 md:mb-12 md:px-10">
               <div className="overflow-hidden">
-                <span className="label label-gold block">[GREEPIXEL LAB]</span>
-                <h2 className="font-display mt-3 text-[clamp(2.4rem,6vw,5.5rem)] uppercase leading-[0.9]">
+                <span className="label label-gold block" data-scramble>[GREEPIXEL LAB]</span>
+                <h2 className="font-display mt-3 text-[clamp(2.4rem,6vw,5.5rem)] uppercase leading-[0.9]" data-hx>
                   AI × INTERACTIVE <span className="text-stroke">R&D</span>
                 </h2>
               </div>
@@ -518,7 +524,7 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
             <div ref={labTrackRef} className="flex w-max items-stretch gap-5 px-6 md:gap-8 md:px-10">
               {Object.entries(LAB).map(([k, item], i) => (
                 <figure key={k} className="lab-card group relative w-[74vw] shrink-0 md:w-[36vw] lg:w-[30vw]" data-cursor="R&D">
-                  <div className="theme-dark relative overflow-hidden border border-bone/10" style={{ aspectRatio: "16/10", borderColor: "rgba(var(--bone-rgb),0.12)" }}>
+                  <div className="theme-dark card-sheen relative overflow-hidden border border-bone/10" style={{ aspectRatio: "16/10", borderColor: "rgba(var(--bone-rgb),0.12)" }}>
                     <img src={item.img} alt={item.title} loading="lazy" className="h-[112%] w-[112%] max-w-none object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
                     <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" style={{ background: "rgba(var(--gold-rgb),0.12)" }} />
                     <span className="label absolute left-3 top-3 border border-bone/20 px-2 py-1 backdrop-blur-sm" style={{ background: "rgba(var(--ink-rgb),0.5)", fontSize: "9px" }}>
@@ -546,7 +552,7 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
         {/* ---------- STATS ---------- */}
         <section className="grid grid-cols-2 border-y md:grid-cols-4" style={{ borderColor: "rgba(var(--bone-rgb),0.09)" }}>
           {stats.map((s, i) => (
-            <div key={i} className="border-b border-r p-8 last:border-r-0 md:border-b-0 md:p-12" style={{ borderColor: "rgba(var(--bone-rgb),0.09)" }}>
+            <div key={i} className="spot-card border-b border-r p-8 last:border-r-0 md:border-b-0 md:p-12" style={{ borderColor: "rgba(var(--bone-rgb),0.09)" }}>
               <div className="font-display flex items-baseline text-6xl md:text-7xl" style={{ color: i === 0 ? "var(--color-gold)" : "var(--color-bone)" }}>
                 <span className="stat-num" data-value={s.v}>
                   0
@@ -562,18 +568,18 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
         <section className="px-6 py-24 md:px-10 md:py-36">
           <div className="mb-12 flex flex-wrap items-end justify-between gap-6 md:mb-16">
             <div>
-              <span className="label label-gold block">[PORTFOLIO — GREEPIXEL® × STUDIO ARCHIVE]</span>
+              <span className="label label-gold block" data-scramble>[PORTFOLIO — GREEPIXEL® × STUDIO ARCHIVE]</span>
               <div className="mt-3 overflow-hidden">
-                <h2 className="reveal-line font-display block text-[clamp(2.8rem,7vw,6.5rem)] uppercase leading-[0.9]">SELECTED WORK</h2>
+                <h2 className="reveal-line font-display block text-[clamp(2.8rem,7vw,6.5rem)] uppercase leading-[0.9]" data-hx>SELECTED WORK</h2>
               </div>
             </div>
-            <a href="#/work" onClick={goWork} data-cursor="OPEN" data-magnetic className="label flex items-center gap-2 border border-bone/20 px-4 py-3 transition-colors hover:border-gold hover:text-gold">
-              FULL ARCHIVE <ArrowUpRight className="h-3.5 w-3.5" />
+            <a href="#/work" onClick={goWork} data-cursor="OPEN" data-magnetic className="label group flex items-center gap-2 rounded-full border border-bone/20 px-5 py-3 transition-colors hover:border-gold" data-cursor-snap>
+              <RollText text="FULL ARCHIVE" /> <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:rotate-45" />
             </a>
           </div>
 
           <div className="grid gap-6 md:grid-cols-12">
-            <a href="#/work" onClick={goWork} data-cursor={featured[0].video ? "PLAY" : "VIEW"} className="theme-dark group relative block overflow-hidden md:col-span-7" style={{ aspectRatio: "16/10" }}>
+            <a href="#/work" onClick={goWork} data-cursor={featured[0].video ? "PLAY" : "VIEW"} className="theme-dark card-sheen group relative block overflow-hidden md:col-span-7" style={{ aspectRatio: "16/10" }}>
               <div className="work-parallax absolute inset-0" data-speed="6">
                 {featured[0].video ? (
                   <video ref={featVidRef} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" src={featured[0].video} poster={featured[0].img} muted loop playsInline preload="none" />
@@ -594,7 +600,7 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
 
             <div className="grid gap-6 md:col-span-5">
               {featured.slice(1).map((p, i) => (
-                <a key={p.id} href="#/work" onClick={goWork} data-cursor="VIEW" className="theme-dark group relative block overflow-hidden" style={{ aspectRatio: "16/8.5" }}>
+                <a key={p.id} href="#/work" onClick={goWork} data-cursor="VIEW" className="theme-dark card-sheen group relative block overflow-hidden" style={{ aspectRatio: "16/8.5" }}>
                   <div className="work-parallax absolute inset-0" data-speed={i === 0 ? 10 : 8}>
                     <img src={p.img} alt={p.name} className="h-full w-full scale-110 object-cover transition-transform duration-700 group-hover:scale-125" />
                   </div>
@@ -611,7 +617,7 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
 
         {/* ---------- QUOTE ---------- */}
         <section className="quote-block border-t px-6 py-28 md:px-10 md:py-40" style={{ borderColor: "rgba(var(--bone-rgb),0.09)" }}>
-          <span className="label label-gold block text-center">[FIELD REPORT]</span>
+          <span className="label label-gold block text-center" data-scramble>[FIELD REPORT]</span>
           <blockquote className="mx-auto mt-8 max-w-5xl text-center">
             <p className="font-display text-[clamp(1.9rem,4.6vw,4.2rem)] uppercase leading-[1.02]">
               {"What a 70-engineer team could not deliver, this crew shipped — mobile, web and backend, live."
@@ -623,7 +629,7 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
                 ))}
             </p>
           </blockquote>
-          <p className="label mt-10 text-center">— FOUNDER, EDTECH PLATFORM RESCUE</p>
+          <p className="label mt-10 text-center" data-reveal>— FOUNDER, EDTECH PLATFORM RESCUE</p>
         </section>
 
         <Footer onNavigate={onNavigate} />
