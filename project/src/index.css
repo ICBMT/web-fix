@@ -499,15 +499,16 @@ canvas {
   -webkit-backdrop-filter: blur(20px) saturate(1.8);
   backdrop-filter: blur(20px) saturate(1.8);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.03),
+    inset 0 1px 0 rgba(255, 250, 240, 0.07),
+    inset 0 -1px 0 rgba(255, 250, 240, 0.02),
     0 14px 44px -18px rgba(0, 0, 0, 0.65);
   transition:
     background-color 0.5s,
     box-shadow 0.5s,
     --gx 0.9s cubic-bezier(0.16, 1, 0.3, 1);
 }
-/* liquid rim: a 1px gradient border that catches light on two corners */
+/* liquid rim: a 1px gradient border that catches light on two corners.
+   Kept faint and warm so it reads as an edge of light, not an outline. */
 .nav-glass::before {
   content: "";
   position: absolute;
@@ -518,10 +519,10 @@ canvas {
   pointer-events: none;
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.36),
-    rgba(255, 255, 255, 0.07) 28%,
-    rgba(255, 255, 255, 0.02) 62%,
-    rgba(255, 255, 255, 0.2)
+    rgba(255, 248, 236, 0.2),
+    rgba(255, 248, 236, 0.04) 28%,
+    rgba(255, 248, 236, 0.012) 62%,
+    rgba(255, 248, 236, 0.11)
   );
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
@@ -546,17 +547,17 @@ canvas {
 html.light .nav-glass:not(.theme-dark *) {
   background: linear-gradient(180deg, rgba(var(--ink-rgb), 0.74), rgba(var(--ink-rgb), 0.58));
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.85),
-    inset 0 -1px 0 rgba(21, 19, 17, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -1px 0 rgba(21, 19, 17, 0.02),
     0 14px 40px -20px rgba(21, 19, 17, 0.28);
 }
 html.light .nav-glass:not(.theme-dark *)::before {
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.95),
-    rgba(21, 19, 17, 0.08) 30%,
-    rgba(21, 19, 17, 0.05) 62%,
-    rgba(255, 255, 255, 0.8)
+    rgba(255, 255, 255, 0.8),
+    rgba(120, 100, 80, 0.045) 30%,
+    rgba(120, 100, 80, 0.025) 62%,
+    rgba(255, 255, 255, 0.6)
   );
 }
 html.light .nav-glass:not(.theme-dark *)::after {
@@ -822,5 +823,39 @@ html.light .theme-dark {
   :where(html.light) .text-bone\/75:not(:where(.theme-dark *)),
   :where(html.light) .text-bone\/80:not(:where(.theme-dark *)) {
     color: rgba(var(--bone-rgb), 0.86);
+  }
+}
+
+/* ===================== WORK: STORY CARDS (GreeLogix portfolio layout) ===================== */
+.story-shelf {
+  background: rgba(var(--ink-rgb), 0.62);
+  -webkit-backdrop-filter: blur(18px) saturate(1.6);
+  backdrop-filter: blur(18px) saturate(1.6);
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--bone-rgb), 0.07),
+    0 12px 36px -20px rgba(0, 0, 0, 0.55);
+  scrollbar-width: none;
+}
+.story-shelf::-webkit-scrollbar {
+  display: none;
+}
+.story-shelf-on {
+  background: var(--color-bone);
+  color: var(--color-ink);
+  box-shadow: 0 8px 22px -10px rgba(0, 0, 0, 0.5);
+}
+html.light .story-shelf {
+  background: rgba(var(--ink-rgb), 0.78);
+  box-shadow:
+    inset 0 0 0 1px rgba(21, 19, 17, 0.06),
+    0 12px 30px -20px rgba(21, 19, 17, 0.3);
+}
+.story-chip:hover {
+  border-color: rgba(var(--gold-rgb), 0.6) !important;
+  color: var(--color-gold) !important;
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .story-shelf {
+    background: rgba(var(--ink-rgb), 0.95);
   }
 }

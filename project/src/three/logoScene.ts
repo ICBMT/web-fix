@@ -67,6 +67,11 @@ export class LogoScene {
   private lastX = 0;
   private mode: "autoplay" | "scrub" = "scrub";
   private running = true;
+  /** Paused while the time-tunnel portal covers the screen (frees the main thread for the palette flip). */
+  private tunnelCovered = false;
+  private onTunnel = (e: Event) => {
+    this.tunnelCovered = (e as CustomEvent<string>).detail === "covered";
+  };
   private interactive: boolean;
   private disposed = false;
   private url: string;
@@ -100,6 +105,7 @@ export class LogoScene {
     this.url = url;
     this.interactive = interactive;
     this.sizeFactor = sizeFactor;
+    window.addEventListener("gp-tunnel", this.onTunnel);
   }
 
   async init() {
@@ -238,14 +244,12 @@ export class LogoScene {
       m.blending = l ? THREE.NormalBlending : THREE.AdditiveBlending;
       m.opacity = l ? 0.6 : 0.7;
       m.color.setHex(l ? 0xd1440f : 0xf4602a);
-      m.needsUpdate = true;
     }
     if (dust) {
       const m = dust.material as THREE.PointsMaterial;
       m.blending = l ? THREE.NormalBlending : THREE.AdditiveBlending;
       m.opacity = l ? 0.4 : 0.35;
       m.color.setHex(l ? 0x2a2420 : 0xf2eee5);
-      m.needsUpdate = true;
     }
     if (this.renderer) this.renderer.toneMappingExposure = l ? 1.05 : 1.15;
   }
@@ -297,7 +301,7 @@ export class LogoScene {
   private loop = () => {
     if (this.disposed) return;
     this.raf = requestAnimationFrame(this.loop);
-    if (!this.running) return;
+    if (!this.running || this.tunnelCovered) return;
     const dt = Math.min(this.clock.getDelta(), 0.05);
     const t = this.clock.elapsedTime;
     const s = this.smooth;
@@ -379,6 +383,7 @@ export class LogoScene {
     this.disposed = true;
     cancelAnimationFrame(this.raf);
     window.removeEventListener("resize", this.onResize);
+    window.removeEventListener("gp-tunnel", this.onTunnel);
     window.removeEventListener("pointermove", this.onPointer);
     window.removeEventListener("pointerdown", this.onDown);
     window.removeEventListener("pointerup", this.onUp);

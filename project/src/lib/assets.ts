@@ -74,13 +74,13 @@ const WORK_IDS = [
   "deltabook",
   "xpatio",
   "hotcoin",
-  // studio archive (MILL3 × Studio Mirage)
+  "startwise",
+  "mts-rescue",
+  "gcc-fitness",
+  "the-incc",
+  // motion work (video)
   "moosehead",
   "cob",
-  "sopra",
-  "caisse",
-  "jinns",
-  "biotherm",
 ] as const;
 
 export const MEDIA: Record<string, { img: string; video?: string }> = Object.fromEntries(

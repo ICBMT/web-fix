@@ -4,6 +4,8 @@ export { GLB_URL, LOGO_BLACK, LOGO_WHITE };
 
 export type Studio = "GREEPIXEL" | "MILL3" | "MIRAGE";
 
+export const CREDIT = "Created by GreePixel";
+
 export type Project = {
   id: string;
   name: string;
@@ -20,6 +22,14 @@ export type Project = {
   tags: string[];
   url?: string;
   hue?: string;
+  /** Pull-quote shown on the story card. */
+  note?: string;
+  /** "Inside the build" list on the story card. */
+  features?: string[];
+  /** Decorative glyph floating on the story visual. */
+  glyph?: string;
+  /** Video work: shows a "Created by GreePixel" credit. */
+  credit?: boolean;
 };
 
 /** Where GreePixel portfolio cards link to (source: greelogix.com/portfolio). */
@@ -35,6 +45,20 @@ export const STUDIO_LABEL: Record<Studio, string> = {
 export function projectMeta(p: Project) {
   return p.year ?? (p.kind ?? "").toUpperCase();
 }
+
+/* Story-card extras (note, "inside the build", glyph), from the GreeLogix portfolio data. */
+const STORY: Record<string, Pick<Project, "note" | "features" | "glyph">> = {
+  jalebi: { glyph: "◈", note: "Built to scale from single outlets to multi-branch chains.", features: ["Supply management", "Universal menu", "Smarter inventory", "Smarter orders", "Intelligent recipes", "Insightful reporting"] },
+  "ad-grants-pilot": { glyph: "✦", note: "Every conversation, response and campaign — visible in one calm dashboard.", features: ["Conversation monitoring", "Automated response config", "Performance analytics", "Multi-campaign management"] },
+  "on-card": { glyph: "◎", note: "One tap replaces the paper card — and remembers everyone you meet.", features: ["Save & sort contacts", "Lead capture form", "Export to Salesforce / CRM", "NFC card (Ion NFC)", "ROI tracking on networking", "Engagement analytics"] },
+  "kim-and-co": { glyph: "▦", note: "Leadership stopped asking for reports. The answer is always on screen.", features: ["Product management", "Sales analytics", "Performance dashboards", "Team reporting"] },
+  lairo: { glyph: "♡", note: "A screenshot goes in. A read on the conversation — and your next reply — comes out.", features: ["Screenshot analysis", "Interest level scoring", "AI reply suggestions", "Conversation insights"] },
+  "find-a-doc": { glyph: "✚", note: "Booking a doctor now takes less time than describing the symptom.", features: ["Patient appointment booking", "Doctor schedule management", "Staff management", "Specialisation search"] },
+  shepherd: { glyph: "⬡", note: "The tutor that remembers how you learn — and plans tomorrow's session.", features: ["AI-powered tutor", "Flashcards & quizzes", "Study plans", "Progress streaks", "Daily task management", "Instant topic help"] },
+  deltabook: { glyph: "❧", note: "Four subjects, one guided path — learners always know what comes next.", features: ["Structured lessons", "Subject quizzes", "Progress tracking", "Multi-subject support"] },
+  xpatio: { glyph: "⌂", note: "A hometown, rebuilt inside an app — wherever in the world you land.", features: ["Community pages", "Local & global events", "Job board", "Marketplace", "Business profiles", "Social feed"] },
+  hotcoin: { glyph: "●", note: "Watch, earn, redeem — a loop simple enough to become a daily habit.", features: ["Video-based coin earning", "Daily tasks", "Progress tracking", "Rewards redemption", "Smooth UX"] },
+};
 
 /* ---- GreePixel portfolio (sourced from the GreeLogix portfolio page) ---- */
 const portfolio: Project[] = [
@@ -145,15 +169,72 @@ const portfolio: Project[] = [
     img: MEDIA.hotcoin.img,
     tags: ["Flutter", "Node.js", "Firebase", "Stripe"],
   },
+  {
+    id: "startwise",
+    name: "Startwise",
+    cat: "AI Startup Workspace",
+    studio: "GREEPIXEL",
+    kind: "Web platform",
+    industry: "SaaS · AI",
+    desc: "A multi-tenant SaaS workspace for entrepreneurs, investors, mentors, PMs and accelerators — AI business-plan and pitch generation, investor CRM, a mentor marketplace with Google Meet, and credit-based subscriptions.",
+    note: "From first idea to investor meeting — the plan, the pitch and the people in one workspace.",
+    features: ["Multi-tenant workspaces", "AI business-plan generation", "AI pitch generation", "Investor CRM", "Mentor marketplace + Google Meet", "Credit-based subscriptions"],
+    glyph: "✶",
+    img: MEDIA.startwise.img,
+    tags: ["SaaS", "AI", "Google Meet"],
+  },
+  {
+    id: "mts-rescue",
+    name: "MTS",
+    cat: "EdTech Platform Rescue",
+    studio: "GREEPIXEL",
+    kind: "Web + mobile",
+    industry: "Education · EdTech",
+    desc: "An education platform stuck in development limbo with a previous vendor of 70+ engineers — we took it over, stabilised the codebase, shipped the core student and teacher experience, and made the client happy.",
+    note: "Dead → Live. What a 70-engineer vendor couldn't ship, a senior team did.",
+    features: ["Takeover from a stalled vendor", "Codebase stabilised", "Core student experience", "Core teacher experience", "React Native app + Angular web"],
+    glyph: "✷",
+    img: MEDIA["mts-rescue"].img,
+    tags: ["React Native", "Angular", "Laravel", "PHP", "MySQL"],
+  },
+  {
+    id: "gcc-fitness",
+    name: "GCC Fitness",
+    cat: "Trainer & Client Marketplace",
+    studio: "GREEPIXEL",
+    kind: "Mobile app",
+    industry: "Fitness · Wellness",
+    desc: "A three-sided fitness marketplace backend: mobile API, trainer dashboard and admin dashboard — dual workout and meal subscriptions, MyFatoorah, Firebase, SMS OTP, Reverb chat, and English / Arabic.",
+    note: "Clients, trainers and admins — three sides, one marketplace, two languages.",
+    features: ["Mobile API", "Trainer dashboard", "Admin dashboard", "Workout + meal subscriptions", "MyFatoorah payments", "Reverb real-time chat", "SMS OTP + Firebase", "English / Arabic"],
+    glyph: "⬢",
+    img: MEDIA["gcc-fitness"].img,
+    tags: ["Laravel 12", "Inertia", "React", "TypeScript", "Shadcn UI"],
+  },
+  {
+    id: "the-incc",
+    name: "The INCC",
+    cat: "Multi-Platform Social Network",
+    studio: "GREEPIXEL",
+    kind: "Mobile app",
+    industry: "Social · Media",
+    desc: "We joined The INCC (The Inccubator) during ongoing development and continued its Laravel backend, Flutter and iOS apps and admin dashboard — adding social features and keeping third-party integrations stable.",
+    note: "Joined mid-flight and kept it flying — new features, nothing that was live broke.",
+    features: ["Laravel backend", "Flutter + iOS apps", "Admin dashboard", "New social features", "Stable third-party integrations"],
+    glyph: "◉",
+    img: MEDIA["the-incc"].img,
+    tags: ["Laravel 10", "PHP", "MySQL", "Laravel Passport", "Flutter"],
+  },
 ];
 
-/* ---- Studio archive (MILL3 × Studio Mirage) — kept: video work + remaining slots ---- */
+/* ---- Motion work (video), created by GreePixel ---- */
 const archive: Project[] = [
   {
     id: "moosehead",
     name: "Moosehead",
     cat: "E-Commerce Experience",
-    studio: "MILL3",
+    studio: "GREEPIXEL",
+    credit: true,
     year: "2023",
     img: MEDIA.moosehead.img,
     video: MEDIA.moosehead.video,
@@ -164,61 +245,25 @@ const archive: Project[] = [
     id: "cob",
     name: "COB Foods",
     cat: "Brand Site / WebGL",
-    studio: "MILL3",
+    studio: "GREEPIXEL",
+    credit: true,
     year: "2024",
     img: MEDIA.cob.img,
     video: MEDIA.cob.video,
     tags: ["Art Direction", "WebGL", "CPG"],
     url: "https://cobfoods.com/",
   },
-  {
-    id: "sopra",
-    name: "Sopra Banking",
-    cat: "Live Event 3D World",
-    studio: "MIRAGE",
-    year: "2023",
-    img: MEDIA.sopra.img,
-    tags: ["Live Event", "Fintech", "3D"],
-    url: "https://studiomirage.io/works/sopra-banking",
-  },
-  {
-    id: "caisse",
-    name: "Caisse des Dépôts",
-    cat: "Real-time 3D Village",
-    studio: "MIRAGE",
-    year: "2024",
-    img: MEDIA.caisse.img,
-    tags: ["Real-time 3D", "Public", "Paris"],
-    url: "https://studiomirage.io/works/caisse-des-depots",
-  },
-  {
-    id: "jinns",
-    name: "Jinns",
-    cat: "Campaign & Billboard",
-    studio: "MIRAGE",
-    year: "2023",
-    img: MEDIA.jinns.img,
-    tags: ["Campaign", "Beverage", "OOH"],
-    url: "https://studiomirage.io/works/jinns",
-  },
-  {
-    id: "biotherm",
-    name: "Biotherm",
-    cat: "Campaign Visual System",
-    studio: "MIRAGE",
-    year: "2024",
-    img: MEDIA.biotherm.img,
-    tags: ["Beauty", "Campaign", "CGI"],
-    url: "https://studiomirage.io/works/biotherm",
-  },
 ];
 
-for (const p of portfolio) p.url ??= PORTFOLIO_URL;
+for (const p of portfolio) {
+  p.url ??= PORTFOLIO_URL;
+  Object.assign(p, { ...STORY[p.id], ...p });
+}
 
 export const projects: Project[] = [...portfolio, ...archive];
 
 export const PORTFOLIO_IDS = portfolio.map((p) => p.id);
-export const ARCHIVE_IDS = archive.filter((p) => p.id !== "moosehead").map((p) => p.id);
+export const VIDEO_IDS = archive.map((p) => p.id);
 
 export const chapters = [
   {
