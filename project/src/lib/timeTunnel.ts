@@ -54,9 +54,11 @@ const T = {
   streakIn: 450, streakInJitter: 340, streakInSpread: 400,
   portalDelay: 130, portal: 530,
   captionInDelay: 490, captionIn: 250,
-  ringOut: 730, ringOutStagger: 43, streakOutSpread: 190,
-  captionOutDelay: 115, captionOut: 380,
-  fadeDelay: 55, fade: 640,
+  // act 2 (arrival) is timed from the reveal and is over before the fade ends:
+  // once the new mode is on screen, no tunnel lines hang around
+  ringOut: 380, ringOutStagger: 30, streakOut: 240, streakOutJitter: 100, streakOutSpread: 80,
+  captionOutDelay: 60, captionOut: 320,
+  fadeDelay: 40, fade: 560,
 };
 const FLIP_AT = T.portalDelay + T.portal;
 
@@ -66,8 +68,9 @@ const signal = (phase: TunnelPhase) => window.dispatchEvent(new CustomEvent<Tunn
 /* Painter: runs inside the worker (or on the main thread as a last resort).  */
 /* MUST stay self-contained: it's serialised with Function#toString.          */
 /* ------------------------------------------------------------------------- */
-type RingSpec = { rot: number; col: RGBA; start: number; dur: number };
-type StreakSpec = { ang: number; col: RGBA; start: number; dur: number };
+// `after`: timed from the reveal (act 2) instead of from the click (act 1)
+type RingSpec = { rot: number; col: RGBA; start: number; dur: number; after?: boolean };
+type StreakSpec = { ang: number; col: RGBA; start: number; dur: number; after?: boolean };
 type Plan = {
   cx: number; // CSS px
   cy: number;
@@ -352,6 +355,7 @@ void main() {
 
     /* portal */
     disc.on = false;
+    let fadeK = 1; // act-1 lines dissolve together with the portal once the reveal starts
     if (revealAt < 0) {
       alive = true;
       const pp = (t - pl.portal.start) / pl.portal.dur;
@@ -366,17 +370,31 @@ void main() {
         alive = true;
         const e = eReveal(Math.max(0, rp));
         Object.assign(disc, { on: true, x: cx, y: cy, r: pl.R * k * (1 + 0.18 * e), a: 1 - e });
-      }
+        fadeK = 1 - e;
+      } else fadeK = 0;
     }
+    const revealed = revealAt >= 0;
+    const sinceReveal = Tnow - revealAt;
+    // local time of a line, and whether it still needs frames
+    const local = (o: { start: number; dur: number; after?: boolean }) => {
+      if (o.after) {
+        if (!revealed) return { lt: -1, live: true }; // waiting for the reveal
+        const lt = sinceReveal - o.start;
+        return { lt, live: lt < o.dur };
+      }
+      const lt = t - o.start;
+      return { lt, live: lt < o.dur && (!revealed || fadeK > 0.003) };
+    };
 
     /* pixel rings: squares growing toward the viewer (2px border scales with them) */
     const half = pl.S / 2;
     for (const r of pl.rings) {
-      const lt = t - r.start;
-      if (lt < r.dur) alive = true;
-      if (lt <= 0 || lt >= r.dur) continue;
+      const { lt, live } = local(r);
+      if (!live) continue;
+      alive = true;
+      if (lt <= 0) continue;
       const p = eApproach(lt / r.dur);
-      const a = ringAlpha(p);
+      const a = ringAlpha(p) * (r.after ? 1 : fadeK);
       if (a <= 0.003) continue;
       const s = (0.02 + (pl.ringMax - 0.02) * p) * k;
       const th = ((r.rot + 34 * p) * Math.PI) / 180;
@@ -393,11 +411,12 @@ void main() {
 
     /* warp streaks: rotate(ang) translateY(y) scaleY(sy) from the vanishing point */
     for (const st of pl.streaks) {
-      const lt = t - st.start;
-      if (lt < st.dur) alive = true;
-      if (lt <= 0 || lt >= st.dur) continue;
+      const { lt, live } = local(st);
+      if (!live) continue;
+      alive = true;
+      if (lt <= 0) continue;
       const p = eApproach(lt / st.dur);
-      const a = streakAlpha(p);
+      const a = streakAlpha(p) * (st.after ? 1 : fadeK);
       if (a <= 0.003) continue;
       const y = (pl.R * 0.04 + (pl.R * 1.05 - pl.R * 0.04) * p) * k;
       const len = pl.L * (0.05 + 1.35 * p) * k;
@@ -631,13 +650,13 @@ function makePlan(next: Theme, w: number, h: number): Plan {
   const sIn = small ? 22 : 36;
   for (let i = 0; i < sIn; i++)
     streaks.push({ ang: Math.random() * 360, col: i % 4 === 0 ? NEUTRAL : fromAc, start: Math.random() * T.streakInSpread, dur: T.streakIn + Math.random() * T.streakInJitter });
-  // act 2 runs on the painter's own clock: it flies on time even if the main
-  // thread is still busy repainting the page under the portal
-  const nOut = small ? 5 : 7;
-  for (let i = 0; i < nOut; i++) rings.push({ rot: (i + 3) * 11, col: i % 3 === 1 ? NEUTRAL : toAc, start: FLIP_AT + i * T.ringOutStagger, dur: T.ringOut });
-  const sOut = small ? 14 : 24;
+  // act 2: a short arrival burst, timed from the reveal (painter's own clock) and
+  // finished before the portal has faded, so the new mode appears clean
+  const nOut = small ? 3 : 4;
+  for (let i = 0; i < nOut; i++) rings.push({ rot: (i + 3) * 11, col: i % 3 === 1 ? NEUTRAL : toAc, start: i * T.ringOutStagger, dur: T.ringOut, after: true });
+  const sOut = small ? 8 : 12;
   for (let i = 0; i < sOut; i++)
-    streaks.push({ ang: Math.random() * 360, col: toAc, start: FLIP_AT + Math.random() * T.streakOutSpread, dur: T.streakIn + Math.random() * T.streakInJitter });
+    streaks.push({ ang: Math.random() * 360, col: toAc, start: Math.random() * T.streakOutSpread, dur: T.streakOut + Math.random() * T.streakOutJitter, after: true });
   return {
     cx, cy, S, ringMax: (R * 2.4) / S, R, L: R * 0.42, bez: APPROACH, rings, streaks,
     portal: { start: T.portalDelay, dur: T.portal, bez: EASE_IN, bg: hex(to.bg), accent: toAc },
