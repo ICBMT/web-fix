@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { Flip } from "gsap/Flip";
 import { gsap, ScrollTrigger } from "../lib/core";
-import { CREDIT, PORTFOLIO_IDS, projectMeta, projects, STUDIO_LABEL, VIDEO_IDS, type Project } from "../lib/data";
+import { CALENDLY_URL, CREDIT, PORTFOLIO_IDS, projectMeta, projects, STUDIO_LABEL, VIDEO_IDS, type Project } from "../lib/data";
 import RollText from "../components/RollText";
 import Footer from "../components/Footer";
 import Marquee from "../components/Marquee";
@@ -530,8 +530,10 @@ export default function Work({ ready, onNavigate }: { ready: boolean; onNavigate
           Every pixel above shipped to production. <span className="text-stroke">Yours could be next.</span>
         </p>
         <a
-          href="mailto:hello@greepixel.com"
-          data-cursor="SAY HI"
+          href={CALENDLY_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-cursor="BOOK A CALL"
           data-magnetic
           className="group mt-10 inline-flex items-center gap-3 rounded-full border px-8 py-4 font-mono text-xs tracking-[0.24em] transition-colors"
           style={{

@@ -1,6 +1,6 @@
 import { ArrowUp, ArrowUpRight } from "lucide-react";
 import { getLenis } from "../lib/core";
-import { LOGO_BLACK, LOGO_WHITE } from "../lib/data";
+import { CALENDLY_URL, LOGO_BLACK, LOGO_WHITE } from "../lib/data";
 import Marquee from "./Marquee";
 import RollText from "./RollText";
 
@@ -21,7 +21,7 @@ export default function Footer({ onNavigate }: { onNavigate: (r: string) => void
       <div className="grid gap-10 px-6 py-14 md:grid-cols-12 md:px-10 md:py-20">
         <div className="md:col-span-5">
           <span className="label label-gold" data-scramble>NEXT STEP</span>
-          <a href="mailto:hello@greepixel.com" className="group mt-5 block" data-cursor="SAY HI" data-magnetic>
+          <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className="group mt-5 block" data-cursor="BOOK A CALL" data-magnetic>
             <span className="font-display gtg block text-[clamp(3rem,7vw,6rem)] uppercase leading-[0.9] text-stroke transition-all duration-500">
               Have a brief?
             </span>

@@ -1,5 +1,5 @@
 /**
- * Link guard — only the site's own links work.
+ * Link guard — only the site's own links work (plus the Calendly booking link).
  *
  * Any link that would leave the site (another domain, mailto:, tel:, …) is
  * silently neutralised. Nothing is removed or restyled, so the site looks and
@@ -12,6 +12,9 @@
 /** Set to true to let mailto:/tel: links open the visitor's mail/phone app again. */
 const ALLOW_MAIL_AND_PHONE = false;
 
+/** The only external destinations that may open: booking a call from the "start a project" CTAs. */
+const ALLOWED_EXTERNAL = [{ host: "calendly.com", path: "/abuzer/" }];
+
 function isInternal(href: string | null | undefined): boolean {
   if (!href) return true; // <a> without href does nothing anyway
   const raw = href.trim();
@@ -23,6 +26,7 @@ function isInternal(href: string | null | undefined): boolean {
     return false;
   }
   if (ALLOW_MAIL_AND_PHONE && (url.protocol === "mailto:" || url.protocol === "tel:")) return true;
+  if (url.protocol === "https:" && ALLOWED_EXTERNAL.some((x) => url.hostname === x.host && url.pathname.startsWith(x.path))) return true;
   // same protocol + host = the site itself (also works when opened from file://)
   return url.protocol === window.location.protocol && url.host === window.location.host;
 }

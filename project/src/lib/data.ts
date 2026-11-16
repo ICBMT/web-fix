@@ -32,6 +32,9 @@ export type Project = {
   credit?: boolean;
 };
 
+/** Every "start a project" CTA books a call here (the link guard allows this one external link). */
+export const CALENDLY_URL = "https://calendly.com/abuzer/30min?back=1";
+
 /** Where GreePixel portfolio cards link to (source: greelogix.com/portfolio). */
 export const PORTFOLIO_URL = "https://greelogix.com/portfolio";
 

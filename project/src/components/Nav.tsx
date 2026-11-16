@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { getTheme, onThemeChange, type Theme } from "../lib/theme";
 import { ArrowUpRight, Menu, X } from "lucide-react";
-import { LOGO_BLACK, LOGO_WHITE } from "../lib/data";
+import { CALENDLY_URL, LOGO_BLACK, LOGO_WHITE } from "../lib/data";
 import ThemeToggle from "./ThemeToggle";
 import RollText from "./RollText";
 
@@ -86,7 +86,9 @@ export default function Nav({ route, onNavigate }: { route: string; onNavigate: 
             <Link to="#/work">WORK ARCHIVE</Link>
             <ThemeToggle />
             <a
-              href="mailto:hello@greepixel.com"
+              href={CALENDLY_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               data-magnetic
               data-cursor-snap
               className="nav-cta group flex items-center gap-2 rounded-full px-5 py-2.5 font-mono text-[11px] tracking-[0.22em] transition-colors"
@@ -129,7 +131,7 @@ export default function Nav({ route, onNavigate }: { route: string; onNavigate: 
               {label}
             </a>
           ))}
-          <a href="mailto:hello@greepixel.com" className="font-display mt-4 flex items-baseline gap-4 text-4xl uppercase text-stroke-gold">
+          <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className="font-display mt-4 flex items-baseline gap-4 text-4xl uppercase text-stroke-gold">
             START A PROJECT
           </a>
         </nav>

@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { ArrowDown, ArrowUpRight, Move, Play } from "lucide-react";
 import { gsap, ScrollTrigger } from "../lib/core";
 import { LAB, SERVICE_PREVIEWS } from "../lib/assets";
-import { chapters, GLB_URL, projectMeta, projects, services, stats, STUDIO_LABEL, type Project } from "../lib/data";
+import { CALENDLY_URL, chapters, GLB_URL, projectMeta, projects, services, stats, STUDIO_LABEL, type Project } from "../lib/data";
 import { defaultPose, logoPose, LogoScene, resetPose } from "../three/logoScene";
 import Footer from "../components/Footer";
 import ToolsStrip from "../components/ToolsStrip";
@@ -608,7 +608,7 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
                 </figure>
               ))}
 
-              <a href="mailto:hello@greepixel.com" className="group flex w-[60vw] shrink-0 items-center justify-center border border-dashed md:w-[26vw]" style={{ borderColor: "rgba(var(--gold-rgb),0.4)" }} data-cursor="SAY HI">
+              <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className="group flex w-[60vw] shrink-0 items-center justify-center border border-dashed md:w-[26vw]" style={{ borderColor: "rgba(var(--gold-rgb),0.4)" }} data-cursor="BOOK A CALL">
                 <span className="font-display flex items-center gap-4 text-3xl uppercase text-stroke-gold transition-colors duration-300 group-hover:text-gold md:text-4xl" style={{ ["--tw-text-opacity" as string]: 1 }}>
                   Your experiment <ArrowUpRight className="h-8 w-8 transition-transform duration-500 group-hover:-translate-y-2 group-hover:translate-x-2" style={{ color: "var(--color-gold)" }} />
                 </span>
