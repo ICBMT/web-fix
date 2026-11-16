@@ -57,7 +57,8 @@ export class LogoScene {
   private ringPivot = new THREE.Group();
   private backLight!: THREE.PointLight;
   private raf = 0;
-  private clock = new THREE.Clock();
+  private timer = new THREE.Timer();
+  private forceFrame = false; // one render while the tunnel holds everything else still
   private pointer = { x: 0, y: 0 };
   private smooth = { ...logoPose };
   private baseDist = 8;
@@ -189,7 +190,7 @@ export class LogoScene {
       window.addEventListener("pointerup", this.onUp);
     }
 
-    this.clock.start();
+    this.timer.reset();
     this.loop();
   }
 
@@ -229,6 +230,9 @@ export class LogoScene {
   setLight(light: boolean) {
     this.light = light;
     this.applyLight();
+    // the palette flips while the tunnel covers the screen: paint the new look once,
+    // so the reveal shows it, without restarting the per-frame loop
+    this.forceFrame = true;
   }
 
   private applyLight() {
@@ -296,9 +300,13 @@ export class LogoScene {
   private loop = () => {
     if (this.disposed) return;
     this.raf = requestAnimationFrame(this.loop);
-    if (!this.running || tunnelPaused()) return; // time tunnel owns the GPU right now
-    const dt = Math.min(this.clock.getDelta(), 0.05);
-    const t = this.clock.elapsedTime;
+    if (!this.running) return;
+    // time tunnel owns the GPU right now (except for the one frame in the new palette)
+    if (tunnelPaused() && !this.forceFrame) return;
+    this.forceFrame = false;
+    this.timer.update();
+    const dt = Math.min(this.timer.getDelta(), 0.05);
+    const t = this.timer.getElapsed();
     const s = this.smooth;
 
     // damp toward shared pose targets
@@ -371,7 +379,7 @@ export class LogoScene {
 
   setRunning(running: boolean) {
     this.running = running;
-    if (running) this.clock.getDelta();
+    if (running) this.timer.update();
   }
 
   dispose() {

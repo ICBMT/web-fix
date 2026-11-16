@@ -21,8 +21,9 @@ import { TUNNEL_EVENT, type TunnelPhase } from "./tunnelPause";
  * - Shaders are compiled and the pipeline is warmed up while the browser is idle
  *   after load, and every trip's flight plan is computed ahead of time, so a click
  *   only posts one message.
- * - While it runs, the page pauses its own GPU work (3D logo, Pixel Vault, halos;
- *   see tunnelPause.ts) and resumes it the moment the reveal starts.
+ * - While it runs, the page pauses its own GPU work (3D logo, Pixel Vault, halos,
+ *   decorative CSS loops; see tunnelPause.ts) and resumes it once the tunnel is gone.
+ *   The 3D logo paints one frame in the new palette while the screen is covered.
  * - The palette flips only once the worker reports the screen fully covered, and the
  *   reveal starts once a frame with the new palette has been produced, so old
  *   colours never peek through.
@@ -86,7 +87,8 @@ type Msg =
   | { type: "start"; at: number; plan: Plan }
   | { type: "reveal"; at: number }
   | { type: "stop" };
-type Out = { type: "ready"; backend: string } | { type: "covered" } | { type: "done" };
+type Stats = { frames: number; ms: number; worst: number; slow: number };
+type Out = { type: "ready"; backend: string } | { type: "covered" } | { type: "done"; stats: Stats };
 
 function painter(scope: {
   onmessage: ((e: { data: Msg }) => void) | null;
@@ -109,6 +111,8 @@ function painter(scope: {
   let revealAt = -1;
   let coveredSent = false;
   let running = false;
+  // frame pacing of the current trip (debug: window.__gpTunnel)
+  let fN = 0, fFirst = 0, fLast = 0, fWorst = 0, fSlow = 0;
   const now = () => performance.timeOrigin + performance.now();
   const raf = (cb: () => void) => {
     if (typeof scope.requestAnimationFrame === "function") scope.requestAnimationFrame(cb);
@@ -267,7 +271,17 @@ void main() {
       g.uniform1f(uD.a, disc.a);
       g.uniform3f(uD.bg, bgD[0], bgD[1], bgD[2]);
       g.uniform3f(uD.ac, acD[0], acD[1], acD[2]);
-      g.drawArrays(g.TRIANGLES, 0, 3);
+      // only shade the pixels the disc can touch (it starts as a dot in the middle)
+      const x0 = Math.max(0, Math.floor(disc.x - disc.r - 2));
+      const y0 = Math.max(0, Math.floor(H - disc.y - disc.r - 2));
+      const x1 = Math.min(W, Math.ceil(disc.x + disc.r + 2));
+      const y1 = Math.min(H, Math.ceil(H - disc.y + disc.r + 2));
+      if (x1 > x0 && y1 > y0) {
+        g.enable(g.SCISSOR_TEST);
+        g.scissor(x0, y0, x1 - x0, y1 - y0);
+        g.drawArrays(g.TRIANGLES, 0, 3);
+        g.disable(g.SCISSOR_TEST);
+      }
     }
     if (nq) {
       g.useProgram(progQ);
@@ -405,14 +419,22 @@ void main() {
 
   const frame = () => {
     if (!running || !plan) return;
-    const alive = build(now());
+    const tn = now();
+    if (fN) {
+      const d = tn - fLast;
+      if (d > fWorst) fWorst = d;
+      if (d > 25) fSlow++;
+    } else fFirst = tn;
+    fN++;
+    fLast = tn;
+    const alive = build(tn);
     if (gl) drawGL();
     else if (c2) draw2D();
     if (alive) raf(frame);
     else {
       clearAll();
       running = false;
-      scope.postMessage({ type: "done" });
+      scope.postMessage({ type: "done", stats: { frames: fN, ms: Math.round(fLast - fFirst), worst: Math.round(fWorst), slow: fSlow } });
     }
   };
 
@@ -467,6 +489,7 @@ void main() {
       revealAt = -1;
       coveredSent = false;
       if (!running) {
+        fN = fWorst = fSlow = 0;
         running = true;
         raf(frame);
       }
@@ -507,12 +530,14 @@ export function tunnelBackend() {
 
 const supported = () => typeof document !== "undefined" && typeof document.body?.animate === "function";
 
-/** Canvas resolution: crisp up to 2x, but never more than ~3.7M pixels (fill-rate guard for 4K screens). */
+/** Canvas resolution: crisp up to 2x, but never more than ~2.4M pixels. Every tunnel
+ *  frame is full-screen, so on laptop / 4K / TV screens the pixel count is what costs;
+ *  the soft rings and streaks look the same at this budget (the compositor upscales). */
 const viewport = () => {
   const w = window.innerWidth;
   const h = window.innerHeight;
   let dpr = Math.min(2, window.devicePixelRatio || 1);
-  const MAX_PX = 3_700_000;
+  const MAX_PX = 2_400_000;
   if (w * h * dpr * dpr > MAX_PX) dpr = Math.sqrt(MAX_PX / (w * h));
   return { w, h, dpr: Math.round(dpr * 100) / 100 };
 };
@@ -667,7 +692,14 @@ export async function timeTravel(next: Theme): Promise<void> {
   let onDone: () => void = () => {};
   const covered = new Promise<void>((r) => (onCovered = r));
   const painted = new Promise<void>((r) => (onDone = r));
-  s.on((m) => (m.type === "covered" ? onCovered() : m.type === "done" ? onDone() : undefined));
+  s.on((m) => {
+    if (m.type === "covered") onCovered();
+    else if (m.type === "done") {
+      // debugging aid: `__gpTunnel` in the console shows the renderer and how the last trip paced
+      (window as Window & { __gpTunnel?: unknown }).__gpTunnel = { backend: s.backend, viewport: `${s.w}x${s.h}@${s.dpr}`, ...m.stats };
+      onDone();
+    }
+  });
 
   document.body.appendChild(s.root);
   signal("start"); // page parks its own GPU work for the duration
@@ -688,13 +720,17 @@ export async function timeTravel(next: Theme): Promise<void> {
     /* ---------- the jump: flip palette while fully covered ---------- */
     signal("covered");
     release = applyTheme(next, { deferRelease: true });
-    // two frames: the first produces the new palette, the second starts after it was committed
+    // three frames: the first produces the new palette, the second starts once it was
+    // committed, and the third can only start once it was rasterised (the next commit
+    // waits for that). Big screens need the most raster time; revealing earlier would
+    // make the GPU re-rasterise the page in the middle of the fade.
+    await nextFrame();
     await nextFrame();
     await nextFrame();
 
     /* ---------- act 2: arrival ---------- */
     s.send({ type: "reveal", at: performance.timeOrigin + performance.now() });
-    signal("revealing"); // page resumes
+    signal("revealing");
     play([{ opacity: 1, transform: "scale(1)" }, { opacity: 0, transform: "scale(1.08)" }], { duration: T.captionOut, delay: T.captionOutDelay, easing: EASE_REVEAL_CSS });
 
     await Promise.race([painted, wait(T.fadeDelay + T.fade + T.ringOut + 1500)]);

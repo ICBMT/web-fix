@@ -63,7 +63,7 @@ export function initTextFx(root: ParentNode = document): () => void {
   root.querySelectorAll<HTMLElement>("[data-hx]").forEach((el) => {
     const chars = splitHeadline(el);
     if (!hover || reduce || !chars.length) return;
-    let setters: { s: gsap.QuickToFunc; y: gsap.QuickToFunc }[] | null = null;
+    let setters: { s: (v: number) => void; y: gsap.QuickToFunc }[] | null = null;
     let centers: number[] = [];
     let raf = 0;
     let px = 0;
@@ -88,10 +88,19 @@ export function initTextFx(root: ParentNode = document): () => void {
       () => {
         if (!setters)
           ctx.add(() => {
-            setters = chars.map((c) => ({
-              s: gsap.quickTo(c, "scale", { duration: 0.35, ease: "power2.out" }),
-              y: gsap.quickTo(c, "yPercent", { duration: 0.35, ease: "power2.out" }) as gsap.QuickToFunc,
-            }));
+            // `scale` is a GSAP shorthand (scaleX + scaleY) that quickTo can't retarget,
+            // so drive both axes explicitly
+            setters = chars.map((c) => {
+              const sx = gsap.quickTo(c, "scaleX", { duration: 0.35, ease: "power2.out" });
+              const sy = gsap.quickTo(c, "scaleY", { duration: 0.35, ease: "power2.out" });
+              return {
+                s: (v: number) => {
+                  sx(v);
+                  sy(v);
+                },
+                y: gsap.quickTo(c, "yPercent", { duration: 0.35, ease: "power2.out" }) as gsap.QuickToFunc,
+              };
+            });
           });
       },
       { signal }

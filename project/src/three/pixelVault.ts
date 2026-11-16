@@ -161,7 +161,7 @@ export class PixelVault {
   private mouse = { x: 0, y: 0, tx: 0, ty: 0, hover: 0, thover: 0 };
   private lastPointer = -10;
 
-  private clock = new THREE.Clock();
+  private timer = new THREE.Timer();
   private raf = 0;
   private running = true;
   private disposed = false;
@@ -218,7 +218,7 @@ export class PixelVault {
     if (this.disposed) return;
     this.resize(true);
     if (this.opts.reducedMotion) this.introT = 1;
-    this.clock.start();
+    this.timer.reset();
     this.loop();
   }
 
@@ -251,7 +251,7 @@ export class PixelVault {
     this.mouse.tx = clientX - r.left - this.w / 2;
     this.mouse.ty = this.h / 2 - (clientY - r.top);
     this.mouse.thover = 1;
-    this.lastPointer = this.clock.elapsedTime;
+    this.lastPointer = this.timer.getElapsed();
   }
 
   leave() {
@@ -261,7 +261,7 @@ export class PixelVault {
   shockwave(clientX: number, clientY: number) {
     const r = this.canvas.getBoundingClientRect();
     (this.mat.uniforms.uWave.value as THREE.Vector3).set(clientX - r.left - this.w / 2, this.h / 2 - (clientY - r.top), 0);
-    this.waveStart = this.clock.elapsedTime;
+    this.waveStart = this.timer.getElapsed();
   }
 
   setScatter(p: number) {
@@ -270,7 +270,7 @@ export class PixelVault {
 
   setRunning(running: boolean) {
     this.running = running;
-    if (running) this.clock.getDelta();
+    if (running) this.timer.update();
   }
 
   /* ------------------------------------------------------------------ */
@@ -400,8 +400,9 @@ export class PixelVault {
     if (this.disposed) return;
     this.raf = requestAnimationFrame(this.loop);
     if (!this.running || !this.geo || tunnelPaused()) return; // time tunnel owns the GPU right now
-    const dt = Math.min(this.clock.getDelta(), 0.05);
-    const t = this.clock.elapsedTime;
+    this.timer.update();
+    const dt = Math.min(this.timer.getDelta(), 0.05);
+    const t = this.timer.getElapsed();
     const u = this.mat.uniforms;
     const m = this.mouse;
 
