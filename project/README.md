@@ -38,3 +38,15 @@ Media is collected with `import.meta.glob` in `src/lib/assets.ts`, so:
   started from the wrong (too large) folder, see above. If it still happens
   inside `project/`, raise the Linux inotify limit:
   `echo fs.inotify.max_user_watches=524288 | sudo tee /etc/sysctl.d/99-inotify.conf && sudo sysctl --system`
+
+## SEO / GEO
+
+The site is set up for **https://greepixel.com** (deploy `dist/` to the domain root).
+
+- `index.html` — title, description, canonical, Open Graph / Twitter cards (`og-image.jpg`, 1200×630), geo meta (Lahore, PK-PB) and JSON-LD: ProfessionalService/Organization (founded 2019, Lahore, English/Urdu/Arabic, price range `$$`, 8 services), WebSite, WebPage and an ItemList of the 14 case studies. A `<noscript>` summary covers crawlers that don't run JavaScript.
+- `public/robots.txt` — open to all crawlers, AI answer engines named explicitly, points to the sitemap.
+- `public/sitemap.xml` — the site URL (the Work page lives at `/#/work`, which search engines treat as the same URL).
+- `public/llms.txt` — plain-language studio summary for AI assistants.
+- `public/site.webmanifest`, `favicon-48.png`, `favicon.svg`, `apple-touch-icon.png`, `icon-512.png`, `logo.png` — icons and the logo referenced by the structured data.
+
+After launch: add the domain in Google Search Console and Bing Webmaster Tools, and submit `https://greepixel.com/sitemap.xml`.

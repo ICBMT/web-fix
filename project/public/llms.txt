@@ -1,0 +1,48 @@
+# GreePixel
+
+> GreePixel is a senior UI/UX design studio based in Lahore, Pakistan, founded in 2019. We design web apps, mobile apps, SaaS dashboards, websites and design systems for startups and businesses worldwide — including the US, UK, UAE and Australia — working remotely in English, Urdu and Arabic.
+
+- Website: https://greepixel.com
+- Founded: 2019 · Lahore, Punjab, Pakistan (31.5204° N, 74.3587° E)
+- Products designed: 150+ · Countries served: 8 · Typical reply time: within 4 business hours
+- Price level: $$ (mid-range, senior-only team)
+- Languages: English, Urdu, Arabic (including RTL interface design)
+- Contact: contact@greelogix.com · +92 333 65 27 366 (phone and WhatsApp)
+- Book a discovery call: https://calendly.com/abuzer/30min?back=1
+
+## UI/UX design services
+
+- **UX Research & Strategy** — user interviews, analytics reviews, journey mapping and usability testing that reveal what users need.
+- **UI Design** — pixel-perfect, accessible (WCAG) interface design for web and mobile products in Figma.
+- **MVP Product Design** — from idea to a clickable, investor-ready prototype in 4–8 weeks.
+- **SaaS & Dashboard UX** — dashboards, admin panels and B2B workflows that make complex data calm and usable.
+- **Mobile App Design** — iOS and Android app UI/UX that feels native, fast and thumb-friendly.
+- **Design Systems** — Figma design systems, design tokens and component libraries developers can build without guesswork.
+- **UX Audits & Redesigns** — heuristic and accessibility audits of live products, followed by redesigns that remove friction.
+- **Interaction & 3D Design** — micro-interactions, motion design and WebGL experiences that make brands memorable.
+
+## Selected case studies
+
+- **Jalebi** — Restaurant SaaS UX/UI Design. End-to-end UX and UI design for a restaurant SaaS platform — we mapped how owners, chefs and cashiers really work, then designed one calm system for inventory, orders, customers and operations.
+- **Lairo** — AI App UX & UI Design. Mobile UI for an AI app that reads a conversation screenshot and reveals the other person's level of interest — designed so complex AI analysis feels simple, friendly and instant.
+- **Startwise** — AI SaaS Workspace UX Design. Product design for a multi-tenant SaaS workspace for entrepreneurs, investors, mentors and accelerators — AI business-plan and pitch flows, an investor CRM, a mentor marketplace and subscription UX.
+- **ON Card** — Digital Business Card App Design. Mobile app UX and UI for creating and sharing NFC digital business cards — a one-tap sharing flow, effortless lead capture and CRM export, designed around real networking moments.
+- **Ad Grants Pilot** — AI Chatbot Dashboard Design. An admin dashboard designed for non-profit teams running AI chatbot ad campaigns — clear conversation monitoring, simple response setup and performance insights at a glance.
+- **GCC Fitness** — Fitness Marketplace UX Design. A three-sided fitness marketplace designed for clients, trainers and admins — workout and meal subscriptions, payments, real-time chat and fully bilingual English / Arabic (RTL) interfaces.
+- **Shepherd** — AI Tutor App UI Design. UI/UX design for an AI study co-pilot — topic chat, generated study modules, notes, flashcards, summaries and a study calendar, designed to keep learners focused and coming back.
+- **MTS** — EdTech Product Redesign. An education platform stuck in limbo with a previous vendor of 70+ engineers — we audited the UX, redesigned the core student and teacher journeys and helped the team take them live.
+- **Kim & Co** — Internal Sales Dashboard UX. UX/UI design for an internal product and sales tool — we turned scattered spreadsheets into clear dashboards that give leadership real-time visibility into performance.
+- **Xpatio** — Community App UX/UI Design. UX and UI design for an expat community app — community pages, events, jobs, a marketplace and a social feed, organised into one navigation that feels like home.
+- **The INCC** — Social Network UX/UI Design. We joined The INCC (The Inccubator) mid-development to evolve its social experience across the Flutter and iOS apps and the admin dashboard — new social features designed to fit the live product.
+- **Find a Doc** — Healthcare App UX Design. Patient and doctor app UX for booking specialist appointments — an accessible booking flow for patients, plus schedule, staff and practice screens for doctors.
+- **Hotcoin** — Rewards App UI Design. Mobile UI for a video rewards app — a watch, earn and redeem loop with gamified progress and smooth micro-interactions, designed to become a daily habit.
+- **DeltaBook** — E-Learning App UX Design. Interactive learning app design with a guided path through four subjects — structured lessons, quizzes and progress tracking that always show learners what comes next.
+
+## Product films (motion design by GreePixel)
+
+- **Ad Grants Pilot** — product film for an AI chatbot admin dashboard.
+- **Jalebi** — product film for a restaurant SaaS platform.
+
+## How we work
+
+Senior designers only, from first call to developer hand-off. Typical engagements: discovery and UX research, wireframes and prototypes, UI design, design system, and hand-off with specs developers can build from.

@@ -8,10 +8,16 @@
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <meta name="author" content="GreePixel" />
     <meta name="theme-color" content="#0b0a09" />
+    <link rel="canonical" href="https://greepixel.com/" />
+    <link rel="alternate" hreflang="en" href="https://greepixel.com/" />
+    <link rel="alternate" hreflang="x-default" href="https://greepixel.com/" />
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+    <link rel="manifest" href="/site.webmanifest" />
     <!-- location (local search) -->
     <meta name="geo.region" content="PK-PB" />
     <meta name="geo.placename" content="Lahore" />
     <meta name="geo.position" content="31.5204;74.3587" />
+    <meta name="geo.country" content="PK" />
     <meta name="ICBM" content="31.5204, 74.3587" />
     <!-- social previews -->
     <meta property="og:site_name" content="GreePixel" />
@@ -19,9 +25,18 @@
     <meta property="og:description" content="Senior UI/UX designers crafting intuitive apps, SaaS dashboards and websites that users love and developers can build." />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="en_US" />
+    <meta property="og:url" content="https://greepixel.com/" />
+    <meta property="og:image" content="https://greepixel.com/og-image.jpg" />
+    <meta property="og:image:secure_url" content="https://greepixel.com/og-image.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="GreePixel — UI/UX design studio. Designed pixel by pixel." />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="GreePixel® — UI/UX Design Studio for Apps, SaaS & Websites" />
     <meta name="twitter:description" content="Senior UI/UX design studio: UX research, UI design, mobile app design, SaaS dashboards and design systems." />
+    <meta name="twitter:image" content="https://greepixel.com/og-image.jpg" />
+    <meta name="twitter:image:alt" content="GreePixel — UI/UX design studio. Designed pixel by pixel." />
     <!-- structured data: who we are, where, and what we design (search + AI answer engines) -->
     <script type="application/ld+json">
       {
@@ -32,14 +47,31 @@
               "ProfessionalService",
               "Organization"
             ],
-            "@id": "#greepixel",
+            "@id": "https://greepixel.com/#organization",
             "name": "GreePixel",
             "alternateName": "GreePixel UI/UX Design Studio",
+            "url": "https://greepixel.com/",
+            "logo": {
+              "@type": "ImageObject",
+              "@id": "https://greepixel.com/#logo",
+              "url": "https://greepixel.com/logo.png",
+              "contentUrl": "https://greepixel.com/logo.png",
+              "width": 512,
+              "height": 512,
+              "caption": "GreePixel"
+            },
+            "image": {
+              "@id": "https://greepixel.com/#og-image"
+            },
             "description": "GreePixel is a senior UI/UX design studio in Lahore, Pakistan, designing web apps, mobile apps, SaaS dashboards, websites and design systems for clients worldwide.",
             "slogan": "Designed pixel by pixel.",
             "foundingDate": "2019",
+            "foundingLocation": {
+              "@type": "Place",
+              "name": "Lahore, Pakistan"
+            },
             "email": "contact@greelogix.com",
-            "telephone": "+92 333 6527366",
+            "telephone": "+923336527366",
             "priceRange": "$$",
             "address": {
               "@type": "PostalAddress",
@@ -60,6 +92,11 @@
               "Australia",
               "Pakistan"
             ],
+            "knowsLanguage": [
+              "en",
+              "ur",
+              "ar"
+            ],
             "knowsAbout": [
               "UI design",
               "UX design",
@@ -75,17 +112,25 @@
               "Accessibility (WCAG)",
               "Web design"
             ],
-            "contactPoint": {
-              "@type": "ContactPoint",
-              "contactType": "sales",
-              "email": "contact@greelogix.com",
-              "telephone": "+92 333 6527366",
-              "areaServed": "Worldwide",
-              "availableLanguage": [
-                "English",
-                "Urdu",
-                "Arabic"
-              ]
+            "contactPoint": [
+              {
+                "@type": "ContactPoint",
+                "contactType": "sales",
+                "email": "contact@greelogix.com",
+                "telephone": "+923336527366",
+                "url": "https://calendly.com/abuzer/30min?back=1",
+                "areaServed": "Worldwide",
+                "availableLanguage": [
+                  "English",
+                  "Urdu",
+                  "Arabic"
+                ]
+              }
+            ],
+            "potentialAction": {
+              "@type": "ScheduleAction",
+              "name": "Book a 30-minute UI/UX discovery call",
+              "target": "https://calendly.com/abuzer/30min?back=1"
             },
             "hasOfferCatalog": {
               "@type": "OfferCatalog",
@@ -97,7 +142,11 @@
                     "@type": "Service",
                     "name": "UX Research & Strategy",
                     "description": "User interviews, analytics reviews, journey mapping and usability testing that reveal what users need.",
-                    "serviceType": "UI/UX design"
+                    "serviceType": "UI/UX design",
+                    "provider": {
+                      "@id": "https://greepixel.com/#organization"
+                    },
+                    "areaServed": "Worldwide"
                   }
                 },
                 {
@@ -106,7 +155,11 @@
                     "@type": "Service",
                     "name": "UI Design",
                     "description": "Pixel-perfect, accessible (WCAG) interface design for web and mobile products in Figma.",
-                    "serviceType": "UI/UX design"
+                    "serviceType": "UI/UX design",
+                    "provider": {
+                      "@id": "https://greepixel.com/#organization"
+                    },
+                    "areaServed": "Worldwide"
                   }
                 },
                 {
@@ -115,7 +168,11 @@
                     "@type": "Service",
                     "name": "MVP Product Design",
                     "description": "From idea to a clickable, investor-ready prototype in 4–8 weeks.",
-                    "serviceType": "UI/UX design"
+                    "serviceType": "UI/UX design",
+                    "provider": {
+                      "@id": "https://greepixel.com/#organization"
+                    },
+                    "areaServed": "Worldwide"
                   }
                 },
                 {
@@ -124,7 +181,11 @@
                     "@type": "Service",
                     "name": "SaaS & Dashboard UX",
                     "description": "Dashboards, admin panels and B2B workflows that make complex data calm and usable.",
-                    "serviceType": "UI/UX design"
+                    "serviceType": "UI/UX design",
+                    "provider": {
+                      "@id": "https://greepixel.com/#organization"
+                    },
+                    "areaServed": "Worldwide"
                   }
                 },
                 {
@@ -133,7 +194,11 @@
                     "@type": "Service",
                     "name": "Mobile App Design",
                     "description": "iOS and Android app UI/UX that feels native, fast and thumb-friendly.",
-                    "serviceType": "UI/UX design"
+                    "serviceType": "UI/UX design",
+                    "provider": {
+                      "@id": "https://greepixel.com/#organization"
+                    },
+                    "areaServed": "Worldwide"
                   }
                 },
                 {
@@ -142,7 +207,11 @@
                     "@type": "Service",
                     "name": "Design Systems",
                     "description": "Figma design systems, design tokens and component libraries developers can build without guesswork.",
-                    "serviceType": "UI/UX design"
+                    "serviceType": "UI/UX design",
+                    "provider": {
+                      "@id": "https://greepixel.com/#organization"
+                    },
+                    "areaServed": "Worldwide"
                   }
                 },
                 {
@@ -151,7 +220,11 @@
                     "@type": "Service",
                     "name": "UX Audits & Redesigns",
                     "description": "Heuristic and accessibility audits of live products, followed by redesigns that remove friction.",
-                    "serviceType": "UI/UX design"
+                    "serviceType": "UI/UX design",
+                    "provider": {
+                      "@id": "https://greepixel.com/#organization"
+                    },
+                    "areaServed": "Worldwide"
                   }
                 },
                 {
@@ -160,7 +233,11 @@
                     "@type": "Service",
                     "name": "Interaction & 3D Design",
                     "description": "Micro-interactions, motion design and WebGL experiences that make brands memorable.",
-                    "serviceType": "UI/UX design"
+                    "serviceType": "UI/UX design",
+                    "provider": {
+                      "@id": "https://greepixel.com/#organization"
+                    },
+                    "areaServed": "Worldwide"
                   }
                 }
               ]
@@ -168,17 +245,256 @@
           },
           {
             "@type": "WebSite",
+            "@id": "https://greepixel.com/#website",
+            "url": "https://greepixel.com/",
             "name": "GreePixel",
             "description": "GreePixel is a senior UI/UX design studio in Lahore, Pakistan, designing web apps, mobile apps, SaaS dashboards, websites and design systems for clients worldwide.",
             "inLanguage": "en",
             "publisher": {
-              "@id": "#greepixel"
+              "@id": "https://greepixel.com/#organization"
             }
+          },
+          {
+            "@type": "ImageObject",
+            "@id": "https://greepixel.com/#og-image",
+            "url": "https://greepixel.com/og-image.jpg",
+            "contentUrl": "https://greepixel.com/og-image.jpg",
+            "width": 1200,
+            "height": 630,
+            "caption": "GreePixel — UI/UX design studio. Designed pixel by pixel."
+          },
+          {
+            "@type": "WebPage",
+            "@id": "https://greepixel.com/#webpage",
+            "url": "https://greepixel.com/",
+            "name": "GreePixel® — UI/UX Design Studio for Apps, SaaS & Websites",
+            "description": "GreePixel is a senior UI/UX design studio in Lahore, Pakistan, designing web apps, mobile apps, SaaS dashboards, websites and design systems for clients worldwide.",
+            "inLanguage": "en",
+            "isPartOf": {
+              "@id": "https://greepixel.com/#website"
+            },
+            "about": {
+              "@id": "https://greepixel.com/#organization"
+            },
+            "primaryImageOfPage": {
+              "@id": "https://greepixel.com/#og-image"
+            },
+            "datePublished": "2026-11-13",
+            "dateModified": "2026-11-13",
+            "hasPart": {
+              "@id": "https://greepixel.com/#case-studies"
+            }
+          },
+          {
+            "@type": "ItemList",
+            "@id": "https://greepixel.com/#case-studies",
+            "name": "GreePixel UI/UX design case studies",
+            "numberOfItems": 14,
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "item": {
+                  "@type": "CreativeWork",
+                  "name": "Jalebi — Restaurant SaaS UX/UI Design",
+                  "description": "End-to-end UX and UI design for a restaurant SaaS platform — we mapped how owners, chefs and cashiers really work, then designed one calm system for inventory, orders, customers and operations.",
+                  "genre": "Web app UX",
+                  "about": "Food & Hospitality",
+                  "creator": {
+                    "@id": "https://greepixel.com/#organization"
+                  }
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "item": {
+                  "@type": "CreativeWork",
+                  "name": "Lairo — AI App UX & UI Design",
+                  "description": "Mobile UI for an AI app that reads a conversation screenshot and reveals the other person's level of interest — designed so complex AI analysis feels simple, friendly and instant.",
+                  "genre": "Mobile app UI",
+                  "about": "AI · Consumer",
+                  "creator": {
+                    "@id": "https://greepixel.com/#organization"
+                  }
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "item": {
+                  "@type": "CreativeWork",
+                  "name": "Startwise — AI SaaS Workspace UX Design",
+                  "description": "Product design for a multi-tenant SaaS workspace for entrepreneurs, investors, mentors and accelerators — AI business-plan and pitch flows, an investor CRM, a mentor marketplace and subscription UX.",
+                  "genre": "Web app UX",
+                  "about": "SaaS · AI",
+                  "creator": {
+                    "@id": "https://greepixel.com/#organization"
+                  }
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 4,
+                "item": {
+                  "@type": "CreativeWork",
+                  "name": "ON Card — Digital Business Card App Design",
+                  "description": "Mobile app UX and UI for creating and sharing NFC digital business cards — a one-tap sharing flow, effortless lead capture and CRM export, designed around real networking moments.",
+                  "genre": "Mobile app UI",
+                  "about": "Networking · FinTech",
+                  "creator": {
+                    "@id": "https://greepixel.com/#organization"
+                  }
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 5,
+                "item": {
+                  "@type": "CreativeWork",
+                  "name": "Ad Grants Pilot — AI Chatbot Dashboard Design",
+                  "description": "An admin dashboard designed for non-profit teams running AI chatbot ad campaigns — clear conversation monitoring, simple response setup and performance insights at a glance.",
+                  "genre": "Web app UX",
+                  "about": "Non-Profit · AI",
+                  "creator": {
+                    "@id": "https://greepixel.com/#organization"
+                  }
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 6,
+                "item": {
+                  "@type": "CreativeWork",
+                  "name": "GCC Fitness — Fitness Marketplace UX Design",
+                  "description": "A three-sided fitness marketplace designed for clients, trainers and admins — workout and meal subscriptions, payments, real-time chat and fully bilingual English / Arabic (RTL) interfaces.",
+                  "genre": "Mobile app UI",
+                  "about": "Fitness · Wellness",
+                  "creator": {
+                    "@id": "https://greepixel.com/#organization"
+                  }
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 7,
+                "item": {
+                  "@type": "CreativeWork",
+                  "name": "Shepherd — AI Tutor App UI Design",
+                  "description": "UI/UX design for an AI study co-pilot — topic chat, generated study modules, notes, flashcards, summaries and a study calendar, designed to keep learners focused and coming back.",
+                  "genre": "Mobile app UI",
+                  "about": "EdTech · AI",
+                  "creator": {
+                    "@id": "https://greepixel.com/#organization"
+                  }
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 8,
+                "item": {
+                  "@type": "CreativeWork",
+                  "name": "MTS — EdTech Product Redesign",
+                  "description": "An education platform stuck in limbo with a previous vendor of 70+ engineers — we audited the UX, redesigned the core student and teacher journeys and helped the team take them live.",
+                  "genre": "Web + mobile UX",
+                  "about": "Education · EdTech",
+                  "creator": {
+                    "@id": "https://greepixel.com/#organization"
+                  }
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 9,
+                "item": {
+                  "@type": "CreativeWork",
+                  "name": "Kim & Co — Internal Sales Dashboard UX",
+                  "description": "UX/UI design for an internal product and sales tool — we turned scattered spreadsheets into clear dashboards that give leadership real-time visibility into performance.",
+                  "genre": "Web app UX",
+                  "about": "Internal Tools · Retail",
+                  "creator": {
+                    "@id": "https://greepixel.com/#organization"
+                  }
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 10,
+                "item": {
+                  "@type": "CreativeWork",
+                  "name": "Xpatio — Community App UX/UI Design",
+                  "description": "UX and UI design for an expat community app — community pages, events, jobs, a marketplace and a social feed, organised into one navigation that feels like home.",
+                  "genre": "Mobile app UI",
+                  "about": "Social · Community",
+                  "creator": {
+                    "@id": "https://greepixel.com/#organization"
+                  }
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 11,
+                "item": {
+                  "@type": "CreativeWork",
+                  "name": "The INCC — Social Network UX/UI Design",
+                  "description": "We joined The INCC (The Inccubator) mid-development to evolve its social experience across the Flutter and iOS apps and the admin dashboard — new social features designed to fit the live product.",
+                  "genre": "Mobile app UI",
+                  "about": "Social · Media",
+                  "creator": {
+                    "@id": "https://greepixel.com/#organization"
+                  }
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 12,
+                "item": {
+                  "@type": "CreativeWork",
+                  "name": "Find a Doc — Healthcare App UX Design",
+                  "description": "Patient and doctor app UX for booking specialist appointments — an accessible booking flow for patients, plus schedule, staff and practice screens for doctors.",
+                  "genre": "Mobile app UI",
+                  "about": "Healthcare",
+                  "creator": {
+                    "@id": "https://greepixel.com/#organization"
+                  }
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 13,
+                "item": {
+                  "@type": "CreativeWork",
+                  "name": "Hotcoin — Rewards App UI Design",
+                  "description": "Mobile UI for a video rewards app — a watch, earn and redeem loop with gamified progress and smooth micro-interactions, designed to become a daily habit.",
+                  "genre": "Mobile app UI",
+                  "about": "Entertainment · Rewards",
+                  "creator": {
+                    "@id": "https://greepixel.com/#organization"
+                  }
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 14,
+                "item": {
+                  "@type": "CreativeWork",
+                  "name": "DeltaBook — E-Learning App UX Design",
+                  "description": "Interactive learning app design with a guided path through four subjects — structured lessons, quizzes and progress tracking that always show learners what comes next.",
+                  "genre": "Mobile app UI",
+                  "about": "EdTech",
+                  "creator": {
+                    "@id": "https://greepixel.com/#organization"
+                  }
+                }
+              }
+            ]
           }
         ]
       }
     </script>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iLTYyIC02MiA2NDcgNTMxIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB4PSItNjIiIHk9Ii02MiIgd2lkdGg9IjY0NyIgaGVpZ2h0PSI1MzEiIHJ4PSIxNDAiIGZpbGw9IiMwQTBBMEIiLz4KPHBhdGggZD0iTTMxMi41MzYgNDA2LjUwNEMyOTkuODI2IDQwNi44MjIgMjg3LjA2OCA0MDYuNTc3IDI3NC4zNTMgNDA2LjU3NUMyNTguNjIzIDQwNi41NzEgMjQyLjgyNyA0MDYuNzM0IDIyNy4xMDMgNDA2LjQxMkMyMTIuMTU3IDQwNi4xMDYgMTk5LjI3NyAzOTkuODI5IDE4OC45IDM4OS4yNDZDMTY1LjMwNCAzNjUuMTgyIDE0MC45NTIgMzQxLjg1IDExNy4yNDIgMzE3LjkwMUMxMTIuNDcxIDMxMy4wODIgMTExLjM0OCAzMDUuODIzIDExMS4yNTYgMjk5LjA0MkMxMTEuMDYzIDI4NC43MSAxMTEuNDA0IDI3MC4zNzQgMTExLjIzNCAyNTYuMDQxQzExMS4xNjEgMjQ5LjkwNCAxMDkuNjc1IDI0OS4wMSAxMDMuODU0IDI0OS4wMDhDOTMuOTM2NiAyNDkuMDA1IDg0LjAxODYgMjQ4LjkyIDc0LjEwMTYgMjQ5LjA0N0M2OS4xMzE2IDI0OS4xMSA2NS40NDQ2IDI0OC44MzEgNjUuMzc1NiAyNDMuMDQ1QzY1LjIzMjYgMjMxLjA0NSA2NS4yMjk2IDIxOS4wNDEgNjUuMzY0NiAyMDcuMDRDNjUuNDEzNiAyMDIuNjA4IDY4Ljc2MDYgMjAwLjI5MyA3Mi44NDg2IDIwMC4yMjlDODQuMDE1NiAyMDAuMDUyIDk1LjE4NTYgMjAwLjA5MyAxMDYuMzUzIDIwMC4yNTVDMTEyLjA1MyAyMDAuMzM3IDExNC4zNjYgMjAxLjYzNSAxMTQuMzc4IDIwNy4yOUMxMTQuNDAyIDIxOS4wNDIgMTE0LjI3NSAyMzAuNzkzIDExNC4zNDcgMjQyLjU0NUMxMTQuMzQ3IDI0Mi41NDkgMTE0LjM2NCAyNDMuNTQ0IDExNC4zNjQgMjQzLjU0OEMxMTQuNDUgMjQ3LjU0NSAxMTkuNjUgMjQ3LjQ5OSAxMjIuNjAyIDI0Ny41MjNDMTQ0LjAxOCAyNDcuNjk1IDE2NS40MzkgMjQ3LjIwOSAxODYuODUzIDI0Ny41NzNDMTk3LjEwOSAyNDcuNzQ3IDE5Ni43ODYgMjUwLjAwNCAyMDQuODQ0IDI1Ny44MTNDMjE1LjQ4IDI2OC4xMjEgMjI1Ljg5OSAyNzguNjYzIDIzNi41NTEgMjg4Ljk0OEMyNDAuOTYxIDI5My4yMDYgMjQ1LjE0MiAyOTcuNjk4IDI0OS41NTYgMzAxLjkzOUMyNTYuMjczIDMwOC4zOTMgMjY2LjkyNyAzMTAuNTM4IDI3NS44NTMgMzEwLjU4N0MyOTUuMTAxIDMxMC42OTQgMzE0LjM1NCAzMTAuNTQzIDMzMy42MDMgMzEwLjU5M0MzNTguNjUxIDMxMC42NTkgMzgzLjc0MyAzMTAuMjc3IDQwOC43ODYgMzEwLjcyMUwzMTIuNTM2IDQwNi41MDRaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNMTg5LjAzIDEyNS43ODdDMTg4LjcyMiAxMTguOTggMTg4Ljg4MyAxMDYuMDI3IDE4OC45NTUgOTkuNzkyMkMxODkuMTA0IDg2LjkyNjIgMTkxLjA5MyA3OC44NjAyIDIwMC40MzggNjkuNTcwMkMyMTYuMjMzIDUzLjg2OTIgMjM3LjQ1NSAzNy45MDUyIDI2MC44NTMgMzguMjI5MkMyNzguNjg3IDM4LjQ3NjIgMjk2LjUyIDM5LjA0MTIgMzE0LjM1MyAzOS4zNTUyQzMzMy4xMDMgMzkuNjg2MiAzNTEuODU3IDQwLjQ3ODIgMzcwLjYwMyA0MC43MzEyQzM4Ny4wMTQgNDAuOTUzMiA0MDMuMzU5IDQxLjcyMzIgNDE5Ljc1NSA0Mi40MTAyTDQyMS4zODYgNDIuNDg2MkM0MjYuNTU3IDQyLjM5NzIgNDMxLjcyOCA0Mi41NDAyIDQzNi44OTkgNDIuNjEwMkw1MjIuNjg5IDEyNy41OEM0NTQuMTczIDEyOC4yNDIgMzg1LjYyMyAxMjYuOTA0IDMxNy4xMDMgMTI2Ljc0QzMxMS4xOTcgMTI2LjcyNiAzMDMuNSAxMjcuMTgzIDI5Ny41MjMgMTI2LjMzMUMyOTYuNDY5IDEyNi4yMzcgMjk1LjQxMiAxMjYuMTgzIDI5NC4zNTMgMTI2LjE2N0MyNzIuNTMgMTI1Ljg0MiAyNTAuNjggMTI2LjA3NyAyMjguODUzIDEyNS45MzlDMjE1LjU5NSAxMjUuODU1IDIwMi4yNzUgMTI2LjI0NyAxODkuMDMgMTI1Ljc4N1oiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik00MjEuMzg1IDQyLjQ4NjNDNDI2LjU1NiA0Mi4zOTczIDQzMS43MjcgNDIuNTQwMyA0MzYuODk4IDQyLjYxMDNMNTIyLjY4OCAxMjcuNThDNDU0LjE3MiAxMjguMjQyIDM4NS42MjIgMTI2LjkwNCAzMTcuMTAyIDEyNi43NEMzMTEuMTk2IDEyNi43MjYgMzAzLjQ5OSAxMjcuMTgzIDI5Ny41MjIgMTI2LjMzMUMzMDQuMTY0IDExOS43OTMgMzEwLjU4MSAxMTMuMDQ5IDMxNy4xNTEgMTA2LjQ0MUMzMzAuNTgyIDkyLjkzNDMgMzQzLjk0MSA3OS4zMTYzIDM1Ny41MjcgNjUuOTY4M0MzNjkuMjk0IDU0LjQwNjMgMzgxLjIwMSA0OS42NzQzIDM5Ny4xOTQgNDYuNTM3M0M0MDIuMzMgNDUuNTI5MyA0MDcuODk4IDQ0LjMzNzMgNDEzLjEwMSA0My44MzkzQzQxNS4xMDUgNDMuNjQ3MyA0MTcuMTEgNDMuNDcyMyA0MTkuMTEzIDQzLjI2NDNDNDE5LjkxNyA0My4xODAzIDQyMC42NzMgNDIuODY5MyA0MjEuMzg1IDQyLjQ4NjNaIiBmaWxsPSIjRTk1OTI1Ii8+CjxwYXRoIGQ9Ik0yNTcuMzIxIDE3NC4zODVDMzAxLjY2NSAxNzQuMTU5IDM0Ni4wMDggMTc0LjI5NCAzOTAuMzUzIDE3NC4zNjFDNDMxLjg0OCAxNzQuNDI0IDQ3My4zNjEgMTc0LjA3NyA1MTQuODUzIDE3NC4zODlDNTE2LjcxNCAxNzQuNDAzIDUxOC4xMjYgMTc0LjQ4NCA1MTkuNzM2IDE3NS40NjVDNTIxLjQ0MSAxNzYuNTA0IDUyMi4wNDcgMTc3LjQxNSA1MjIuMzg2IDE3OS4zMjFDNTIxLjMxMiAxODAuNjIzIDUyMC4xOTEgMTgxLjg4NyA1MTkuMDEgMTgzLjA5M0M1MDEuMTQyIDIwMS4zNDQgNDgyLjkwOCAyMTkuMjI2IDQ2NC44OTYgMjM3LjMzNEM0NjQuODkzIDIzNy4zMzYgNDYzLjg5NCAyMzguMzI5IDQ2My44OTEgMjM4LjMzMUM0NTUuODI3IDI0Ni4yMTEgNDQ1LjQxMyAyNTMuNTA3IDQzNC4xMDQgMjU0LjcxMUM0MzIuOTI0IDI1NC44MzYgNDMxLjczOCAyNTQuOTA0IDQzMC41NTYgMjU1LjAwNkM0MDguODI4IDI1NC40NTggMzg3LjA4NyAyNTQuOTIxIDM2NS4zNTMgMjU0Ljg2MUMzNTYuNDgyIDI1NC44MzcgMzQ3LjQ4NSAyNTUuMjA3IDMzOC42MzEgMjU0Ljc0MkMzMzIuOTYzIDI1MC40MTYgMzI4LjMxIDI0NC45MjMgMzIzLjI0MSAyMzkuOTA5QzMwNy41MzQgMjI0LjM3MiAyOTEuODc4IDIwOC43NzUgMjc2LjA5MiAxOTMuMzJDMjY5Ljc3NSAxODcuMTM1IDI2My4wNzggMTgxLjA5OCAyNTcuMzIxIDE3NC4zODVaIiBmaWxsPSIjRTk1OTI1Ii8+CjxwYXRoIGQ9Ik01MjIuMzg2IDE3OS4zMjFDNTIyLjM4NiAxNzkuMzIxIDUyMi4zNTQgMTgwLjkwNiA1MjIuMzU0IDE4MC45MDhDNTIyLjEzNyAyMDAuMjgxIDUyMi41NzYgMjE5LjY2MyA1MjIuMjkxIDIzOS4wNDJDNTIyLjAzNCAyNTYuNDU1IDUyMi4yODggMjczLjg4IDUyMi4wNTggMjkxLjI5MkM1MjEuOTYzIDI5OC40NjYgNTIxLjAzNSAzMDcuNjk5IDUxNS41NDIgMzEyLjk4MUM1MTAuMjQ2IDMxOC4wNzQgNTA0Ljc4MiAzMjIuOTcyIDQ5OS40OTkgMzI4LjA4OUM0ODMuNTI0IDM0My41NjcgNDY3LjMyNSAzNTguODA4IDQ1MS40NzYgMzc0LjQxOEM0NDUuNzUgMzgwLjA1NyA0MzkuODk5IDM4NS42NTkgNDM0LjA2MyAzOTEuMTg1QzQzMy4yMTMgMzkxLjk5IDQzMi4zMzQgMzkyLjc2NSA0MzEuNDY1IDM5My41NDlDNDMxLjAyOCAzNjQuNDgxIDQzMS4zNzkgMzM1LjM2NCA0MzEuMzc1IDMwNi4yOTJDNDMxLjM3NCAyOTEuODc5IDQzMS41OTcgMjc3LjQ1MSA0MzEuNDQ4IDI2My4wNDFDNDMxLjQyMSAyNjAuMzQgNDMxLjA2OCAyNTcuNjU5IDQzMC41NTYgMjU1LjAwNkM0MzEuNzM4IDI1NC45MDQgNDMyLjkyNCAyNTQuODM2IDQzNC4xMDQgMjU0LjcxMUM0NDUuNDEzIDI1My41MDcgNDU1LjgyNyAyNDYuMjExIDQ2My44OTEgMjM4LjMzMUM0NjMuODk0IDIzOC4zMjkgNDY0Ljg5MyAyMzcuMzM2IDQ2NC44OTYgMjM3LjMzNEM0ODIuOTA4IDIxOS4yMjYgNTAxLjE0MiAyMDEuMzQ0IDUxOS4wMSAxODMuMDkzQzUyMC4xOTEgMTgxLjg4NyA1MjEuMzEyIDE4MC42MjMgNTIyLjM4NiAxNzkuMzIxWiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTE0MC4xMDMgMTI1LjAwOUMxNTQuMjcgMTI0Ljk5NCAxNjguNDM3IDEyNS4wMDcgMTgyLjYwNCAxMjUuMDUzQzE4My41MTUgMTI1LjA1NiAxODQuNDQ3IDEyNS4wNTkgMTg1LjM1NSAxMjUuMTU2QzE4OS4wMzUgMTI1LjU1MiAxODkuMjUxIDEyNi45MTUgMTg5LjI4NSAxMzAuMjkxQzE4OS40OTYgMTUwLjgyNiAxODkuNTMxIDE3NC4xNjIgMTg5LjMyOSAxOTQuNzkyQzE4OS4yODYgMTk5LjIxNCAxODkuMzU0IDIwMC43MDggMTg0LjYwNiAyMDAuNzU1QzE3Ni40MzkgMjAwLjgzNiAxNjguMjcxIDIwMC44MzEgMTYwLjEwMyAyMDAuODI2QzE0Ni42ODYgMjAwLjgxOSAxMzMuMjY4IDIwMC45NDUgMTE5Ljg1MSAyMDAuNzkxQzExNC45NDkgMjAwLjczNCAxMTQuMjg0IDE5OS43OTMgMTE0LjMgMTk1LjA0M0MxMTQuMzY5IDE3My45NTkgMTE0LjEyNSAxNTIuODc0IDExNC4zNzggMTMxLjc5MUMxMTQuNDM2IDEyNi45MjEgMTE2LjIwMSAxMjUuMDM2IDEyMS4wOTkgMTI1LjAwOUMxMjYuMTAxIDEyNC45ODIgMTMxLjEwNCAxMjUuMDkgMTM2LjEwNiAxMjUuMDI4QzEzNi4xMDkgMTI1LjAyOCAxNDAuMDk5IDEyNS4wMDkgMTQwLjEwMyAxMjUuMDA5WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTYyLjYwMjUgNDguMzU3MkM3OC4xODY1IDQ4LjM1NTIgOTMuNzY5NSA0OC40MTUyIDEwOS4zNTQgNDguNDM2MkMxMTMuNzUgNDguNDQxMiAxMTcuNDUgNDguMTMzMiAxMTcuNDY3IDUzLjAzODJDMTE3LjU0IDc0Ljg3MzIgMTE3LjY2OCA5Ni43MDgyIDExNy40NDIgMTE4LjU0MkMxMTcuNDA4IDEyMS43NTcgMTE2LjA0IDEyMy41NzggMTEyLjYwOSAxMjMuNjEyQzEwNC45NDEgMTIzLjY4OCA5Ny4yNzE1IDEyMy42MjcgODkuNjAyNSAxMjMuNjI4Qzc2LjI2ODUgMTIzLjYzMSA2Mi45MzQ1IDEyMy40ODIgNDkuNjAwNSAxMjMuNTk2QzQ1Ljc2MTUgMTIzLjYyOCA0My42NjM1IDEyMy41IDQzLjYyMjUgMTE5LjI5MUM0My41OTM1IDExNi4zNzUgNDMuNTc5NSAxMTMuNDU4IDQzLjU3NjUgMTEwLjU0MkM0My41NTg1IDkxLjMwNDIgNDMuMzI5NSA3Mi4wMjQyIDQzLjU0NTUgNTIuNzg5MkM0My41NTY1IDUxLjc3NzIgNDMuNjcxNSA0OS43NTIyIDQ0LjYxMjUgNDkuMDk3MkM0Ni41ODA1IDQ3LjcyODIgNjAuNjg0NSA0OC4zNTgyIDYyLjYwMjUgNDguMzU3MloiIGZpbGw9IiNFOTU5MjUiLz4KPHBhdGggZD0iTTEyNy4xMDMgNjUuODg4MkMxMjUuOTc4IDY0Ljc2MzIgMTI2LjI5MSA2Mi44ODUyIDEyNi4yNyA2MS4yOTMyQzEyNi4wNSA0NC4yMDgyIDEyNi4xMDIgMjcuMTE5MiAxMjYuMjY2IDEwLjAzMzJDMTI2LjMgNi40NzEyMSAxMjguODczIDcuMTI0MjIgMTMyLjM1MiA3LjEwNDIyQzE0MS4yNzEgNy4wNTMyMiAxNTAuMTg0IDcuMDY0MiAxNTkuMTAzIDcuMDU4MkMxNjguNzIzIDcuMDUyMiAxNzguNDI3IDYuNzczMjMgMTg4LjAzNiA3LjIxMjIzQzE4OC4xNjkgOC41ODYyMyAxODguMjQ3IDkuOTEwMjEgMTg4LjI0OSAxMS4yOTEyQzE4OC4yNzUgMjguMTI0MiAxODguMjU5IDQ0Ljk2MTIgMTg4LjIyOSA2MS43OTQyQzE4OC4yMjMgNjUuMzUxMiAxODcuNTE1IDY2Ljg0MzIgMTgzLjg1NiA2Ni44NDQyQzE2Ni4xMDUgNjYuODQ4MiAxNDguMzUzIDY3LjA2MzIgMTMwLjYwMyA2Ni44OTkyQzEyOS4zNTMgNjYuODg4MiAxMjcuOTg3IDY2Ljc3MjIgMTI3LjEwMyA2NS44ODgyWiIgZmlsbD0iI0U5NTkyNSIvPgo8cGF0aCBkPSJNMTQuMTAyNiAxMzcuMjY2QzIyLjUyMDYgMTM3LjI2MiAzMC45Mzk2IDEzNy4yMDYgMzkuMzU2NiAxMzcuMzE4QzQyLjY0MDYgMTM3LjM2MiA0NC4zMjU2IDEzOC43MTEgNDQuMzU5NiAxNDIuMDM2QzQ0LjQ4NDYgMTUzLjk1NyA0NC40ODg2IDE2NS44OCA0NC4zNzU2IDE3Ny44MDFDNDQuMzQzNiAxODEuMTQzIDQyLjA0MzYgMTgxLjMxOCAzOS4xMDU2IDE4MS4zMzJDMjguOTM3NiAxODEuMzgxIDE4Ljc3MDYgMTgxLjM4NCA4LjYwMjU5IDE4MS40MDVDMS4yMDM1OSAxODEuNDIgMC4xOTA1OTEgMTgyLjMxOCAwLjEzMDU5MSAxNzUuNzkzQzAuMTI3NTkxIDE3NS40ODcgLTAuMzE1NDA4IDE0Mi4yODQgMC40NDc1OTIgMTM5LjI3NUMxLjE2NTU5IDEzNi40NDMgMTMuMDUwNiAxMzcuMjY2IDE0LjEwMjYgMTM3LjI2NloiIGZpbGw9IiNFOTU5MjUiLz4KPHBhdGggZD0iTTUuNzA2NTggMzkuMjI3MkM1LjAwMDU4IDMxLjc1NjIgNS4zMDc1NyAxMS4zNTQzIDUuMzg5NTcgNC4wMzkyNUM1LjM5OTU3IDMuMDczMjUgNS40NDk1NyAyLjEzOTI2IDUuODI4NTcgMS4yMzgyNkM2LjU0NDU3IC0wLjQ2Mjc0MiAxMy43OTY2IDAuMDg0MjUyMyAxNC4xMDE2IDAuMDgyMjUyM0MyMi4yNzA2IDAuMDMwMjUyMyAzMC40Mzk2IDAuMDEyMjI5OSAzOC42MDc2IDAuMTA5MjNDNDAuNDUwNiAwLjEzMTIzIDQyLjcwMjYgLTAuMzM2NzU2IDQzLjkyNjYgMS4wNDIyNEM0NC40OTg2IDEuNjg3MjQgNDQuMzk4NiAyLjY2ODI1IDQ0LjM5NzYgMy41MzAyNUM0NC4zODQ2IDEzLjcwMjMgNDQuNTQ1NiAyMy44NzQyIDQ0LjQyNDYgMzQuMDQ2MkM0NC4zNjk2IDM4LjcyMjIgNDMuNzk0NiAzOS4zODMzIDM5LjEwNTYgMzkuNDQ0M0MyOS45Mzc2IDM5LjU2NTMgMjAuNzY5NiAzOS41NTMyIDExLjYwMTYgMzkuNTUwMkM5LjYzMTU3IDM5LjU1MDIgNy42NjM1OCAzOS40NTEyIDUuNzA2NTggMzkuMjI3MloiIGZpbGw9IiNFOTU5MjUiLz4KPC9zdmc+Cg==" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <title>GreePixel® — UI/UX Design Studio for Apps, SaaS & Websites</title>
     <!-- apply the saved theme before first paint (no flash) -->
     <script>
@@ -211,7 +527,7 @@
         <h2>Selected UI/UX case studies</h2>
         <p>Jalebi (restaurant SaaS UX), Startwise (AI SaaS workspace), Lairo (AI app UI), ON Card (NFC business card app), GCC Fitness (bilingual English/Arabic fitness marketplace), Shepherd (AI tutor app), Find a Doc (healthcare booking app), Kim &amp; Co (sales dashboard UX), MTS (EdTech product redesign) and more.</p>
         <h2>Contact</h2>
-        <p>Email contact@greelogix.com · Phone / WhatsApp +92 333 65 27 366 · Replies within 4 business hours.</p>
+        <p>Website greepixel.com · Email contact@greelogix.com · Phone / WhatsApp +92 333 65 27 366 · We work in English, Urdu and Arabic · Replies within 4 business hours.</p>
       </main>
     </noscript>
     <script type="module" src="/src/main.tsx"></script>
