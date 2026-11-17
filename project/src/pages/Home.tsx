@@ -78,7 +78,12 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
      Which row is "hovered" is decided by hit-testing the pointer position, not by
      mouseenter/mouseleave: those don't fire when the page scrolls under a still
      cursor (fast wheel / Lenis), which used to leave the preview stuck to the cursor
-     outside the section. The rAF loop only runs while the preview is moving. */
+     outside the section. The rAF loop only runs while the preview is moving.
+     The image is also gated on the row's CSS :hover — the orange highlight. Browsers
+     defer :hover updates while the page scrolls under a still cursor, so without the
+     gate the image popped up over rows that weren't highlighted. Now it only appears
+     once the browser has actually focused the row (orange) and hides the moment the
+     two disagree. */
   useEffect(() => {
     if (window.matchMedia("(hover: none)").matches) return;
     const preview = previewRef.current!;
@@ -94,6 +99,7 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
     let dirty = false; // pointer moved / page scrolled since last hit-test
     let raf = 0;
     let lastTx = "";
+    let lastScroll = 0; // keep re-checking briefly after scrolling: :hover catches up late
 
     const show = (row: HTMLElement) => {
       const key = row.dataset.preview || "01";
@@ -123,6 +129,8 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
         if (pos.x >= r.left && pos.x <= r.right && pos.y >= r.top && pos.y <= r.bottom) {
           row = (document.elementFromPoint(pos.x, pos.y) as HTMLElement | null)?.closest<HTMLElement>(".service-row") ?? null;
           if (row && !list.contains(row)) row = null;
+          // only when the orange :hover highlight is on this very row
+          if (row && !row.matches(":hover")) row = null;
         }
       }
       if (row === active) return;
@@ -133,10 +141,13 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
 
     const loop = () => {
       raf = 0;
-      if (dirty) {
+      // right after a scroll the browser re-applies :hover a little later — poll for it
+      const settling = hasPointer && near && performance.now() - lastScroll < 450;
+      if (dirty || settling) {
         dirty = false;
         hitTest();
       }
+      if (settling && !raf) raf = requestAnimationFrame(loop);
       if (!shown) return; // idle: nothing to move
       cur.x += (pos.x - cur.x) * 0.12;
       cur.y += (pos.y - cur.y) * 0.12;
@@ -147,7 +158,7 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
         lastTx = tx;
       }
       const settled = Math.abs(pos.x - cur.x) < 0.3 && Math.abs(pos.y - cur.y) < 0.3;
-      if (!settled || active || dirty) raf = requestAnimationFrame(loop);
+      if ((!settled || active || dirty) && !raf) raf = requestAnimationFrame(loop);
     };
     const kick = () => {
       dirty = true;
@@ -162,8 +173,11 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
       if (near || active) kick();
     };
     const onScroll = () => {
+      lastScroll = performance.now();
       if (near || active) kick();
     };
+    // :hover changes (incl. the browser's post-scroll update) fire boundary events
+    const onOver = () => kick();
     const onGone = () => {
       hasPointer = false;
       kick();
@@ -184,6 +198,7 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
     window.addEventListener("pointermove", onMove, { passive: true });
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("wheel", onScroll, { passive: true });
+    list.addEventListener("mouseover", onOver);
     document.addEventListener("pointerout", onOut);
     window.addEventListener("blur", onGone);
 
@@ -194,6 +209,7 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("wheel", onScroll);
+      list.removeEventListener("mouseover", onOver);
       document.removeEventListener("pointerout", onOut);
       window.removeEventListener("blur", onGone);
     };
