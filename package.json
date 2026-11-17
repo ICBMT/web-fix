@@ -6,7 +6,6 @@
     "postinstall": "npm --prefix project install",
     "dev": "npm --prefix project run dev --",
     "build": "npm --prefix project run build --",
-    "preview": "npm --prefix project run preview --",
-    "fetch:videos": "npm --prefix project run fetch:videos --"
+    "preview": "npm --prefix project run preview --"
   }
 }

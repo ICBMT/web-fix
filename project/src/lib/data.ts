@@ -239,29 +239,29 @@ const portfolio: Project[] = [
   },
 ];
 
-/* ---- Motion work (video), created by GreePixel ---- */
+/* ---- Motion work (product films), created by GreePixel ---- */
 const archive: Project[] = [
   {
-    id: "moosehead",
-    name: "Moosehead",
-    cat: "E-Commerce Experience Design",
+    id: "agp-film",
+    name: "Ad Grants Pilot",
+    cat: "AI Chatbot Dashboard Design",
     studio: "GREEPIXEL",
     credit: true,
-    year: "2023",
-    img: MEDIA.moosehead.img,
-    video: MEDIA.moosehead.video,
-    tags: ["E-Commerce UX", "Motion Design", "Shopify"],
+    kind: "Product film",
+    img: MEDIA["agp-film"].img,
+    video: MEDIA["agp-film"].video,
+    tags: ["Product Film", "Dashboard UI", "Motion Design"],
   },
   {
-    id: "cob",
-    name: "COB Foods",
-    cat: "Brand Site UX / WebGL",
+    id: "jalebi-film",
+    name: "Jalebi",
+    cat: "Restaurant SaaS UX/UI Design",
     studio: "GREEPIXEL",
     credit: true,
-    year: "2024",
-    img: MEDIA.cob.img,
-    video: MEDIA.cob.video,
-    tags: ["Art Direction", "Interaction Design", "WebGL"],
+    kind: "Product film",
+    img: MEDIA["jalebi-film"].img,
+    video: MEDIA["jalebi-film"].video,
+    tags: ["Product Film", "SaaS UI", "Motion Design"],
   },
 ];
 

@@ -387,7 +387,7 @@ export default function Home({ ready, onNavigate }: { ready: boolean; onNavigate
   };
 
   // big video tile + two portfolio highlights
-  const featured = ["moosehead", "jalebi", "shepherd"].map((id) => projects.find((p) => p.id === id)).filter(Boolean) as Project[];
+  const featured = ["agp-film", "jalebi", "shepherd"].map((id) => projects.find((p) => p.id === id)).filter(Boolean) as Project[];
   const caption = (p: Project) => `${p.cat} — ${STUDIO_LABEL[p.studio].replace("®", "")}, ${projectMeta(p)}`;
 
   return (

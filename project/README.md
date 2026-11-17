@@ -10,7 +10,6 @@ them into `project/`) or from inside `project/`.
 
 ```bash
 npm install
-npm run fetch:videos   # optional: downloads Moosehead + COB case-study videos from mill3.studio
 npm run dev
 ```
 
@@ -18,7 +17,7 @@ npm run dev
 
 | Folder | Contents |
 | --- | --- |
-| `src/media/work/` | Case-study images (`<id>.jpg`) and optional videos (`<id>.mp4`) |
+| `src/media/work/` | Case-study images (`<id>.jpg`) and optional videos (`<id>.mp4`), e.g. the product films `agp-film.mp4` / `jalebi-film.mp4` |
 | `src/media/lab/` | Lab / R&D gallery images |
 | `src/media/fonts/` | Self-hosted fonts (Schibsted Grotesk — PP Mori look-alike, Geist Mono, Silkscreen — OFL) |
 
@@ -30,7 +29,7 @@ Media is collected with `import.meta.glob` in `src/lib/assets.ts`, so:
 
 ## Troubleshooting
 
-- **`Missing script: "fetch:videos"` / `Failed to load url /src/main.tsx`** — npm
+- **`Missing script` / `Failed to load url /src/main.tsx`** — npm
   could not find this project's `package.json` and used one from a parent folder
   instead. Pull the latest branch (it includes a root wrapper) or `cd project`
   first. Also remove any stray `package.json` / `node_modules` from parent

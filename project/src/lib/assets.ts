@@ -78,9 +78,9 @@ const WORK_IDS = [
   "mts-rescue",
   "gcc-fitness",
   "the-incc",
-  // motion work (video)
-  "moosehead",
-  "cob",
+  // motion work (product films, video)
+  "agp-film",
+  "jalebi-film",
 ] as const;
 
 export const MEDIA: Record<string, { img: string; video?: string }> = Object.fromEntries(

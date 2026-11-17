@@ -34,6 +34,9 @@ const CATS: Record<string, Shelf[]> = {
   "gcc-fitness": ["mobile", "web"], "the-incc": ["mobile", "web"],
 };
 
+/** The product film shown as the big featured case at the top of the archive. */
+const FEATURED_ID = "agp-film";
+
 /** Dark interludes between stories (only on the "All" shelf), keyed by story index. */
 const INTERLUDES: Record<number, { big: string; small: string }> = {
   2: { big: "150+ products", small: "designed for founders and businesses across the US, UK, UAE and Australia — a few of them are the stories around this one." },
@@ -42,8 +45,8 @@ const INTERLUDES: Record<number, { big: string; small: string }> = {
 
 /** Pixel Vault hero cycles every case — ordered so consecutive palettes contrast. */
 const HERO_ITEMS: Project[] = [
-  "jalebi", "hotcoin", "lairo", "on-card", "moosehead", "shepherd", "ad-grants-pilot", "xpatio",
-  "startwise", "kim-and-co", "find-a-doc", "cob", "deltabook", "gcc-fitness", "the-incc", "mts-rescue",
+  "jalebi", "hotcoin", "lairo", "on-card", "agp-film", "shepherd", "ad-grants-pilot", "xpatio",
+  "startwise", "kim-and-co", "find-a-doc", "jalebi-film", "deltabook", "gcc-fitness", "the-incc", "mts-rescue",
 ]
   .map((id) => projects.find((p) => p.id === id))
   .filter((p): p is Project => Boolean(p));
@@ -339,7 +342,7 @@ function WorkCard({ p, i }: { p: Project; i: number }) {
 }
 
 function MotionVault() {
-  const items = VIDEO_IDS.filter((id) => id !== "moosehead").map((id) => projects.find((p) => p.id === id)!).filter(Boolean);
+  const items = VIDEO_IDS.filter((id) => id !== FEATURED_ID).map((id) => projects.find((p) => p.id === id)!).filter(Boolean);
   if (!items.length) return null;
   return (
     <section className="relative overflow-hidden px-6 py-20 md:px-10 md:py-28">
@@ -361,9 +364,9 @@ function MotionVault() {
           </div>
         ))}
         <div className="md:col-span-5" data-reveal>
-          <p className="label label-gold">Motion · WebGL · Art direction</p>
+          <p className="label label-gold">Motion · Product film · UI showcase</p>
           <p className="mt-4 max-w-md text-lg leading-[1.7]" style={{ color: "rgba(var(--bone-rgb),0.72)" }}>
-            Brand worlds that move — interaction design, real-time WebGL scenes and launch sites. Hover the frame to play it.
+            Product films that put our UI in motion — dashboards, flows and launch moments, designed and animated in-house. Hover the frame to play it.
           </p>
           <p className="mt-6 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[11px] uppercase tracking-[0.2em]" style={{ fontFamily: "var(--font-mono)", borderColor: "rgba(var(--gold-rgb),0.45)", color: "var(--color-gold)" }}>
             <span className="h-1.5 w-1.5 rounded-full bg-gold" />
@@ -467,7 +470,7 @@ export default function Work({ ready, onNavigate }: { ready: boolean; onNavigate
     };
   }, []);
 
-  const moosehead = projects.find((p) => p.id === "moosehead")!;
+  const feature = projects.find((p) => p.id === FEATURED_ID)!;
 
   return (
     <div ref={rootRef} className="relative" style={{ background: "var(--color-ink)" }}>
@@ -482,29 +485,29 @@ export default function Work({ ready, onNavigate }: { ready: boolean; onNavigate
           <span className="label label-gold" data-scramble>[00] — FEATURED CASE</span>
           <span className="label hidden md:block">{projects.some((p) => p.video) ? "HOVER-TO-PLAY BELOW" : "HOVER TO EXPLORE BELOW"}</span>
         </div>
-        <a {...(moosehead.url ? { href: moosehead.url, target: "_blank", rel: "noreferrer" } : {})} data-cursor={moosehead.video ? "PLAY" : "VIEW"} className="group relative block overflow-hidden">
+        <a {...(feature.url ? { href: feature.url, target: "_blank", rel: "noreferrer" } : {})} data-cursor={feature.video ? "PLAY" : "VIEW"} className="group relative block overflow-hidden">
           <div className="theme-dark card-sheen relative" style={{ aspectRatio: "16/9" }}>
             <div ref={heroMediaRef} className="h-full w-full">
-              {moosehead.video ? (
-                <video ref={heroVidRef} src={moosehead.video} poster={moosehead.img} muted loop playsInline preload="metadata" className="h-full w-full object-cover" />
+              {feature.video ? (
+                <video ref={heroVidRef} src={feature.video} poster={feature.img} muted loop playsInline preload="metadata" className="h-full w-full object-cover" />
               ) : (
-                <img src={moosehead.img} alt={`${moosehead.name} — ${moosehead.cat} by GreePixel`} className="h-full w-full object-cover" />
+                <img src={feature.img} alt={`${feature.name} — ${feature.cat} by GreePixel`} className="h-full w-full object-cover" />
               )}
             </div>
             <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(var(--ink-rgb),0.78), rgba(var(--ink-rgb),0.12) 45%, rgba(var(--ink-rgb),0.25))" }} />
             <div className="absolute left-0 top-0 flex w-full items-center justify-between p-5 md:p-7">
               <span className="label border border-bone/25 px-2 py-1 backdrop-blur-sm" style={{ background: "rgba(var(--ink-rgb),0.5)", fontSize: "9px" }}>
-                {moosehead.credit ? CREDIT.toUpperCase() : STUDIO_LABEL[moosehead.studio]} — {moosehead.year}
+                {feature.credit ? CREDIT.toUpperCase() : STUDIO_LABEL[feature.studio]} — {projectMeta(feature)}
               </span>
-              <span className="label label-gold">E-COMMERCE UX / MOTION DESIGN</span>
+              <span className="label label-gold">AI DASHBOARD UX / PRODUCT FILM</span>
             </div>
             <div className="absolute bottom-0 left-0 flex w-full items-end justify-between p-5 md:p-7">
               <div>
                 <h2 className="font-display text-[clamp(2.6rem,8vw,7rem)] uppercase leading-[0.85]" data-hx>
-                  {moosehead.name}
+                  {feature.name}
                 </h2>
                 <p className="label mt-3 max-w-md" style={{ letterSpacing: "0.16em" }}>
-                  AHEAD OF THE ALES — A FULL-FUNNEL E-COMMERCE EXPERIENCE, DESIGNED END TO END
+                  AI CHATBOT ADMIN PANEL — ONE CALM DASHBOARD FOR NON-PROFIT AD CAMPAIGNS, DESIGNED END TO END
                 </p>
               </div>
               <ArrowUpRight className="mb-2 h-8 w-8 text-bone/60 transition-all duration-500 group-hover:-translate-y-2 group-hover:translate-x-2 group-hover:text-gold" />
