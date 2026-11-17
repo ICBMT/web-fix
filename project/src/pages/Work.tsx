@@ -291,12 +291,8 @@ function WorkCard({ p, i }: { p: Project; i: number }) {
       data-cursor={p.video ? "PLAY" : "VIEW"}
       className="work-card group block"
       onMouseEnter={() => vidRef.current?.play().catch(() => {})}
-      onMouseLeave={() => {
-        if (vidRef.current) {
-          vidRef.current.pause();
-          vidRef.current.currentTime = 0;
-        }
-      }}
+      // pause (not rewind) on hover-out, so the next hover resumes where the viewer left off
+      onMouseLeave={() => vidRef.current?.pause()}
     >
       <div className="theme-dark card-sheen relative overflow-hidden" style={{ aspectRatio: "16/10" }}>
         <div className="work-media absolute -inset-y-[8%] inset-x-0">
