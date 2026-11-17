@@ -52,7 +52,17 @@ export default function App() {
   useEffect(() => initTextFx(document), [route]);
 
   useEffect(() => {
-    document.title = route === "#/work" ? "Work Archive — GreePixel®" : "GreePixel® — We Build Beyond";
+    // per-route title + description (SEO): the work archive is the portfolio page
+    const work = route === "#/work";
+    document.title = work ? "UI/UX Design Portfolio & Case Studies — GreePixel®" : "GreePixel® — UI/UX Design Studio for Apps, SaaS & Websites";
+    document
+      .querySelector('meta[name="description"]')
+      ?.setAttribute(
+        "content",
+        work
+          ? "GreePixel UI/UX design portfolio: case studies in SaaS dashboard UX, mobile app UI, AI product design, healthcare, EdTech and e-commerce experiences."
+          : "GreePixel is a senior UI/UX design studio in Lahore, Pakistan, designing web apps, mobile apps, SaaS dashboards, websites and design systems for clients worldwide."
+      );
   }, [route]);
 
   const transitionTo = useCallback((next: string) => {

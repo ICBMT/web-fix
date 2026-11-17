@@ -185,14 +185,14 @@ export default function WorkHero({ ready, items }: { ready: boolean; items: Proj
       <div className="pointer-events-none relative z-10 flex h-full flex-col justify-between px-6 pb-8 pt-24 md:px-10 md:pb-10 md:pt-28">
         {/* top meta */}
         <div className="work-meta flex items-center justify-between">
-          <span className="label">GREEPIXEL® — WORK</span>
+          <span className="label">GREEPIXEL® — UI/UX WORK</span>
           <span className="label hidden md:block">PIXEL VAULT · {pad(items.length)} PROJECTS RENDERED LIVE</span>
           <span className="label label-gold">{items.length} CASES — 2021 → 2026</span>
         </div>
 
         {/* giant type — difference blend inverts over revealed pixels */}
         <div className="vault-type relative" style={{ mixBlendMode: "difference" }}>
-          <h1 className="sr-only">GreePixel work archive</h1>
+          <h1 className="sr-only">GreePixel UI/UX design portfolio — app, SaaS and web design case studies</h1>
           <div aria-hidden>
             <div className="work-word-1 font-display text-[clamp(4.5rem,19vw,17rem)] leading-[0.8] text-bone">WORK</div>
             <div className="work-word-2 font-display text-right text-[clamp(4.5rem,19vw,17rem)] leading-[0.8] text-stroke">ARCHIVE</div>

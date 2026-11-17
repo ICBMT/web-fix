@@ -23,7 +23,7 @@ const STORIES: Project[] = STORY_ORDER.map((id) => projects.find((p) => p.id ===
 type Shelf = "all" | "ai" | "web" | "mobile";
 const SHELVES: { id: Shelf; label: string }[] = [
   { id: "all", label: "All" },
-  { id: "ai", label: "AI" },
+  { id: "ai", label: "AI UX" },
   { id: "web", label: "Web & SaaS" },
   { id: "mobile", label: "Mobile" },
 ];
@@ -36,8 +36,8 @@ const CATS: Record<string, Shelf[]> = {
 
 /** Dark interludes between stories (only on the "All" shelf), keyed by story index. */
 const INTERLUDES: Record<number, { big: string; small: string }> = {
-  2: { big: "150+ products", small: "shipped for founders and businesses across the US, UK, UAE and Australia — a few of them are the stories around this one." },
-  6: { big: "4–8 weeks", small: "is the typical distance between a first call and a shipped MVP. Most of these stories started exactly there." },
+  2: { big: "150+ products", small: "designed for founders and businesses across the US, UK, UAE and Australia — a few of them are the stories around this one." },
+  6: { big: "4–8 weeks", small: "is the typical distance between a first call and a tested, developer-ready product design. Most of these stories started exactly there." },
 };
 
 /** Pixel Vault hero cycles every case — ordered so consecutive palettes contrast. */
@@ -115,7 +115,7 @@ function StoryCard({ p, index, open, onToggle, hidden }: { p: Project; index: nu
             <div className="grid transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(.22,1,.36,1)]" style={{ gridTemplateRows: open ? "1fr" : "0fr", opacity: open ? 1 : 0 }} aria-hidden={!open}>
               <div className="overflow-hidden">
                 <p className="pt-7 text-[10px] uppercase tracking-[0.24em]" style={{ fontFamily: "var(--font-mono)", color: "rgba(var(--bone-rgb),0.5)" }}>
-                  Inside the build
+                  Inside the design
                 </p>
                 <ul className="mt-3 grid max-w-md gap-x-5 gap-y-2.5 sm:grid-cols-2">
                   {p.features.map((f) => (
@@ -236,7 +236,7 @@ function Stories() {
             </h2>
           </div>
           <p className="max-w-xs text-sm leading-relaxed" style={{ color: "rgba(var(--bone-rgb),0.6)" }} data-reveal>
-            A curated selection across SaaS, AI, mobile and web. Open a story to see what went inside.
+            A curated selection of UI/UX design work across SaaS, AI, mobile and web. Open a story to see the design decisions inside.
           </p>
         </div>
 
@@ -269,7 +269,7 @@ function Stories() {
 
         {shown.length === 0 && <p className="py-24 text-center" style={{ color: "rgba(var(--bone-rgb),0.65)" }}>No stories here yet — try another shelf.</p>}
         <p className="py-14 text-center text-[11px] uppercase tracking-[0.28em]" style={{ fontFamily: "var(--font-mono)", color: "rgba(var(--bone-rgb),0.45)" }}>
-          — plus 130+ more products we can't show here —
+          — plus 130+ more product designs under NDA —
         </p>
       </div>
     </section>
@@ -300,7 +300,7 @@ function WorkCard({ p, i }: { p: Project; i: number }) {
           {p.video ? (
             <video ref={vidRef} src={p.video} poster={p.img} muted loop playsInline preload="none" className="h-full w-full object-cover" />
           ) : (
-            <img src={p.img} alt={p.name} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
+            <img src={p.img} alt={`${p.name} — ${p.cat} by GreePixel`} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
           )}
         </div>
         <div
@@ -361,9 +361,9 @@ function MotionVault() {
           </div>
         ))}
         <div className="md:col-span-5" data-reveal>
-          <p className="label label-gold">Film · WebGL · Art direction</p>
+          <p className="label label-gold">Motion · WebGL · Art direction</p>
           <p className="mt-4 max-w-md text-lg leading-[1.7]" style={{ color: "rgba(var(--bone-rgb),0.72)" }}>
-            Brand worlds that move — real-time WebGL scenes, product films and launch sites. Hover the frame to play it.
+            Brand worlds that move — interaction design, real-time WebGL scenes and launch sites. Hover the frame to play it.
           </p>
           <p className="mt-6 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[11px] uppercase tracking-[0.2em]" style={{ fontFamily: "var(--font-mono)", borderColor: "rgba(var(--gold-rgb),0.45)", color: "var(--color-gold)" }}>
             <span className="h-1.5 w-1.5 rounded-full bg-gold" />
@@ -474,7 +474,7 @@ export default function Work({ ready, onNavigate }: { ready: boolean; onNavigate
       {/* ---------- HERO — Pixel Vault ---------- */}
       <WorkHero ready={ready} items={HERO_ITEMS} />
 
-      <Marquee items={["AI PRODUCTS", "SAAS PLATFORMS", "MOBILE APPS", "IMMERSIVE 3D", "LIVE EVENTS"]} className="border-y py-5" textClass="label !text-[11px]" duration={26} />
+      <Marquee items={["UX RESEARCH", "UI DESIGN", "SAAS DASHBOARDS", "MOBILE APP DESIGN", "DESIGN SYSTEMS", "PROTOTYPING"]} className="border-y py-5" textClass="label !text-[11px]" duration={26} />
 
       {/* ---------- FEATURED ---------- */}
       <section className="featured-wrap px-6 py-20 md:px-10 md:py-28">
@@ -488,7 +488,7 @@ export default function Work({ ready, onNavigate }: { ready: boolean; onNavigate
               {moosehead.video ? (
                 <video ref={heroVidRef} src={moosehead.video} poster={moosehead.img} muted loop playsInline preload="metadata" className="h-full w-full object-cover" />
               ) : (
-                <img src={moosehead.img} alt={moosehead.name} className="h-full w-full object-cover" />
+                <img src={moosehead.img} alt={`${moosehead.name} — ${moosehead.cat} by GreePixel`} className="h-full w-full object-cover" />
               )}
             </div>
             <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(var(--ink-rgb),0.78), rgba(var(--ink-rgb),0.12) 45%, rgba(var(--ink-rgb),0.25))" }} />
@@ -496,7 +496,7 @@ export default function Work({ ready, onNavigate }: { ready: boolean; onNavigate
               <span className="label border border-bone/25 px-2 py-1 backdrop-blur-sm" style={{ background: "rgba(var(--ink-rgb),0.5)", fontSize: "9px" }}>
                 {moosehead.credit ? CREDIT.toUpperCase() : STUDIO_LABEL[moosehead.studio]} — {moosehead.year}
               </span>
-              <span className="label label-gold">E-COMMERCE / SHOPIFY / MOTION</span>
+              <span className="label label-gold">E-COMMERCE UX / MOTION DESIGN</span>
             </div>
             <div className="absolute bottom-0 left-0 flex w-full items-end justify-between p-5 md:p-7">
               <div>
@@ -504,7 +504,7 @@ export default function Work({ ready, onNavigate }: { ready: boolean; onNavigate
                   {moosehead.name}
                 </h2>
                 <p className="label mt-3 max-w-md" style={{ letterSpacing: "0.16em" }}>
-                  AHEAD OF THE ALES — A FULL-FUNNEL BREW E-COMMERCE UNIVERSE
+                  AHEAD OF THE ALES — A FULL-FUNNEL E-COMMERCE EXPERIENCE, DESIGNED END TO END
                 </p>
               </div>
               <ArrowUpRight className="mb-2 h-8 w-8 text-bone/60 transition-all duration-500 group-hover:-translate-y-2 group-hover:translate-x-2 group-hover:text-gold" />
@@ -525,7 +525,7 @@ export default function Work({ ready, onNavigate }: { ready: boolean; onNavigate
       <section className="border-t px-6 py-20 text-center md:py-28" style={{ borderColor: "rgba(var(--bone-rgb),0.09)" }}>
         <span className="label label-gold" data-scramble>[END OF VAULT]</span>
         <p className="font-display mx-auto mt-6 max-w-4xl text-[clamp(1.6rem,3.6vw,3.2rem)] uppercase leading-[1.05]" data-hx>
-          Every pixel above shipped to production. <span className="text-stroke">Yours could be next.</span>
+          Every pixel above was designed to ship. <span className="text-stroke">Yours could be next.</span>
         </p>
         <a
           href={CALENDLY_URL}

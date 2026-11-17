@@ -96,26 +96,26 @@ const labSculpt = lab("sculpt");
 const labMobile = lab("mobile-app");
 const labDesign = lab("design-system");
 
-/** AI / product-design R&D visuals (generated for GreePixel) */
+/** UI/UX R&D visuals (generated for GreePixel) */
 export const LAB: Record<string, { img: string; title: string; tag: string }> = {
-  "ai-core": { img: labAiCore, title: "Neural Cores", tag: "AGENT PIPELINES" },
-  "ai-orb": { img: labAiOrb, title: "Intelligence Fields", tag: "RAG SYSTEMS" },
-  "ui-glass": { img: labUiGlass, title: "Glass Dashboards", tag: "PRODUCT UI" },
-  terminal: { img: labTerminal, title: "Holo Terminal", tag: "CODE AUDITS" },
-  "webgl-wave": { img: labWave, title: "Shader Fields", tag: "GLSL R&D" },
-  sculpt: { img: labSculpt, title: "Form Studies", tag: "3D CRAFT" },
-  "mobile-app": { img: labMobile, title: "Mobile Systems", tag: "FLUTTER / RN" },
+  "ai-core": { img: labAiCore, title: "AI Copilots", tag: "CONVERSATIONAL UX" },
+  "ai-orb": { img: labAiOrb, title: "Intelligence Fields", tag: "AI ASSISTANT UI" },
+  "ui-glass": { img: labUiGlass, title: "Glass Dashboards", tag: "DASHBOARD UI" },
+  terminal: { img: labTerminal, title: "Holo Terminal", tag: "DEV TOOL UX" },
+  "webgl-wave": { img: labWave, title: "Shader Fields", tag: "MOTION DESIGN" },
+  sculpt: { img: labSculpt, title: "Form Studies", tag: "3D UI CRAFT" },
+  "mobile-app": { img: labMobile, title: "Mobile Systems", tag: "APP UI KITS" },
   "design-system": { img: labDesign, title: "Component Atoms", tag: "DESIGN SYSTEMS" },
 };
 
-/** Service row hover previews — one visual per capability */
+/** Service row hover previews — one visual per discipline */
 export const SERVICE_PREVIEWS: Record<string, string> = {
-  "01": labAiCore,
-  "02": labWave,
-  "03": labDesign,
-  "04": labTerminal,
-  "05": labMobile,
-  "06": labUiGlass,
-  "07": labAiOrb,
-  "08": labSculpt,
+  "01": labAiOrb, // UX research
+  "02": labUiGlass, // UI design
+  "03": labAiCore, // MVP product design
+  "04": labTerminal, // SaaS & dashboards
+  "05": labMobile, // mobile apps
+  "06": labDesign, // design systems
+  "07": labWave, // audits & redesigns
+  "08": labSculpt, // interaction & 3D
 };

@@ -12,7 +12,7 @@ export default function Footer({ onNavigate }: { onNavigate: (r: string) => void
   return (
     <footer className="relative border-t" style={{ borderColor: "rgba(var(--bone-rgb),0.09)", background: "var(--color-ink)" }}>
       <Marquee
-        items={["LET'S BUILD SOMETHING RARE", "GREEPIXEL®", "PIXEL BY PIXEL", "LET'S BUILD SOMETHING RARE", "GREEPIXEL®", "PIXEL BY PIXEL"]}
+        items={["LET'S DESIGN SOMETHING RARE", "GREEPIXEL®", "PIXEL BY PIXEL", "LET'S DESIGN SOMETHING RARE", "GREEPIXEL®", "PIXEL BY PIXEL"]}
         duration={26}
         className="border-b py-6 md:py-8"
         textClass="font-display text-[clamp(2.2rem,6vw,5rem)] uppercase leading-none"
@@ -26,7 +26,7 @@ export default function Footer({ onNavigate }: { onNavigate: (r: string) => void
               Have a brief?
             </span>
             <span className="font-display mt-1 flex items-center gap-3 text-[clamp(3rem,7vw,6rem)] uppercase leading-[0.9] text-bone transition-colors duration-500 group-hover:text-gold" style={{ ["--tw-text-opacity" as string]: 1 }}>
-              Let's build
+              Let's design
               <ArrowUpRight className="h-[0.7em] w-[0.7em] transition-transform duration-500 group-hover:-translate-y-2 group-hover:translate-x-2" style={{ color: "var(--color-gold)" }} />
             </span>
           </a>
@@ -84,7 +84,7 @@ export default function Footer({ onNavigate }: { onNavigate: (r: string) => void
           </button>
           <div className="md:text-right">
             <span className="label block">31.5204° N, 74.3587° E</span>
-            <span className="label mt-2 block">SENIOR TEAM · WORLDWIDE</span>
+            <span className="label mt-2 block">UI/UX DESIGN · WORLDWIDE</span>
           </div>
         </div>
       </div>
@@ -99,7 +99,7 @@ export default function Footer({ onNavigate }: { onNavigate: (r: string) => void
         <span className="label" style={{ color: "rgba(var(--gold-rgb),0.75)" }}>
           REPLY WITHIN 4 BUSINESS HOURS
         </span>
-        <span className="label">BUILT PIXEL BY PIXEL</span>
+        <span className="label">DESIGNED PIXEL BY PIXEL</span>
       </div>
     </footer>
   );

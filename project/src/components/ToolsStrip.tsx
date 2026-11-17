@@ -21,7 +21,7 @@ export default function ToolsStrip() {
 
   return (
     <div className="relative">
-      <span className="sr-only">Tools we design and build with: {TOOLS.map((t) => t.title).join(", ")}</span>
+      <span className="sr-only">Design, prototyping and developer hand-off tools we use: {TOOLS.map((t) => t.title).join(", ")}</span>
       <Marquee items={items} className="border-y py-5" duration={42} />
     </div>
   );
